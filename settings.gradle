@@ -1,0 +1,25 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "Weather"
+include ':app'
+include ':core:data'
+include ':core:domain'
+include ':core:data:core-data-api'
+include ':core:data:core-data-impl'
+include ':core:domain:core-domain-api'
+include ':core:domain:core-domain-impl'
+include ':core:domain:core-domain-models'
+include ':core:datasource:core-datasource-db'
+include ':core:datasource:core-datasource-net'
