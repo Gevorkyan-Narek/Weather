@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Titles -->
     <string name="your">Ваша</string>
     <string name="weather">Погода</string>
+    <string name="choose">Выберите</string>
+    <string name="city">Город</string>
+
+    <!-- Hints -->
+    <string name="enter_city">Введите город</string>
 
 </resources>

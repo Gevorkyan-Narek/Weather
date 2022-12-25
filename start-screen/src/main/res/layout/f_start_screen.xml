@@ -1,42 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_bg">
+    android:background="@drawable/gradient_bg"
+    app:layoutDescription="@xml/start_screen_motion_scene">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/logo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:id="@+id/logoImageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:scaleX="-1"
         android:src="@drawable/start_logo"
-        app:layout_constraintBottom_toTopOf="@id/yourLabel"
+        app:layout_constraintBottom_toTopOf="@id/header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/yourLabel"
+        android:id="@+id/header"
         style="@style/Theme.Weather.TextView.H1.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/your"
-        app:layout_constraintBottom_toTopOf="@id/weatherLabel"
-        app:layout_constraintEnd_toEndOf="@id/logo"
-        app:layout_constraintStart_toStartOf="@id/logo"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintBottom_toTopOf="@id/subHeader"
+        app:layout_constraintEnd_toEndOf="@id/logoImageView"
+        app:layout_constraintStart_toStartOf="@id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/weatherLabel"
+        android:id="@+id/subHeader"
         style="@style/Theme.Weather.TextView.H2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/weather"
         android:textColor="@color/lightGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/logo"
-        app:layout_constraintStart_toStartOf="@id/logo"
-        app:layout_constraintTop_toBottomOf="@id/yourLabel" />
+        app:layout_constraintBottom_toTopOf="@id/inputLayout"
+        app:layout_constraintEnd_toEndOf="@id/logoImageView"
+        app:layout_constraintStart_toStartOf="@id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spaceBetweenFields"
+        android:paddingHorizontal="@dimen/defaultIndent"
+        app:boxCornerRadiusBottomEnd="@dimen/inputFieldRadius"
+        app:boxCornerRadiusBottomStart="@dimen/inputFieldRadius"
+        app:boxCornerRadiusTopEnd="@dimen/inputFieldRadius"
+        app:boxCornerRadiusTopStart="@dimen/inputFieldRadius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subHeader"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_city"
+            android:maxLength="40"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
