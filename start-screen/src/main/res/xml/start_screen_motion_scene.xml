@@ -41,6 +41,24 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subHeader" />
 
+        <Constraint
+            android:id="@+id/chooseLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@id/logoImageView"
+            app:layout_constraintStart_toStartOf="@id/logoImageView"
+            app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+
+        <Constraint
+            android:id="@+id/cityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@id/logoImageView"
+            app:layout_constraintStart_toStartOf="@id/logoImageView"
+            app:layout_constraintTop_toBottomOf="@id/chooseLabel" />
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -56,34 +74,55 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed">
-            <Transform android:translationY="@dimen/imageTransitionUp" />
+            <Transform android:translationY="@dimen/longTransitionUp" />
         </Constraint>
 
         <Constraint
             android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/subHeader"
             app:layout_constraintEnd_toEndOf="@id/logoImageView"
             app:layout_constraintStart_toStartOf="@id/logoImageView"
             app:layout_constraintTop_toBottomOf="@id/logoImageView">
-            <CustomAttribute
-                app:attributeName="text"
-                app:customStringValue="@string/choose" />
-            <Transform android:translationY="@dimen/transitionUp" />
+            <Transform android:translationY="@dimen/longTransitionUp" />
         </Constraint>
 
         <Constraint
             android:id="@+id/subHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/inputLayout"
             app:layout_constraintEnd_toEndOf="@id/logoImageView"
             app:layout_constraintStart_toStartOf="@id/logoImageView"
             app:layout_constraintTop_toBottomOf="@id/header">
-            <CustomAttribute
-                app:attributeName="text"
-                app:customStringValue="@string/city" />
+            <Transform android:translationY="@dimen/longTransitionUp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/chooseLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/cityLabel"
+            app:layout_constraintEnd_toEndOf="@id/logoImageView"
+            app:layout_constraintStart_toStartOf="@id/logoImageView"
+            app:layout_constraintTop_toBottomOf="@id/logoImageView"
+            app:layout_constraintVertical_chainStyle="packed">
+            <Transform android:translationY="@dimen/transitionUp" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/cityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/inputLayout"
+            app:layout_constraintEnd_toEndOf="@id/logoImageView"
+            app:layout_constraintStart_toStartOf="@id/logoImageView"
+            app:layout_constraintTop_toBottomOf="@id/chooseLabel">
             <Transform android:translationY="@dimen/transitionUp" />
         </Constraint>
 

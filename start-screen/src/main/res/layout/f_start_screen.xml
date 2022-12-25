@@ -43,6 +43,29 @@
         app:layout_constraintStart_toStartOf="@id/logoImageView"
         app:layout_constraintTop_toBottomOf="@id/header" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/chooseLabel"
+        style="@style/Theme.Weather.TextView.H1.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/logoImageView"
+        app:layout_constraintStart_toStartOf="@id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/cityLabel"
+        style="@style/Theme.Weather.TextView.H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/city"
+        android:textColor="@color/lightGray"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/logoImageView"
+        app:layout_constraintStart_toStartOf="@id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@id/chooseLabel" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
