@@ -2,15 +2,13 @@ package com.example.startscreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import com.example.android.utils.fragment.BindingFragmentMVVM
+import com.example.android.utils.fragment.observe
 import com.example.startscreen.databinding.FStartScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
-
-    companion object {
-        private const val ONE_SEC_DURATION = 1000
-    }
 
     private val viewModel: StartScreenViewModel by viewModel()
 
@@ -19,11 +17,18 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         container: ViewGroup?
     ): FStartScreenBinding = FStartScreenBinding.inflate(inflater, container, false)
 
-    override fun observeViewModel() {
-        viewModel.motionEvent.observe(this) {
-            binding?.motionLayout?.setTransitionDuration(ONE_SEC_DURATION)
-            binding?.motionLayout?.transitionToEnd()
+    override fun FStartScreenBinding.initView() {
+        cityEditText.addTextChangedListener { editable ->
+            viewModel.onCityTextChanged(editable?.trim().toString())
         }
     }
 
+    override fun FStartScreenBinding.observeViewModel() {
+        with(viewModel) {
+            observe(motionStartEvent) {
+                motionLayout.setTransitionDuration(R.dimen.motionSceneDuration)
+                motionLayout.transitionToEnd()
+            }
+        }
+    }
 }

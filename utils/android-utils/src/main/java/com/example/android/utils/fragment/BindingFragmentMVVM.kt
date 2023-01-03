@@ -27,13 +27,13 @@ abstract class BindingFragmentMVVM<B : ViewBinding> : Fragment() {
         // empty
     }
 
-    open fun observeViewModel() {
+    open fun B.observeViewModel() {
         // empty
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
+        binding?.run { observeViewModel() }
     }
 
     override fun onDestroy() {
