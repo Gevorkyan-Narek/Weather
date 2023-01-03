@@ -3,35 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-android {
-    namespace 'com.example.startscreen'
-    compileSdk 32
-
-    defaultConfig {
-        minSdk 25
-        targetSdk 32
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    buildFeatures {
-        viewBinding true
-    }
-}
+apply from: "../module-setup/main-setup.gradle"
+apply from: "../module-setup/viewbinding.gradle"
 
 dependencies {
     implementation project(":shared-styles")
