@@ -5,5 +5,4 @@
     <dimen name="spaceBetweenFields">20dp</dimen>
     <dimen name="inputFieldRadius">100dp</dimen>
     <dimen name="inputTextLength">40</dimen>
-    <dimen name="motionSceneDuration">1000</dimen>
 </resources>

@@ -37,7 +37,6 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
     override fun FStartScreenBinding.observeViewModel() {
         with(viewModel) {
             observe(motionStartEvent) {
-                motionLayout.setTransitionDuration(R.dimen.motionSceneDuration)
                 motionLayout.transitionToEnd()
             }
             observe(matchCitiesLiveData) { pres ->
