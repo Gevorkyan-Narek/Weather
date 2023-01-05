@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-    ktxVersion = '1.7.0'
+    ktxVersion = '1.9.0'
     appCompat = '1.5.1'
     material = '1.7.0'
     constraintLayout = '2.1.4'
@@ -18,4 +18,11 @@ ext {
     espressoCore = '3.5.0'
     lifeCycle = '2.5.1'
     koinVersion = '3.3.1'
+
+    okHttpVersion = '4.10.0'
+    retrofitVersion = '2.9.0'
+    gsonVersion = '2.8.6'
+    okHttpLoggingInterceptorVersion = '4.9.3'
+    slf4j = '2.0.4'
+    logback = '2.0.0'
 }

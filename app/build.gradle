@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.weather'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.weather"
         minSdk 25
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -41,10 +41,18 @@ dependencies {
     implementation project(":start-screen")
     implementation project(":utils:android-utils")
 
+    implementation project(path: ':core:domain:core-domain-api')
+    implementation project(path: ':core:domain:core-domain-impl')
+    implementation project(path: ':core:data:core-data-api')
+    implementation project(path: ':core:data:core-data-impl')
+    implementation project(path: ':core:datasource:core-datasource-net')
+
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation "com.google.android.material:material:$material"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+    implementation "org.slf4j:slf4j-api:$slf4j"
+    implementation "com.github.tony19:logback-android:$logback"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
@@ -53,6 +61,13 @@ dependencies {
     // Koin
     implementation "io.insert-koin:koin-android:$koinVersion"
     implementation "io.insert-koin:koin-androidx-navigation:$koinVersion"
+
+    // Retrofit + OkHttp
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpLoggingInterceptorVersion"
 
     testImplementation "junit:junit:$jUnit"
     androidTestImplementation "androidx.test.ext:junit:$extJUnit"

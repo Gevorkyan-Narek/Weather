@@ -6,11 +6,20 @@ import androidx.core.widget.addTextChangedListener
 import com.example.android.utils.fragment.BindingFragmentMVVM
 import com.example.android.utils.fragment.observe
 import com.example.startscreen.databinding.FStartScreenBinding
+import com.example.startscreen.models.CityPres
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
     private val viewModel: StartScreenViewModel by viewModel()
+
+    private val adapter by lazy {
+        SimpleAdapterWithTransform<CityPres, String>(
+            context = requireContext(),
+            resource = R.layout.support_simple_spinner_dropdown_item,
+            mapper = { pres -> pres.name }
+        )
+    }
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
@@ -18,6 +27,8 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
     ): FStartScreenBinding = FStartScreenBinding.inflate(inflater, container, false)
 
     override fun FStartScreenBinding.initView() {
+        cityEditText.setAdapter(adapter)
+        adapter.setNotifyOnChange(true)
         cityEditText.addTextChangedListener { editable ->
             viewModel.onCityTextChanged(editable?.trim().toString())
         }
@@ -28,6 +39,9 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
             observe(motionStartEvent) {
                 motionLayout.setTransitionDuration(R.dimen.motionSceneDuration)
                 motionLayout.transitionToEnd()
+            }
+            observe(matchCitiesLiveData) { pres ->
+                adapter.submitList(pres.data)
             }
         }
     }

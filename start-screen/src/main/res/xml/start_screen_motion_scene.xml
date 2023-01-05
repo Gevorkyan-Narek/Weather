@@ -140,5 +140,6 @@
 
     <Transition
         app:constraintSetEnd="@id/end"
+        app:autoTransition="animateToEnd"
         app:constraintSetStart="@id/start" />
 </MotionScene>
