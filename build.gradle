@@ -23,6 +23,6 @@ ext {
     retrofitVersion = '2.9.0'
     gsonVersion = '2.8.6'
     okHttpLoggingInterceptorVersion = '4.9.3'
-    slf4j = '2.0.4'
-    logback = '2.0.0'
+    slf4j = '1.7.36'
+    logback = '2.0.1'
 }
