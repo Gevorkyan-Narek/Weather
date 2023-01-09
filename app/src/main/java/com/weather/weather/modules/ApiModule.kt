@@ -20,7 +20,7 @@ val apiModule = module {
 
 fun provideGeoRetrofit(okHttpClient: OkHttpClient): GeoApi {
     return Retrofit.Builder()
-        .baseUrl("https://wft-geo-db.p.rapidapi.com/v1/geo/")
+        .baseUrl("https://wft-geo-db.p.rapidapi.com")
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
