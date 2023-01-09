@@ -9,7 +9,7 @@ class GeoUseCaseImpl(
     private val repository: GeoRepository
 ) : GeoUseCase {
 
-    override suspend fun getCities(namePrefix: String, offset: Int): ResultWrapper<GeoDomain> {
+    override suspend fun getCities(namePrefix: String?, offset: Int): ResultWrapper<GeoDomain> {
         return repository.getCities(namePrefix, offset)
     }
 

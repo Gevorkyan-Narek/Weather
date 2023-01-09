@@ -11,7 +11,7 @@ class GeoRepositoryImpl(
     private val mapper: GeoMapper
 ) : GeoRepository {
 
-    override suspend fun getCities(namePrefix: String, offset: Int): ResultWrapper<GeoDomain> {
+    override suspend fun getCities(namePrefix: String?, offset: Int): ResultWrapper<GeoDomain> {
         return safeApiCall {
             val geoResponse = api.getCities(
                 namePrefix = namePrefix,

@@ -5,6 +5,6 @@ import com.weather.core.domain.models.geo.GeoDomain
 
 interface GeoUseCase {
 
-    suspend fun getCities(namePrefix: String, offset: Int = 0): ResultWrapper<GeoDomain>
+    suspend fun getCities(namePrefix: String?, offset: Int = 0): ResultWrapper<GeoDomain>
 
 }

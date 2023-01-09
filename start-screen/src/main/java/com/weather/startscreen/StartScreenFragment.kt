@@ -28,7 +28,6 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
     override fun FStartScreenBinding.initView() {
         cityEditText.setAdapter(adapter)
-        adapter.setNotifyOnChange(true)
         cityEditText.addTextChangedListener { editable ->
             viewModel.onCityTextChanged(editable?.trim().toString())
         }
@@ -41,6 +40,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
             }
             observe(matchCitiesLiveData) { pres ->
                 adapter.submitList(pres.data)
+                adapter.filter.filter(cityEditText.text, cityEditText)
             }
         }
     }

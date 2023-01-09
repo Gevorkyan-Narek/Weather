@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:defaultDuration="@integer/motionSceneDuration">
 
     <ConstraintSet android:id="@+id/start">
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spaceBetweenFields"
             android:visibility="invisible"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subHeader" />
 

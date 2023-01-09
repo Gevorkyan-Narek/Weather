@@ -35,7 +35,7 @@ class StartScreenViewModel(
 
     fun onCityTextChanged(cityPrefix: String) {
         viewModelScope.launch {
-            geoUseCase.getCities(cityPrefix).checkResult { result ->
+            geoUseCase.getCities(cityPrefix.takeIf { it.isNotBlank() }).checkResult { result ->
                 _matchCitiesLiveData.postValue(geoMapper.toPres(result))
             }
         }
