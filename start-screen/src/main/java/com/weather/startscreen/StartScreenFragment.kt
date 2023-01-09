@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.weather.android.utils.fragment.BindingFragmentMVVM
 import com.weather.android.utils.fragment.observe
 import com.weather.startscreen.databinding.FStartScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
@@ -23,6 +26,22 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         )
     }
 
+    private val logger: Logger = LoggerFactory.getLogger(javaClass)
+
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val visiblePos = layoutManager.findLastVisibleItemPosition()
+            logger.info("visiblePos: $visiblePos, itemCount: ${adapter.itemCount}")
+            recyclerView.adapter?.let { adapter ->
+                if (visiblePos >= adapter.itemCount - 3) {
+                    logger.debug("$visiblePos/${adapter.itemCount}")
+                    viewModel.onScrolled()
+                }
+            }
+        }
+    }
+
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -34,6 +53,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         }
         suggestionsRecycler.layoutManager = layoutManager
         suggestionsRecycler.adapter = adapter
+        suggestionsRecycler.addOnScrollListener(scrollListener)
     }
 
     override fun FStartScreenBinding.observeViewModel() {
@@ -52,6 +72,9 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
                     motionLayout.setTransition(R.id.emptySearchTransition)
                 }
                 motionLayout.transitionToEnd()
+            }
+            observe(insertNewCitiesLiveData) { pres ->
+                adapter.addCities(pres)
             }
         }
     }

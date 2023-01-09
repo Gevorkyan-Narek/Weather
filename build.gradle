@@ -25,4 +25,6 @@ ext {
     okHttpLoggingInterceptorVersion = '4.9.3'
     slf4j = '1.7.36'
     logback = '2.0.1'
+
+    coroutineVersion = '1.6.1'
 }

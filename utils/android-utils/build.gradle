@@ -12,6 +12,9 @@ dependencies {
 
     implementation "org.slf4j:slf4j-api:$slf4j"
 
+    // Koin
+    implementation "io.insert-koin:koin-android:$koinVersion"
+
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycle"
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompat"

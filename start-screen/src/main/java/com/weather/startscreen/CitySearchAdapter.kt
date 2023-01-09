@@ -33,4 +33,10 @@ class CitySearchAdapter : RecyclerView.Adapter<CitySearchViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun addCities(newList: List<CityPres>) {
+        val positionNewInserted = items.size.inc()
+        items.addAll(newList.map(CityPres::name))
+        notifyItemInserted(positionNewInserted)
+    }
+
 }

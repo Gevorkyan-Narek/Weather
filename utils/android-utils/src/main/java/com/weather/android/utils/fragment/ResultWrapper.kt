@@ -15,20 +15,22 @@ suspend inline fun <T> safeApiCall(crossinline apiCall: suspend () -> T): Result
     }
 }
 
-inline fun <T> ResultWrapper<T>.checkResult(
+inline fun <T, R> ResultWrapper<T>.checkResult(
     crossinline loading: () -> Unit = {},
     crossinline fail: (Throwable) -> Unit = {},
-    crossinline success: (T) -> Unit = {}
-) {
-    when (this) {
+    crossinline success: (T) -> R
+): R? {
+    return when (this) {
         is ResultWrapper.Success -> {
             success(this.result)
         }
         is ResultWrapper.Error -> {
             fail(this.error)
+            null
         }
         is ResultWrapper.Loading -> {
             loading()
+            null
         }
     }
 }

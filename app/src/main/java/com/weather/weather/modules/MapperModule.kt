@@ -2,15 +2,18 @@ package com.weather.weather.modules
 
 import com.weather.core.data.impl.GeoMapper
 import com.weather.startscreen.GeoPresMapper
+import com.weather.startscreen.StartScreenFragment
 import org.koin.dsl.module
 
 val mapperModule = module {
 
-    single {
-        GeoMapper()
-    }
-    single {
-        GeoPresMapper()
+    scope<StartScreenFragment> {
+        scoped {
+            GeoMapper()
+        }
+        scoped {
+            GeoPresMapper()
+        }
     }
 
 }

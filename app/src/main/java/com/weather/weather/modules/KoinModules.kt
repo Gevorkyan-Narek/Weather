@@ -6,4 +6,5 @@ val koinModules = listOf(
     mapperModule,
     useCaseModule,
     repositoryModule,
+    inMemoryModules
 )

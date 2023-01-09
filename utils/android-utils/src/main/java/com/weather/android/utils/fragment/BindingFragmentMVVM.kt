@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import org.koin.androidx.scope.ScopeFragment
 
-abstract class BindingFragmentMVVM<B : ViewBinding> : Fragment() {
+abstract class BindingFragmentMVVM<B : ViewBinding> : ScopeFragment() {
 
     var binding: B? = null
 

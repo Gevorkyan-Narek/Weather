@@ -11,6 +11,7 @@ dependencies {
     implementation project(path: ':core:datasource:core-datasource-net')
     implementation project(path: ":core:data:core-data-api")
     implementation project(path: ":core:domain:core-domain-models")
+    implementation project(path: ':core:datasource:core-datasource-inmemory')
 
     implementation "androidx.core:core-ktx:$ktxVersion"
 
@@ -20,6 +21,13 @@ dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpLoggingInterceptorVersion"
+
+    // Logger
+    implementation "org.slf4j:slf4j-api:$slf4j"
+
+    // Coroutine
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+
 
 
 }
