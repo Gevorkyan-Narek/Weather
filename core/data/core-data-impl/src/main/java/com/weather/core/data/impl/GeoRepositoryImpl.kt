@@ -34,16 +34,18 @@ class GeoRepositoryImpl(
     }
 
     override suspend fun getNextCities(): GeoDomain? {
-        val inMemory = inMemoryStore.geoInMemoryState.first()
-        logger.info(inMemory.toString())
-        return inMemory.links.find { link -> link.rel == GeoRelEnumsInMemory.NEXT }?.let { geoLink ->
-            safeApiCall {
-                api.getNextCities(geoLink.href)
-            }.checkResult { response ->
-                val domain = mapper.toDomain(response)
-                inMemoryStore.saveInMemory(mapper.toMemory(domain))
-                domain
-            }
+        val geoLink = inMemoryStore.geoInMemoryState
+            .first()
+            .links
+            .find { link -> link.rel == GeoRelEnumsInMemory.NEXT } ?: return null
+
+        logger.info("geoLink: $geoLink")
+        return safeApiCall {
+            api.getNextCities(geoLink.href)
+        }.checkResult { response ->
+            val domain = mapper.toDomain(response)
+            inMemoryStore.saveInMemory(mapper.toMemory(domain))
+            domain
         }
     }
 

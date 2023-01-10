@@ -32,9 +32,8 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val visiblePos = layoutManager.findLastVisibleItemPosition()
-            logger.info("visiblePos: $visiblePos, itemCount: ${adapter.itemCount}")
             recyclerView.adapter?.let { adapter ->
-                if (visiblePos >= adapter.itemCount - 3) {
+                if (visiblePos >= adapter.itemCount - 1) {
                     logger.debug("$visiblePos/${adapter.itemCount}")
                     viewModel.onScrolled()
                 }
@@ -75,6 +74,9 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
             }
             observe(insertNewCitiesLiveData) { pres ->
                 adapter.addCities(pres)
+            }
+            observe(loadingEvent) {
+                adapter.addLoading()
             }
         }
     }

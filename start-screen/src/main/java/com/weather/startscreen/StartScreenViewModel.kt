@@ -35,6 +35,9 @@ class StartScreenViewModel(
     private val _insertNewCitiesLiveData = MutableLiveData<List<CityPres>>()
     val insertNewCitiesLiveData = _insertNewCitiesLiveData.liveData()
 
+    private val _loadingEvent = MutableLiveData<Unit>()
+    val loadingEvent = _loadingEvent.liveData()
+
     init {
         viewModelScope.launch {
             delay(MOTION_DELAY)
@@ -56,6 +59,8 @@ class StartScreenViewModel(
 
     fun onScrolled() {
         viewModelScope.launch {
+            _loadingEvent.postValue(Unit)
+            delay(3000)
             val domain = geoUseCase.getNextCities()
             if (domain == null) {
                 logger.debug("No new cities")

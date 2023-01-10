@@ -18,7 +18,7 @@ class GeoMapper {
     fun toDomain(net: GeoResponse): GeoDomain = net.run {
         GeoDomain(
             data = data.map(::toDomain),
-            links = links?.map(::toDomain).orEmpty()
+            links = links?.mapNotNull(::toDomain).orEmpty()
         )
     }
 
@@ -31,7 +31,7 @@ class GeoMapper {
         )
     }
 
-    fun toDomain(net: GeoLinkResponse): GeoLinkDomain = net.run {
+    fun toDomain(net: GeoLinkResponse?): GeoLinkDomain? = net?.run {
         GeoLinkDomain(
             rel = toDomain(rel),
             href = href
@@ -41,6 +41,7 @@ class GeoMapper {
     fun toDomain(net: GeoRelEnumsResponse): GeoRelEnumsDomain = when (net) {
         GeoRelEnumsResponse.FIRST -> GeoRelEnumsDomain.FIRST
         GeoRelEnumsResponse.NEXT -> GeoRelEnumsDomain.NEXT
+        GeoRelEnumsResponse.PREV -> GeoRelEnumsDomain.PREV
         GeoRelEnumsResponse.LAST -> GeoRelEnumsDomain.LAST
     }
 
@@ -70,6 +71,7 @@ class GeoMapper {
     fun toMemory(domain: GeoRelEnumsDomain): GeoRelEnumsInMemory = when (domain) {
         GeoRelEnumsDomain.FIRST -> GeoRelEnumsInMemory.FIRST
         GeoRelEnumsDomain.NEXT -> GeoRelEnumsInMemory.NEXT
+        GeoRelEnumsDomain.PREV -> GeoRelEnumsInMemory.PREV
         GeoRelEnumsDomain.LAST -> GeoRelEnumsInMemory.LAST
     }
 
