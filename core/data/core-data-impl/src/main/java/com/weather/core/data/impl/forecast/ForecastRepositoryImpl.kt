@@ -9,7 +9,7 @@ import com.weather.core.domain.models.geo.CityDomain
 
 class ForecastRepositoryImpl(
     private val api: ForecastApi,
-    private val mapper: GeoMapper
+    private val mapper: ForecastMapper
 ) : ForecastRepository {
 
     companion object {

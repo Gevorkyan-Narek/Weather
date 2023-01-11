@@ -22,4 +22,12 @@ class GeoPresMapper {
         )
     }
 
+    fun toDomain(pres: CityPres): CityDomain = pres.run {
+        CityDomain(
+            name = name,
+            countryCode = countryCode,
+            lat = lat,
+            lon = lon
+        )
+    }
 }

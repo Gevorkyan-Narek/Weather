@@ -12,4 +12,5 @@ class ForecastUseCaseImpl(
     override suspend fun downloadForecast(cityDomain: CityDomain): ForecastDomain? {
         return repository.getForecast(cityDomain)
     }
+
 }

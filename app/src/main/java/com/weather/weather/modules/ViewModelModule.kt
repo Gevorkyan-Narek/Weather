@@ -11,7 +11,8 @@ val viewModelsModule = module {
         viewModel {
             StartScreenViewModel(
                 geoUseCase = get(),
-                geoMapper = get()
+                geoMapper = get(),
+                forecastUseCase = get()
             )
         }
     }

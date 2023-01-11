@@ -5,9 +5,9 @@ import java.util.Date
 data class WeatherDomain(
     val dateTime: Date,
     val metrics: WeatherMetricsDomain,
-    val weatherDescription: WeatherDescriptionDomain,
+    val weatherDescription: List<WeatherDescriptionDomain>,
     val clouds: WeatherCloudsDomain,
     val wind: WeatherWindDomain,
     /** Вероятность осадков, в %*/
-    val pop: Int
+    val pop: Double
 )

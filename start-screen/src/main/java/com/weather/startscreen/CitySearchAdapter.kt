@@ -10,7 +10,9 @@ import com.weather.startscreen.databinding.LoadingItemBinding
 import com.weather.startscreen.databinding.SuggestionItemsBinding
 import com.weather.startscreen.models.CityPres
 
-class CitySearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CitySearchAdapter(
+    private val citySelectListener: (CityPres) -> Unit,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private companion object {
         const val CITY_INFO_VIEW_TYPE = 0
@@ -27,7 +29,8 @@ class CitySearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ),
+                    citySelectListener
                 )
             }
             LOADING_VIEW_TYPE -> {
@@ -55,7 +58,7 @@ class CitySearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
             is CityAdapterInfo.CityInfo -> {
-                (holder as CitySearchViewHolder).bind(item.cityName)
+                (holder as CitySearchViewHolder).bind(item.city)
             }
             is CityAdapterInfo.Loading -> {
                 holder as LoadingViewHolder
@@ -66,14 +69,14 @@ class CitySearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = items.size
 
     fun submitList(newList: List<CityPres>) {
-        val mappedList = newList.map(CityPres::name).map(CityAdapterInfo::CityInfo)
+        val mappedList = newList.map(CityAdapterInfo::CityInfo)
         items.clear()
         items.addAll(mappedList)
         notifyDataSetChanged()
     }
 
     fun addCities(newList: List<CityPres>) {
-        val mappedList = newList.map(CityPres::name).map(CityAdapterInfo::CityInfo)
+        val mappedList = newList.map(CityAdapterInfo::CityInfo)
         val positionNewInserted = items.size
         items.remove(CityAdapterInfo.Loading)
         items.addAll(mappedList)

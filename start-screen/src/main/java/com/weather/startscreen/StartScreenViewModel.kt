@@ -6,6 +6,7 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.weather.android.utils.fragment.liveData
 import com.weather.android.utils.fragment.postEvent
+import com.weather.core.domain.api.ForecastUseCase
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.startscreen.models.CityPres
 import kotlinx.coroutines.Job
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
+    private val forecastUseCase: ForecastUseCase,
     private val logger: Logger = LoggerFactory.getLogger(StartScreenViewModel::class.java)
 ) : ViewModel() {
 
@@ -75,6 +77,12 @@ class StartScreenViewModel(
                     _insertNewCitiesLiveData.postValue(geoMapper.toPres(domain).data)
                 }
             }
+        }
+    }
+
+    fun onCitySelect(city: CityPres) {
+        viewModelScope.launch {
+            forecastUseCase.downloadForecast(geoMapper.toDomain(city))
         }
     }
 

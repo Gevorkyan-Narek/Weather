@@ -4,7 +4,7 @@ import com.weather.core.datasource.net.forecast.model.*
 import com.weather.core.domain.models.forecast.*
 import java.util.*
 
-class GeoMapper {
+class ForecastMapper {
 
     fun toDomain(net: ForecastResponse): ForecastDomain = net.run {
         ForecastDomain(
@@ -16,7 +16,7 @@ class GeoMapper {
         WeatherDomain(
             dateTime = Date(dateTime),
             metrics = toDomain(metrics),
-            weatherDescription = toDomain(weatherDescription),
+            weatherDescription = weatherDescription.map(::toDomain),
             clouds = toDomain(clouds),
             wind = toDomain(wind),
             pop = pop

@@ -6,11 +6,13 @@ import retrofit2.http.Query
 
 interface ForecastApi {
 
-    @GET("/forecast")
+    @GET("forecast")
     suspend fun downloadForecast(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
-        @Query("appId") appId: String
+        @Query("appId") appId: String,
+        @Query("lang") lang: String = "ru",
+        @Query("units") units: String = "metric",
     ): ForecastResponse
 
 }

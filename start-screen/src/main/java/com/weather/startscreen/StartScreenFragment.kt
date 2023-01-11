@@ -16,7 +16,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
     private val viewModel: StartScreenViewModel by viewModel()
 
-    private val adapter = CitySearchAdapter()
+    private val adapter by lazy { CitySearchAdapter(viewModel::onCitySelect) }
 
     private val layoutManager by lazy {
         LinearLayoutManager(
@@ -43,7 +43,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?
+        container: ViewGroup?,
     ): FStartScreenBinding = FStartScreenBinding.inflate(inflater, container, false)
 
     override fun FStartScreenBinding.initView() {
