@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="largeTextSize">40dp</dimen>
+    <dimen name="defaultIndent">20dp</dimen>
+    <dimen name="smallIndent">5dp</dimen>
+    <dimen name="spaceBetweenFields">20dp</dimen>
+    <dimen name="inputFieldRadius">100dp</dimen>
+    <dimen name="inputTextLength">40</dimen>
+</resources>

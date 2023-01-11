@@ -1,0 +1,34 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: "$rootDir/module-setup/main-setup.gradle"
+apply from: "$rootDir/module-setup/viewbinding.gradle"
+
+dependencies {
+    implementation project(":shared-styles")
+    implementation project(":utils:android-utils")
+    implementation project(":core:domain:core-domain-api")
+    implementation project(":core:domain:core-domain-models")
+
+    implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "androidx.appcompat:appcompat:$appCompat"
+    implementation "com.google.android.material:material:$material"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+
+    implementation "org.slf4j:slf4j-api:$slf4j"
+
+    // LifeCycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycle"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycle"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycle"
+
+    // Koin
+    implementation "io.insert-koin:koin-android:$koinVersion"
+    implementation "io.insert-koin:koin-androidx-navigation:$koinVersion"
+
+    testImplementation "junit:junit:$jUnit"
+    androidTestImplementation "androidx.test.ext:junit:$extJUnit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCore"
+}
