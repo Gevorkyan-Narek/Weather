@@ -4,8 +4,8 @@ import com.weather.core.domain.models.geo.GeoDomain
 
 interface GeoUseCase {
 
-    suspend fun getCities(namePrefix: String, offset: Int = 0): GeoDomain?
+    suspend fun downloadCities(namePrefix: String, offset: Int = 0): GeoDomain?
 
-    suspend fun getNextCities(): GeoDomain?
+    suspend fun downloadMoreCities(): GeoDomain?
 
 }

@@ -8,7 +8,7 @@ import retrofit2.http.Url
 interface GeoApi {
 
     @GET("/v1/geo/cities")
-    suspend fun getCities(
+    suspend fun downloadCities(
         @Query(value = "namePrefix") namePrefix: String,
         @Query(value = "limit") limit: Int,
         @Query(value = "languageCode") languageCode: String,
@@ -16,6 +16,6 @@ interface GeoApi {
     ): GeoResponse
 
     @GET
-    suspend fun getNextCities(@Url href: String): GeoResponse
+    suspend fun downloadMoreCities(@Url href: String): GeoResponse
 
 }

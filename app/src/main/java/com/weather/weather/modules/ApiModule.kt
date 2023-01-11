@@ -1,5 +1,6 @@
 package com.weather.weather.modules
 
+import com.weather.core.datasource.net.forecast.ForecastApi
 import com.weather.core.datasource.net.geo.GeoApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,22 +10,31 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val apiModule = module {
 
-    factory { provideGeoOkHttpClient() }
-    single {
-        provideGeoRetrofit(
-            okHttpClient = get()
+    single<GeoApi> {
+        provideRetrofit(
+            baseUrl = "https://wft-geo-db.p.rapidapi.com",
+            okHttpClient = provideGeoOkHttpClient()
+        )
+    }
+
+    single<ForecastApi> {
+        provideRetrofit(
+            baseUrl = "api.openweathermap.org/data/2.5"
         )
     }
 
 }
 
-fun provideGeoRetrofit(okHttpClient: OkHttpClient): GeoApi {
-    return Retrofit.Builder()
-        .baseUrl("https://wft-geo-db.p.rapidapi.com")
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(GeoApi::class.java)
+inline fun <reified T> provideRetrofit(baseUrl: String, okHttpClient: OkHttpClient? = null): T {
+    return Retrofit.Builder().apply {
+        baseUrl(baseUrl)
+
+        okHttpClient?.let {
+            client(okHttpClient)
+        }
+
+        addConverterFactory(GsonConverterFactory.create())
+    }.build().create(T::class.java)
 }
 
 fun provideGeoOkHttpClient(): OkHttpClient {

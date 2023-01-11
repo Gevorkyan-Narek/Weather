@@ -4,7 +4,7 @@ import com.weather.core.domain.models.geo.GeoDomain
 
 interface GeoRepository {
 
-    suspend fun getCities(namePrefix: String, offset: Int): GeoDomain?
+    suspend fun downloadCities(namePrefix: String, offset: Int): GeoDomain?
 
-    suspend fun getNextCities(): GeoDomain?
+    suspend fun downloadMoreCities(): GeoDomain?
 }

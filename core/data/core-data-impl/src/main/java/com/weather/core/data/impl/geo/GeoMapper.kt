@@ -1,4 +1,4 @@
-package com.weather.core.data.impl
+package com.weather.core.data.impl.geo
 
 import com.weather.core.datasource.inmemory.model.CityInMemory
 import com.weather.core.datasource.inmemory.model.GeoInMemory

@@ -1,4 +1,4 @@
-package com.weather.core.data.impl
+package com.weather.core.data.impl.geo
 
 import com.weather.android.utils.fragment.checkResult
 import com.weather.android.utils.fragment.safeApiCall
@@ -18,9 +18,9 @@ class GeoRepositoryImpl(
     private val logger: Logger = LoggerFactory.getLogger(GeoRepositoryImpl::class.java)
 ) : GeoRepository {
 
-    override suspend fun getCities(namePrefix: String, offset: Int): GeoDomain? {
+    override suspend fun downloadCities(namePrefix: String, offset: Int): GeoDomain? {
         return safeApiCall {
-            api.getCities(
+            api.downloadCities(
                 namePrefix = namePrefix,
                 offset = offset,
                 limit = 10,
@@ -33,7 +33,7 @@ class GeoRepositoryImpl(
         }
     }
 
-    override suspend fun getNextCities(): GeoDomain? {
+    override suspend fun downloadMoreCities(): GeoDomain? {
         val geoLink = inMemoryStore.geoInMemoryState
             .first()
             .links
@@ -41,7 +41,7 @@ class GeoRepositoryImpl(
 
         logger.info("geoLink: $geoLink")
         return safeApiCall {
-            api.getNextCities(geoLink.href)
+            api.downloadMoreCities(geoLink.href)
         }.checkResult { response ->
             val domain = mapper.toDomain(response)
             inMemoryStore.saveInMemory(mapper.toMemory(domain))

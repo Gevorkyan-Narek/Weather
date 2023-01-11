@@ -8,6 +8,7 @@ import com.weather.android.utils.fragment.liveData
 import com.weather.android.utils.fragment.postEvent
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.startscreen.models.CityPres
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.slf4j.Logger
@@ -38,6 +39,8 @@ class StartScreenViewModel(
     private val _loadingEvent = MutableLiveData<Unit>()
     val loadingEvent = _loadingEvent.liveData()
 
+    private var job: Job? = null
+
     init {
         viewModelScope.launch {
             delay(MOTION_DELAY)
@@ -47,10 +50,10 @@ class StartScreenViewModel(
 
     fun onCityTextChanged(cityPrefix: String) {
         viewModelScope.launch {
-            val isSearching = cityPrefix.isNotBlank()
-            _emptySearchLiveData.postValue(isSearching)
-            if (isSearching) {
-                geoUseCase.getCities(cityPrefix)?.let { domain ->
+            val isPrefixNotBlank = cityPrefix.isNotBlank()
+            _emptySearchLiveData.postValue(isPrefixNotBlank)
+            if (isPrefixNotBlank) {
+                geoUseCase.downloadCities(cityPrefix)?.let { domain ->
                     _matchCitiesLiveData.postValue(geoMapper.toPres(domain).data)
                 }
             }
@@ -59,13 +62,18 @@ class StartScreenViewModel(
 
     fun onScrolled() {
         viewModelScope.launch {
-            _loadingEvent.postValue(Unit)
-            delay(3000)
-            val domain = geoUseCase.getNextCities()
-            if (domain == null) {
-                logger.debug("No new cities")
-            } else {
-                _insertNewCitiesLiveData.postValue(geoMapper.toPres(domain).data)
+            if (job != null) return@launch
+
+            job = launch {
+                _loadingEvent.postValue(Unit)
+                delay(3000)
+                val domain = geoUseCase.downloadMoreCities()
+                job = null
+                if (domain == null) {
+                    logger.debug("No new cities")
+                } else {
+                    _insertNewCitiesLiveData.postValue(geoMapper.toPres(domain).data)
+                }
             }
         }
     }

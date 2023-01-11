@@ -1,6 +1,6 @@
 package com.weather.weather.modules
 
-import com.weather.core.data.impl.GeoMapper
+import com.weather.core.data.impl.geo.GeoMapper
 import com.weather.startscreen.GeoPresMapper
 import com.weather.startscreen.StartScreenFragment
 import org.koin.dsl.module
