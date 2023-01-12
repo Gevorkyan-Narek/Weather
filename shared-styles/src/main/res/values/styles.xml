@@ -3,38 +3,51 @@
 
     <style name="Theme.Weather" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/light_blue</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/gray</item>
-        <item name="colorSecondaryVariant">@color/light_gray</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/bg_color</item>
+        <item name="android:statusBarColor">@color/status_color</item>
         <!-- Customize your theme here. -->
         <item name="android:background">@color/bg_color</item>
     </style>
 
-    <style name="Theme.Weather.TextView">
-        <item name="android:textColor">@color/gray</item>
-    </style>
+    <style name="Theme.Weather.TextView" />
 
     <style name="Theme.Weather.TextView.H1">
         <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="Theme.Weather.TextView.H1.SubText">
+        <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
     <style name="Theme.Weather.TextView.H1.Bold">
         <item name="fontFamily">sans-serif-black</item>
     </style>
 
-    <style name="Theme.Weather.TextView.H2">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/light_gray</item>
+    <style name="Theme.Weather.TextView.H1.Bold.SubText">
+        <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
-    <style name="Theme.Weather.TextView.NormalText">
+    <style name="Theme.Weather.TextView.H2">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Theme.Weather.TextView.H2.SubText">
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Theme.Weather.TextView.H3">
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Theme.Weather.TextView.H3.SubText">
+        <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
 </resources>
