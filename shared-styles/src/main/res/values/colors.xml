@@ -3,6 +3,7 @@
     <!-- Common -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
 
     <!-- Day -->
     <color name="primary">#154CD8</color>

@@ -8,6 +8,18 @@
     <fragment
         android:id="@+id/startScreen"
         android:name="com.weather.startscreen.StartScreenFragment"
-        tools:layout="@layout/f_start_screen" />
+        tools:layout="@layout/f_start_screen">
+
+        <action
+            android:id="@+id/fromStartToWeatherScreen"
+            app:destination="@id/weatherScreen"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherScreen"
+        android:name="com.weather.main.screen.MainScreenFragment"
+        tools:layout="@layout/main_screen" />
 
 </navigation>

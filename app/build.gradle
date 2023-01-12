@@ -39,6 +39,7 @@ dependencies {
 
     implementation project(":shared-styles")
     implementation project(":start-screen")
+    implementation project(":main-screen")
     implementation project(":utils:android-utils")
 
     implementation project(path: ':core:domain:core-domain-api')
