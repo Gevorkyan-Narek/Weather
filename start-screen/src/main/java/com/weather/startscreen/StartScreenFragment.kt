@@ -6,7 +6,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.android.utils.fragment.BindingFragmentMVVM
+import com.weather.android.utils.fragment.getDrawable
 import com.weather.android.utils.fragment.observe
+import com.weather.startscreen.adapter.CityAdapterItemDecoration
 import com.weather.startscreen.databinding.FStartScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.slf4j.Logger
@@ -53,6 +55,9 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         suggestionsRecycler.layoutManager = layoutManager
         suggestionsRecycler.adapter = adapter
         suggestionsRecycler.addOnScrollListener(scrollListener)
+        suggestionsRecycler.addItemDecoration(
+            CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
+        )
     }
 
     override fun FStartScreenBinding.observeViewModel() {

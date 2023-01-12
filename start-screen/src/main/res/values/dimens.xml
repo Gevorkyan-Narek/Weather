@@ -2,7 +2,8 @@
 <resources>
     <dimen name="largeTextSize">40dp</dimen>
     <dimen name="defaultIndent">20dp</dimen>
-    <dimen name="smallIndent">5dp</dimen>
+    <dimen name="littleIndent">5dp</dimen>
+    <dimen name="smallIndent">10dp</dimen>
     <dimen name="spaceBetweenFields">20dp</dimen>
     <dimen name="inputFieldRadius">100dp</dimen>
     <dimen name="inputTextLength">40</dimen>
