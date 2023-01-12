@@ -7,4 +7,9 @@
     <dimen name="spaceBetweenFields">20dp</dimen>
     <dimen name="inputFieldRadius">100dp</dimen>
     <dimen name="inputTextLength">40</dimen>
+
+    <dimen name="transitionUp">-180dp</dimen>
+    <dimen name="transitionDown">180dp</dimen>
+    <dimen name="longTransitionUp">-250dp</dimen>
+    <dimen name="longTransitionDown">250dp</dimen>
 </resources>
