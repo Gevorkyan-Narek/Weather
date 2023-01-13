@@ -4,8 +4,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="@dimen/indent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/indent">
 
     <ImageView
         android:id="@+id/icon"
@@ -19,14 +19,14 @@
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.Weather.TextView.H5.Secondary"
+        android:theme="@style/Theme.Weather.TextView.H4.Secondary"
         tools:text="Label: " />
 
     <TextView
         android:id="@+id/value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.Weather.TextView.H5"
+        android:theme="@style/Theme.Weather.TextView.H4"
         tools:text="Value%" />
 
 </LinearLayout>

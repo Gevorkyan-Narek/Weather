@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="today">Сегодня</string>
+    <string name="forecast">Прогноз</string>
+
     <string name="wind">Ветер</string>
     <string name="windSpeed">%1$d м/c</string>
     <string name="degree">Угол ветра %1$d°</string>

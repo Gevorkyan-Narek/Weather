@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/mainScreenFragment"
-        android:name="com.weather.main.screen.MainScreenFragment" />
+        android:name="com.weather.main.screen.main.MainScreenFragment" />
 
 </navigation>
