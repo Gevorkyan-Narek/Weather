@@ -1,0 +1,17 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: "$rootDir/module-setup/main-setup.gradle"
+apply from: "$rootDir/module-setup/viewbinding.gradle"
+
+dependencies {
+
+    implementation "androidx.core:core-ktx:$ktxVersion"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+
+}

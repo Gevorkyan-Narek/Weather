@@ -19,7 +19,7 @@ class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
     private val forecastUseCase: ForecastUseCase,
-    private val logger: Logger = LoggerFactory.getLogger(StartScreenViewModel::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(StartScreenViewModel::class.java),
 ) : ViewModel() {
 
     companion object {
@@ -40,6 +40,9 @@ class StartScreenViewModel(
 
     private val _loadingEvent = MutableLiveData<Unit>()
     val loadingEvent = _loadingEvent.liveData()
+
+    private val _navigationEvent = MutableLiveData<Unit>()
+    val navigationEvent = _navigationEvent.liveData()
 
     private var job: Job? = null
 
@@ -83,6 +86,7 @@ class StartScreenViewModel(
     fun onCitySelect(city: CityPres) {
         viewModelScope.launch {
             forecastUseCase.downloadForecast(geoMapper.toDomain(city))
+            _navigationEvent.postEvent()
         }
     }
 

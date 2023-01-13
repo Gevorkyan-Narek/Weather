@@ -3,6 +3,7 @@ package com.weather.startscreen
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.android.utils.fragment.BindingFragmentMVVM
@@ -82,6 +83,9 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
             }
             observe(loadingEvent) {
                 adapter.addLoading()
+            }
+            observe(navigationEvent) {
+                findNavController().navigate(R.id.fromStartToWeatherScreen)
             }
         }
     }
