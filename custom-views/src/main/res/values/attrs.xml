@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WeatherField">
+        <attr name="weatherIcon" format="reference|integer" />
+        <attr name="fieldLabel" format="string" />
+        <attr name="fieldValue" format="string" />
+        <attr name="unit" format="enum">
+            <enum name="none" value="0" />
+            <enum name="percent" value="1" />
+            <enum name="speed" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

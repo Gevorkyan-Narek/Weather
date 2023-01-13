@@ -4,6 +4,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="dark_gray">#32333e</color>
+    <color name="light_gray">#9C9C9C</color>
 
     <!-- Day -->
     <color name="primary">#154CD8</color>
