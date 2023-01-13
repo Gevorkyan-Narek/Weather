@@ -21,7 +21,7 @@ class WeatherField @JvmOverloads constructor(
         WeatherFieldBinding.inflate(
             LayoutInflater.from(context),
             this,
-            false
+            true
         )
     }
 
