@@ -1,7 +1,7 @@
 package com.weather.core.data.impl.geo
 
-import com.weather.android.utils.fragment.checkResult
-import com.weather.android.utils.fragment.safeApiCall
+import com.weather.android.utils.checkResult
+import com.weather.android.utils.safeApiCall
 import com.weather.core.data.api.GeoRepository
 import com.weather.core.datasource.inmemory.GeoInMemoryStore
 import com.weather.core.datasource.inmemory.model.GeoRelEnumsInMemory

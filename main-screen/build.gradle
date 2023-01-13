@@ -9,6 +9,7 @@ apply from: "$rootDir/module-setup/viewbinding.gradle"
 dependencies {
 
     implementation project(":shared-styles")
+    implementation project(":custom-views")
     implementation project(":utils:android-utils")
     implementation project(":core:domain:core-domain-api")
     implementation project(":core:domain:core-domain-models")

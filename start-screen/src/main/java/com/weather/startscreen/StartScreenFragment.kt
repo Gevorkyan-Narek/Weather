@@ -6,8 +6,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.android.utils.fragment.BindingFragmentMVVM
-import com.weather.android.utils.fragment.getDrawable
-import com.weather.android.utils.fragment.observe
+import com.weather.android.utils.getDrawable
+import com.weather.android.utils.observe
 import com.weather.startscreen.adapter.CityAdapterItemDecoration
 import com.weather.startscreen.databinding.FStartScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel

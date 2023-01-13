@@ -1,7 +1,7 @@
 package com.weather.core.data.impl.forecast
 
-import com.weather.android.utils.fragment.checkResult
-import com.weather.android.utils.fragment.safeApiCall
+import com.weather.android.utils.checkResult
+import com.weather.android.utils.safeApiCall
 import com.weather.core.data.api.ForecastRepository
 import com.weather.core.datasource.net.forecast.ForecastApi
 import com.weather.core.domain.models.forecast.ForecastDomain

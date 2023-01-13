@@ -1,4 +1,4 @@
-package com.weather.android.utils.fragment
+package com.weather.android.utils
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData

@@ -1,4 +1,4 @@
-package com.weather.android.utils.fragment
+package com.weather.android.utils
 
 import com.weather.core.domain.models.ResultWrapper
 import kotlinx.coroutines.Dispatchers

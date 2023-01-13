@@ -45,7 +45,7 @@ class WeatherField @JvmOverloads constructor(
 
     var fieldLabel: String = emptyString()
         set(value) {
-            binding.label.text = value
+            binding.label.text = resources.getString(R.string.label, value)
             field = value
         }
 
@@ -56,8 +56,11 @@ class WeatherField @JvmOverloads constructor(
                 binding.icon.setImageDrawable(ContextCompat.getDrawable(context, value))
         }
 
-    fun setFieldValue(text: String, unit: WeatherFieldUnitEnum): String {
-        return text + ":" + resources.getString(unit.unit)
+    fun setFieldValue(text: String, unit: WeatherFieldUnitEnum) {
+        binding.value.text = resources.getString(
+            R.string.value,
+            text, resources.getString(unit.unit)
+        )
     }
 
 }

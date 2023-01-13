@@ -1,4 +1,4 @@
-package com.weather.android.utils.fragment
+package com.weather.android.utils
 
 import android.content.Context
 import android.content.res.Resources.NotFoundException

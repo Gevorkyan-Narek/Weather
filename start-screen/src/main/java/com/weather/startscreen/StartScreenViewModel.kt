@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
-import com.weather.android.utils.fragment.liveData
-import com.weather.android.utils.fragment.postEvent
+import com.weather.android.utils.liveData
+import com.weather.android.utils.postEvent
 import com.weather.core.domain.api.ForecastUseCase
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.startscreen.models.CityPres
