@@ -20,6 +20,7 @@ val repositoryModule = module {
         scoped<ForecastRepository> {
             ForecastRepositoryImpl(
                 api = get(),
+                dao = get(),
                 mapper = get()
             )
         }

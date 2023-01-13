@@ -32,8 +32,8 @@ class StartScreenViewModel(
     private val _emptySearchLiveData = MutableLiveData<Boolean>()
     val emptySearchLiveData = _emptySearchLiveData.liveData().distinctUntilChanged()
 
-    private val _matchCitiesLiveData = MutableLiveData<List<CityPres>>()
-    val matchCitiesLiveData = _matchCitiesLiveData.liveData()
+    private val _clearSearchList = MutableLiveData<Unit>()
+    val clearSearchList = _clearSearchList.liveData()
 
     private val _insertNewCitiesLiveData = MutableLiveData<List<CityPres>>()
     val insertNewCitiesLiveData = _insertNewCitiesLiveData.liveData()
@@ -51,16 +51,23 @@ class StartScreenViewModel(
             delay(MOTION_DELAY)
             _motionStartEvent.postEvent()
         }
+        viewModelScope.launch {
+            geoUseCase.getCities().collect { domain ->
+                logger.info("$domain")
+                domain?.let {
+                    _insertNewCitiesLiveData.postValue(geoMapper.toPres(domain).data)
+                }
+            }
+        }
     }
 
     fun onCityTextChanged(cityPrefix: String) {
         viewModelScope.launch {
+            _clearSearchList.postValue(Unit)
             val isPrefixNotBlank = cityPrefix.isNotBlank()
             _emptySearchLiveData.postValue(isPrefixNotBlank)
             if (isPrefixNotBlank) {
-                geoUseCase.downloadCities(cityPrefix)?.let { domain ->
-                    _matchCitiesLiveData.postValue(geoMapper.toPres(domain).data)
-                }
+                geoUseCase.downloadCities(cityPrefix)
             }
         }
     }
@@ -72,13 +79,8 @@ class StartScreenViewModel(
             job = launch {
                 _loadingEvent.postValue(Unit)
                 delay(3000)
-                val domain = geoUseCase.downloadMoreCities()
+                geoUseCase.downloadMoreCities()
                 job = null
-                if (domain == null) {
-                    logger.debug("No new cities")
-                } else {
-                    _insertNewCitiesLiveData.postValue(geoMapper.toPres(domain).data)
-                }
             }
         }
     }

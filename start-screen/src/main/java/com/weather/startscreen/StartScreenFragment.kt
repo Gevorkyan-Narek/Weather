@@ -67,9 +67,6 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
                 motionLayout.setTransition(R.id.startTransition)
                 motionLayout.transitionToEnd()
             }
-            observe(matchCitiesLiveData) { pres ->
-                adapter.submitList(pres)
-            }
             observe(emptySearchLiveData) { isSearching ->
                 if (isSearching) {
                     motionLayout.setTransition(R.id.chooseCityTransition)
@@ -83,6 +80,9 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
             }
             observe(loadingEvent) {
                 adapter.addLoading()
+            }
+            observe(clearSearchList) {
+                adapter.clear()
             }
             observe(navigationEvent) {
                 findNavController().navigate(R.id.fromStartToWeatherScreen)

@@ -68,11 +68,10 @@ class CitySearchAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    fun submitList(newList: List<CityPres>) {
-        val mappedList = newList.map(CityAdapterInfo::CityInfo)
+    fun clear() {
+        val clearedSize = items.size
         items.clear()
-        items.addAll(mappedList)
-        notifyDataSetChanged()
+        notifyItemRemoved(clearedSize)
     }
 
     fun addCities(newList: List<CityPres>) {

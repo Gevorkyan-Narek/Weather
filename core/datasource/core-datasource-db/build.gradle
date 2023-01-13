@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 apply from: "$rootDir/module-setup/main-setup.gradle"
@@ -9,5 +10,10 @@ apply from: "$rootDir/module-setup/viewbinding.gradle"
 dependencies {
 
     implementation "androidx.core:core-ktx:$ktxVersion"
+
+    // Room
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
 }

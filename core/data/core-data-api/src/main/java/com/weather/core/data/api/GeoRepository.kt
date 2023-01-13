@@ -1,10 +1,13 @@
 package com.weather.core.data.api
 
 import com.weather.core.domain.models.geo.GeoDomain
+import kotlinx.coroutines.flow.Flow
 
 interface GeoRepository {
 
-    suspend fun downloadCities(namePrefix: String, offset: Int): GeoDomain?
+    fun getCities(): Flow<GeoDomain?>
 
-    suspend fun downloadMoreCities(): GeoDomain?
+    suspend fun downloadCities(namePrefix: String, offset: Int)
+
+    suspend fun downloadMoreCities()
 }

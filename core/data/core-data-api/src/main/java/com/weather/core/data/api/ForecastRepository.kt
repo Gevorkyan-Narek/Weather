@@ -1,10 +1,11 @@
 package com.weather.core.data.api
 
-import com.weather.core.domain.models.forecast.ForecastDomain
 import com.weather.core.domain.models.geo.CityDomain
 
 interface ForecastRepository {
 
-    suspend fun getForecast(cityDomain: CityDomain): ForecastDomain?
+    suspend fun downloadForecast(cityDomain: CityDomain)
+
+//    suspend fun getTodayForecast(): ForecastDomain
 
 }
