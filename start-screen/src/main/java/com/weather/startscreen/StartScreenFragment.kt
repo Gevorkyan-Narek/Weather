@@ -24,9 +24,9 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
     private val viewModel: StartScreenViewModel by viewModel()
 
-    private val adapter by lazy { CitySearchAdapter(viewModel::onCitySelect) }
+    private val citySearchAdapter by lazy { CitySearchAdapter(viewModel::onCitySelect) }
 
-    private val layoutManager by lazy {
+    private val linearLayoutManager by lazy {
         LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
@@ -37,7 +37,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            val visiblePos = layoutManager.findLastVisibleItemPosition()
+            val visiblePos = linearLayoutManager.findLastVisibleItemPosition()
             recyclerView.adapter?.let { adapter ->
                 if (visiblePos >= adapter.itemCount - 1) {
                     viewModel.onScrolled()
@@ -56,8 +56,8 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
             viewModel.onCityTextChanged(editable?.trim().toString())
         }
         with(suggestionsRecycler) {
-            layoutManager = layoutManager
-            adapter = adapter
+            layoutManager = linearLayoutManager
+            adapter = citySearchAdapter
             addOnScrollListener(scrollListener)
             addItemDecoration(
                 CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
@@ -81,7 +81,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
                 motionLayout.transitionToEnd()
             }
             observe(searchList) { list ->
-                adapter.submitList(list)
+                citySearchAdapter.submitList(list)
             }
             observe(navigationEvent) {
                 findNavController().navigate(R.id.fromStartToWeatherScreen)
