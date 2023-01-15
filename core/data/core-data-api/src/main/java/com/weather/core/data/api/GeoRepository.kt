@@ -5,9 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface GeoRepository {
 
-    fun getCities(): Flow<GeoDomain?>
+    val isHasMoreCities: Flow<Boolean>
+
+    fun getCities(): Flow<GeoDomain>
 
     suspend fun downloadCities(namePrefix: String, offset: Int)
 
-    suspend fun downloadMoreCities(): Boolean
+    suspend fun downloadMoreCities()
 }

@@ -51,7 +51,12 @@ class StartScreenViewModel(
 
     private val _scrollStateFlow =
         MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
     private val scrollStateFlow = _scrollStateFlow
+        .map {
+            if (geoUseCase.isHasMoreCities.first())
+                addLoading()
+        }
         .debounce(SCROLL_DEBOUNCE)
         .mapLatest {
             geoUseCase.downloadMoreCities()
@@ -76,22 +81,18 @@ class StartScreenViewModel(
         }
         viewModelScope.launch {
             geoUseCase.getCities().collect { domain ->
-                domain?.let {
-                    val matchList = geoMapper.toPres(domain).data
-                    _searchList.apply {
-                        val validList = value.orEmpty()
-                            .filterIsInstance<CityAdapterInfo.CityInfo>()
-
-                        logger.debug("validList $validList")
-                        postValue(
-                            validList +
-                                    if (matchList.isEmpty()) {
-                                        listOf(CityAdapterInfo.NoMatch)
-                                    } else {
-                                        matchList.map(CityAdapterInfo::CityInfo)
-                                    }
-                        )
-                    }
+                val matchList = geoMapper.toPres(domain).data
+                with(_searchList) {
+                    val validList = value.orEmpty().filterIsInstance<CityAdapterInfo.CityInfo>()
+                    logger.debug("validList $validList")
+                    postValue(
+                        validList +
+                                if (matchList.isEmpty()) {
+                                    listOf(CityAdapterInfo.NoMatch)
+                                } else {
+                                    matchList.map(CityAdapterInfo::CityInfo)
+                                }
+                    )
                 }
             }
         }
@@ -99,14 +100,7 @@ class StartScreenViewModel(
             searchStateFlow.collect()
         }
         viewModelScope.launch {
-            scrollStateFlow.collect { isSuccess ->
-                if (!isSuccess) {
-                    logger.debug("No more cities")
-                    _searchList.postValue(
-                        _searchList.value?.filterIsInstance<CityAdapterInfo.CityInfo>()
-                    )
-                }
-            }
+            scrollStateFlow.collect()
         }
     }
 
@@ -116,7 +110,6 @@ class StartScreenViewModel(
     }
 
     fun onScrolled() {
-        addLoading()
         _scrollStateFlow.tryEmit(Unit)
     }
 

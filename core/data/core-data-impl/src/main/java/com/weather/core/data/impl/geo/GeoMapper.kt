@@ -15,7 +15,7 @@ import com.weather.core.domain.models.geo.GeoRelEnumsDomain
 
 class GeoMapper {
 
-    fun toDomain(inMemory: GeoInMemory?): GeoDomain? = inMemory?.run {
+    fun toDomain(inMemory: GeoInMemory): GeoDomain = inMemory.run {
         GeoDomain(
             data = data.map(::toDomain),
             links = links.mapNotNull(::toDomain)

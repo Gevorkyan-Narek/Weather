@@ -2,6 +2,7 @@ package com.weather.core.data.impl.geo
 
 import com.weather.android.utils.checkResult
 import com.weather.android.utils.safeApiCall
+import com.weather.base.utils.exist
 import com.weather.core.data.api.GeoRepository
 import com.weather.core.datasource.inmemory.GeoInMemoryStore
 import com.weather.core.datasource.inmemory.model.GeoRelEnumsInMemory
@@ -20,7 +21,15 @@ class GeoRepositoryImpl(
 ) : GeoRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCities(): Flow<GeoDomain?> {
+    override val isHasMoreCities: Flow<Boolean>
+        get() = inMemoryStore.geoInMemoryState.mapLatest { inMemory ->
+            inMemory.links.exist { link ->
+                link.rel == GeoRelEnumsInMemory.NEXT
+            }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getCities(): Flow<GeoDomain> {
         return inMemoryStore.geoInMemoryState.mapLatest(mapper::toDomain)
     }
 
@@ -37,23 +46,18 @@ class GeoRepositoryImpl(
         }
     }
 
-    override suspend fun downloadMoreCities(): Boolean {
-        val geoLink = inMemoryStore.geoInMemoryState
-            .firstOrNull()
-            ?.links
-            ?.find { link -> link.rel == GeoRelEnumsInMemory.NEXT }
-
-        logger.info("geoLink: $geoLink")
-        return if (geoLink != null) {
-            safeApiCall {
-                api.downloadMoreCities(geoLink.href)
-            }.checkResult { response ->
-                inMemoryStore.saveInMemory(mapper.toMemory(response))
+    override suspend fun downloadMoreCities() {
+        inMemoryStore.geoInMemoryState
+            .first()
+            .links
+            .find { link -> link.rel == GeoRelEnumsInMemory.NEXT }
+            .also { logger.info("geoLink: $it") }
+            ?.let { geoLink ->
+                safeApiCall {
+                    api.downloadMoreCities(geoLink.href)
+                }.checkResult { response ->
+                    inMemoryStore.saveInMemory(mapper.toMemory(response))
+                }
             }
-            true
-        } else {
-            false
-        }
     }
-
 }

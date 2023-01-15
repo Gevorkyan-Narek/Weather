@@ -32,7 +32,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
             super.onScrolled(recyclerView, dx, dy)
             val visiblePos = layoutManager.findLastVisibleItemPosition()
             recyclerView.adapter?.let { adapter ->
-                if (adapter.itemCount > 9 && visiblePos >= adapter.itemCount - 1) {
+                if (visiblePos >= adapter.itemCount - 1) {
                     viewModel.onScrolled()
                 }
             }
