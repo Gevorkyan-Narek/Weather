@@ -3,6 +3,7 @@ package com.weather.startscreen
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +12,15 @@ import com.weather.android.utils.getDrawable
 import com.weather.android.utils.observe
 import com.weather.startscreen.adapter.CityAdapterItemDecoration
 import com.weather.startscreen.databinding.FStartScreenBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
+
+    companion object {
+        private const val MOTION_DELAY = 1500L
+    }
 
     private val viewModel: StartScreenViewModel by viewModel()
 
@@ -48,22 +55,25 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         cityEditText.addTextChangedListener { editable ->
             viewModel.onCityTextChanged(editable?.trim().toString())
         }
-        suggestionsRecycler.layoutManager = layoutManager
-        suggestionsRecycler.adapter = adapter
-        suggestionsRecycler.addOnScrollListener(scrollListener)
-        suggestionsRecycler.addItemDecoration(
-            CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
-        )
+        with(suggestionsRecycler) {
+            layoutManager = layoutManager
+            adapter = adapter
+            addOnScrollListener(scrollListener)
+            addItemDecoration(
+                CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
+            )
+        }
+        lifecycleScope.launch {
+            delay(MOTION_DELAY)
+            motionLayout.setTransition(R.id.startTransition)
+            motionLayout.transitionToEnd()
+        }
     }
 
     override fun FStartScreenBinding.observeViewModel() {
         with(viewModel) {
-            observe(motionStartEvent) {
-                motionLayout.setTransition(R.id.startTransition)
-                motionLayout.transitionToEnd()
-            }
-            observe(emptySearchLiveData) { isSearching ->
-                if (isSearching) {
+            observe(motionEvent) { isNotBlank ->
+                if (isNotBlank) {
                     motionLayout.setTransition(R.id.chooseCityTransition)
                 } else {
                     motionLayout.setTransition(R.id.emptySearchTransition)

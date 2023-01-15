@@ -13,7 +13,6 @@ import com.weather.startscreen.models.CityPres
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.slf4j.Logger
@@ -29,7 +28,6 @@ class StartScreenViewModel(
 
     companion object {
         private const val TEXT_CHANGE_DEBOUNCE = 500L
-        private const val MOTION_DELAY = 1500L
         private const val SCROLL_DEBOUNCE = 1500L
     }
 
@@ -38,7 +36,7 @@ class StartScreenViewModel(
     private val searchStateFlow = _searchStateFlow
         .filterNotNull()
         .map { searchText ->
-            _emptySearchLiveData.postValue(searchText.isNotBlank())
+            _motionEvent.postValue(searchText.isNotBlank())
             searchText
         }
         .debounce(TEXT_CHANGE_DEBOUNCE)
@@ -62,23 +60,16 @@ class StartScreenViewModel(
             geoUseCase.downloadMoreCities()
         }
 
-    private val _motionStartEvent = MutableLiveData<Unit>()
-    val motionStartEvent = _motionStartEvent.liveData()
-
-    private val _emptySearchLiveData = MutableLiveData<Boolean>()
-    val emptySearchLiveData = _emptySearchLiveData.liveData().distinctUntilChanged()
+    private val _motionEvent = MutableLiveData<Boolean>()
+    val motionEvent = _motionEvent.liveData().distinctUntilChanged()
 
     private val _searchList = MutableLiveData<List<CityAdapterInfo>>()
-    val searchList = _searchList.liveData()
+    val searchList = _searchList.liveData().distinctUntilChanged()
 
     private val _navigationEvent = MutableLiveData<Unit>()
     val navigationEvent = _navigationEvent.liveData()
 
     init {
-        viewModelScope.launch {
-            delay(MOTION_DELAY)
-            _motionStartEvent.postEvent()
-        }
         viewModelScope.launch {
             geoUseCase.getCities().collect { domain ->
                 val matchList = geoMapper.toPres(domain).data
