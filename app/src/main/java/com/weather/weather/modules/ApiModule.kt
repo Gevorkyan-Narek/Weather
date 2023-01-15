@@ -61,7 +61,7 @@ fun createOkHttpClient(interceptors: List<Interceptor>? = null): OkHttpClient {
             addInterceptor(interceptor)
         }
         addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.BASIC
         })
     }.build()
 }

@@ -26,6 +26,6 @@ ext {
     slf4j = '1.7.36'
     logback = '2.0.1'
 
-    coroutineVersion = '1.6.1'
+    coroutineVersion = '1.6.4'
     roomVersion = "2.5.0"
 }

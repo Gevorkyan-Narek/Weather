@@ -6,7 +6,7 @@ import com.weather.core.domain.models.geo.GeoDomain
 import kotlinx.coroutines.flow.Flow
 
 class GeoUseCaseImpl(
-    private val repository: GeoRepository
+    private val repository: GeoRepository,
 ) : GeoUseCase {
 
     override fun getCities(): Flow<GeoDomain?> {
@@ -17,7 +17,7 @@ class GeoUseCaseImpl(
         return repository.downloadCities(namePrefix, offset)
     }
 
-    override suspend fun downloadMoreCities() {
+    override suspend fun downloadMoreCities(): Boolean {
         return repository.downloadMoreCities()
     }
 }

@@ -12,8 +12,6 @@ import com.weather.android.utils.observe
 import com.weather.startscreen.adapter.CityAdapterItemDecoration
 import com.weather.startscreen.databinding.FStartScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
@@ -29,15 +27,12 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         )
     }
 
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
-
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val visiblePos = layoutManager.findLastVisibleItemPosition()
             recyclerView.adapter?.let { adapter ->
-                if (visiblePos >= adapter.itemCount - 1) {
-                    logger.debug("$visiblePos/${adapter.itemCount}")
+                if (adapter.itemCount > 9 && visiblePos >= adapter.itemCount - 1) {
                     viewModel.onScrolled()
                 }
             }
@@ -75,14 +70,8 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
                 }
                 motionLayout.transitionToEnd()
             }
-            observe(insertNewCitiesLiveData) { pres ->
-                adapter.addCities(pres)
-            }
-            observe(loadingEvent) {
-                adapter.addLoading()
-            }
-            observe(clearSearchList) {
-                adapter.clear()
+            observe(searchList) { list ->
+                adapter.submitList(list)
             }
             observe(navigationEvent) {
                 findNavController().navigate(R.id.fromStartToWeatherScreen)

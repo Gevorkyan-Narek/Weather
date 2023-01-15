@@ -1,4 +1,4 @@
-package com.weather.startscreen.adapter
+package com.weather.startscreen.adapter.holders
 
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.startscreen.databinding.LoadingItemBinding

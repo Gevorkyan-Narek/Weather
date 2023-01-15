@@ -9,6 +9,6 @@ interface GeoUseCase {
 
     suspend fun downloadCities(namePrefix: String, offset: Int = 0)
 
-    suspend fun downloadMoreCities()
+    suspend fun downloadMoreCities(): Boolean
 
 }

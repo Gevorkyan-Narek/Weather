@@ -37,19 +37,22 @@ class GeoRepositoryImpl(
         }
     }
 
-    override suspend fun downloadMoreCities() {
+    override suspend fun downloadMoreCities(): Boolean {
         val geoLink = inMemoryStore.geoInMemoryState
             .firstOrNull()
             ?.links
             ?.find { link -> link.rel == GeoRelEnumsInMemory.NEXT }
 
         logger.info("geoLink: $geoLink")
-        if (geoLink != null) {
-            return safeApiCall {
+        return if (geoLink != null) {
+            safeApiCall {
                 api.downloadMoreCities(geoLink.href)
             }.checkResult { response ->
                 inMemoryStore.saveInMemory(mapper.toMemory(response))
             }
+            true
+        } else {
+            false
         }
     }
 

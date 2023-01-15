@@ -9,5 +9,5 @@ interface GeoRepository {
 
     suspend fun downloadCities(namePrefix: String, offset: Int)
 
-    suspend fun downloadMoreCities()
+    suspend fun downloadMoreCities(): Boolean
 }
