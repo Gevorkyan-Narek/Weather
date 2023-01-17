@@ -7,8 +7,7 @@ data class WeatherResponse(
     val dateTime: Long,
     @SerializedName("main")
     val metrics: WeatherMetricsResponse,
-    @SerializedName("weather")
-    val weatherDescription: List<WeatherDescriptionResponse>,
+    val weather: List<WeatherShortInfoResponse>,
     val clouds: WeatherCloudsResponse,
     val wind: WeatherWindResponse,
     /** Вероятность осадков, в %*/

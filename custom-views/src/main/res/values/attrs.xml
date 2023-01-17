@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="WeatherField">
-        <attr name="weatherIcon" format="reference|integer" />
         <attr name="fieldLabel" format="string" />
         <attr name="fieldValue" format="string" />
         <attr name="unit" format="enum">

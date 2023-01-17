@@ -9,7 +9,11 @@ apply from: "$rootDir/module-setup/viewbinding.gradle"
 
 dependencies {
 
+    implementation project(":utils:base-utils")
     implementation "androidx.core:core-ktx:$ktxVersion"
+
+    // Gson
+    implementation "com.google.code.gson:gson:$gsonVersion"
 
     // Room
     implementation("androidx.room:room-runtime:$roomVersion")

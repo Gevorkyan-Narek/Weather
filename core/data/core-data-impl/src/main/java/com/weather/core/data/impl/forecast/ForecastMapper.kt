@@ -1,15 +1,17 @@
 package com.weather.core.data.impl.forecast
 
 import com.weather.base.utils.DateFormatter
-import com.weather.core.datasource.db.forecast.WeatherEntity
-import com.weather.core.datasource.db.forecast.WeatherMetricsEntity
-import com.weather.core.datasource.db.forecast.WeatherWindEntity
-import com.weather.core.datasource.net.forecast.model.WeatherDescriptionResponse
+import com.weather.core.datasource.db.forecast.model.WeatherEntity
+import com.weather.core.datasource.db.forecast.model.WeatherMetricsEntity
+import com.weather.core.datasource.db.forecast.model.WeatherShortInfoEntity
+import com.weather.core.datasource.db.forecast.model.WeatherWindEntity
 import com.weather.core.datasource.net.forecast.model.WeatherMetricsResponse
 import com.weather.core.datasource.net.forecast.model.WeatherResponse
+import com.weather.core.datasource.net.forecast.model.WeatherShortInfoResponse
 import com.weather.core.datasource.net.forecast.model.WeatherWindResponse
 import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.forecast.WeatherMetricsDomain
+import com.weather.core.domain.models.forecast.WeatherShortInfoDomain
 import com.weather.core.domain.models.forecast.WeatherWindDomain
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
@@ -23,7 +25,14 @@ class ForecastMapper {
             dateTime = dateTime,
             metrics = toEntity(metrics, clouds.cloudiness, pop),
             wind = toEntity(wind),
-            description = weatherDescription.map(WeatherDescriptionResponse::description)
+            shortInfo = weather.map(::toEntity),
+        )
+    }
+
+    fun toEntity(net: WeatherShortInfoResponse): WeatherShortInfoEntity = net.run {
+        WeatherShortInfoEntity(
+            description = description,
+            icon = icon
         )
     }
 
@@ -58,7 +67,14 @@ class ForecastMapper {
             ),
             metrics = toDomain(metrics),
             wind = toDomain(wind),
-            weatherDescription = description
+            shortInfo = shortInfo.map(::toDomain)
+        )
+    }
+
+    fun toDomain(entity: WeatherShortInfoEntity): WeatherShortInfoDomain = entity.run {
+        WeatherShortInfoDomain(
+            description = description,
+            icon = icon
         )
     }
 

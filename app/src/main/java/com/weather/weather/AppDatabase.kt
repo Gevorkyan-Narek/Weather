@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.weather.core.datasource.db.forecast.ForecastDao
-import com.weather.core.datasource.db.forecast.WeatherEntity
-import com.weather.core.datasource.db.forecast.WeatherEntityConverter
+import com.weather.core.datasource.db.forecast.converter.WeatherShortInfoConverter
+import com.weather.core.datasource.db.forecast.model.WeatherEntity
 import com.weather.core.datasource.db.geo.CityDao
 import com.weather.core.datasource.db.geo.CityEntity
 
@@ -16,11 +16,11 @@ import com.weather.core.datasource.db.geo.CityEntity
         WeatherEntity::class,
         CityEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(
-    WeatherEntityConverter::class
+    WeatherShortInfoConverter::class
 )
 abstract class AppDatabase : RoomDatabase() {
 

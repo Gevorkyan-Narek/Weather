@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.weather.android.utils.fragment.BindingFragmentMVVM
 import com.weather.android.utils.observe
+import com.weather.android.utils.setWeatherIcon
 import com.weather.custom.views.weatherfield.WeatherFieldUnitEnum
 import com.weather.main.screen.R
 import com.weather.main.screen.databinding.TodayScreenBinding
@@ -22,10 +23,6 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
         container: ViewGroup?,
     ): TodayScreenBinding = TodayScreenBinding.inflate(inflater, container, false)
 
-    override fun TodayScreenBinding.initView() {
-
-    }
-
     override fun TodayScreenBinding.observeViewModel() {
         with(viewModel) {
             observe(todayDate) { dateString ->
@@ -34,7 +31,8 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
             observe(currentForecastLiveData) { pres ->
                 LoggerFactory.getLogger(javaClass).debug("current: $pres")
                 temp.text = getString(R.string.tempWithoutCelsius, pres.metrics.temp)
-                tempDescription.text = pres.weatherDescription.joinToString()
+                setWeatherIcon(pres.shortInfo.first().icon, weatherImage)
+                tempDescription.text = pres.shortInfo.joinToString { info -> info.description }
                 with(pres.metrics) {
                     feelsLikeTemp.text = getString(R.string.tempWithCelsius, feelsLike)
                     precipitationField.setFieldValue(pop.toString(), WeatherFieldUnitEnum.PERCENT)
@@ -48,8 +46,10 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
             }
             observe(todayForecastLiveData) { pres ->
                 LoggerFactory.getLogger(javaClass).debug("fullToday: $pres")
-                val max = pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).maxBy { abs(it) }
-                val min = pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
+                val max =
+                    pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).maxBy { abs(it) }
+                val min =
+                    pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
                 tempMinMax.text = getString(R.string.tempMinMax, max, min)
             }
         }

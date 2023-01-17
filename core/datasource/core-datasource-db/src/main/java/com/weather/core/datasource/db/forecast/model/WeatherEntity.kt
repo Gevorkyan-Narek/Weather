@@ -1,4 +1,4 @@
-package com.weather.core.datasource.db.forecast
+package com.weather.core.datasource.db.forecast.model
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -14,5 +14,5 @@ data class WeatherEntity(
     val metrics: WeatherMetricsEntity,
     @Embedded
     val wind: WeatherWindEntity,
-    val description: List<String>,
+    val shortInfo: List<WeatherShortInfoEntity>,
 )
