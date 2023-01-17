@@ -1,6 +1,6 @@
-package com.weather.core.domain.models.forecast
+package com.weather.main.screen.model
 
-data class WeatherMetricsDomain(
+data class WeatherMetricsPres(
     val temp: Double,
     val feelsLike: Double,
     val tempMin: Double,

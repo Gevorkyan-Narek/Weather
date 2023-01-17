@@ -15,6 +15,7 @@ dependencies {
     implementation project(path: ":core:data:core-data-api")
     implementation project(path: ":core:domain:core-domain-models")
 
+    implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
     implementation "androidx.core:core-ktx:$ktxVersion"
 
     // Retrofit + OkHttp

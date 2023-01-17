@@ -30,8 +30,6 @@
         app:layout_constraintBottom_toTopOf="@id/tempDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintVertical_chainStyle="packed"
         tools:text="33°" />
 
     <ImageView
@@ -49,7 +47,7 @@
 
     <TextView
         android:id="@+id/tempDescription"
-        style="@style/Theme.Weather.TextView.H5"
+        style="@style/Theme.Weather.TextView.H4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/barrier"
@@ -66,71 +64,115 @@
         app:constraint_referenced_ids="weatherImage, tempDescription" />
 
     <TextView
-        android:id="@+id/feelsLike"
-        style="@style/Theme.Weather.TextView.H5.Secondary"
+        android:id="@+id/tempMinMax"
+        style="@style/Theme.Weather.TextView.H4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/indent"
         android:layout_marginTop="@dimen/defaultIndent"
-        app:layout_constraintEnd_toStartOf="@id/feelsLikeTemp"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@id/verticalDivider1"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
-        tools:text="35°/28° | Ощущается как" />
+        tools:text="35°/28°" />
+
+    <View
+        android:id="@+id/verticalDivider1"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="3dp"
+        android:background="?attr/colorSecondary"
+        app:layout_constraintBottom_toBottomOf="@id/tempMinMax"
+        app:layout_constraintEnd_toStartOf="@id/feelsLike"
+        app:layout_constraintStart_toEndOf="@id/tempMinMax"
+        app:layout_constraintTop_toTopOf="@id/feelsLike" />
+
+    <TextView
+        android:id="@+id/feelsLike"
+        style="@style/Theme.Weather.TextView.H4.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/feelsLike"
+
+        app:layout_constraintEnd_toStartOf="@id/feelsLikeTemp"
+        app:layout_constraintStart_toEndOf="@id/verticalDivider1"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@id/tempMinMax" />
 
     <TextView
         android:id="@+id/feelsLikeTemp"
-        style="@style/Theme.Weather.TextView.H5"
+        style="@style/Theme.Weather.TextView.H4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
         android:text="@string/tempWithCelsius"
-        app:layout_constraintEnd_toStartOf="@id/verticalDivider"
+        app:layout_constraintEnd_toStartOf="@id/verticalDivider2"
         app:layout_constraintStart_toEndOf="@id/feelsLike"
         app:layout_constraintTop_toTopOf="@id/feelsLike"
         tools:text="33°C" />
 
     <View
-        android:id="@+id/verticalDivider"
+        android:id="@+id/verticalDivider2"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:layout_marginVertical="3dp"
         android:background="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="@id/feelsLikeTemp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/wind"
+        app:layout_constraintStart_toEndOf="@id/feelsLikeTemp"
         app:layout_constraintTop_toTopOf="@id/feelsLike" />
 
     <TextView
         android:id="@+id/wind"
-        style="@style/Theme.Weather.TextView.H5.Secondary"
+        style="@style/Theme.Weather.TextView.H4.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/wind"
         app:layout_constraintEnd_toStartOf="@id/windSpeed"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/verticalDivider"
+        app:layout_constraintStart_toEndOf="@id/verticalDivider2"
         app:layout_constraintTop_toTopOf="@id/feelsLike" />
 
     <TextView
         android:id="@+id/windSpeed"
-        style="@style/Theme.Weather.TextView.H5"
+        style="@style/Theme.Weather.TextView.H4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="2dp"
-        app:layout_constraintEnd_toEndOf="@id/degree"
+        app:layout_constraintEnd_toStartOf="@id/verticalDivider3"
         app:layout_constraintStart_toEndOf="@id/wind"
         app:layout_constraintTop_toTopOf="@id/feelsLike"
         tools:text="9 м/c" />
 
+    <View
+        android:id="@+id/verticalDivider3"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="3dp"
+        android:background="?attr/colorSecondary"
+        app:layout_constraintBottom_toBottomOf="@id/feelsLikeTemp"
+        app:layout_constraintEnd_toStartOf="@id/degreeLabel"
+        app:layout_constraintStart_toEndOf="@id/windSpeed"
+        app:layout_constraintTop_toTopOf="@id/feelsLike" />
+
     <TextView
-        android:id="@+id/degree"
-        style="@style/Theme.Weather.TextView.H5.Secondary"
+        android:id="@+id/degreeLabel"
+        style="@style/Theme.Weather.TextView.H4.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/degreeLabel"
+        app:layout_constraintEnd_toStartOf="@id/degreeValue"
+        app:layout_constraintStart_toEndOf="@id/verticalDivider3"
+        app:layout_constraintTop_toTopOf="@id/tempMinMax" />
+
+    <TextView
+        android:id="@+id/degreeValue"
+        style="@style/Theme.Weather.TextView.H4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/indent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/windSpeed"
-        app:layout_constraintTop_toTopOf="@id/feelsLike"
-        tools:text="Угол ветра 178°" />
+        app:layout_constraintStart_toEndOf="@id/degreeLabel"
+        app:layout_constraintTop_toTopOf="@id/tempMinMax"
+        tools:text="178°" />
 
     <View
         android:id="@+id/horizontalDivider"

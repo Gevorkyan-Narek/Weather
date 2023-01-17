@@ -4,6 +4,6 @@
     <string name="speed">м/c</string>
     <string name="none" />
 
-    <string name="label">%1$s: </string>
-    <string name="value">%1$s%2$s</string>
+    <string name="label">"%1$s: "</string>
+    <string name="value">%1$s %2$s</string>
 </resources>

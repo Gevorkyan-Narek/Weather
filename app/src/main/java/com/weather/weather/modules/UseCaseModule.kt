@@ -9,14 +9,15 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
 
+    single<ForecastUseCase> {
+        ForecastUseCaseImpl(
+            repository = get()
+        )
+    }
+
     scope<StartScreenFragment> {
         scoped<GeoUseCase> {
             GeoUseCaseImpl(
-                repository = get()
-            )
-        }
-        scoped<ForecastUseCase> {
-            ForecastUseCaseImpl(
                 repository = get()
             )
         }

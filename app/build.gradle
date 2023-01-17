@@ -43,6 +43,7 @@ dependencies {
     implementation project(":main-screen")
     implementation project(":navigation")
     implementation project(":utils:android-utils")
+    implementation project(":utils:base-utils")
 
     implementation project(path: ':core:domain:core-domain-api')
     implementation project(path: ':core:domain:core-domain-impl')
@@ -56,6 +57,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
     implementation "org.slf4j:slf4j-api:$slf4j"
     implementation "com.github.tony19:logback-android:$logback"
+    implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"

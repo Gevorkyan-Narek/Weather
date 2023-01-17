@@ -4,11 +4,13 @@
     <string name="forecast">Прогноз</string>
 
     <string name="wind">Ветер</string>
-    <string name="windSpeed">%1$d м/c</string>
-    <string name="degree">Угол ветра %1$d°</string>
-    <string name="feelsLike">%1$d°/%2$d° | Ощущается как</string>
-    <string name="temp">%1$d°</string>
-    <string name="tempWithCelsius">%1$d°C</string>
+    <string name="windSpeed">%1$.2f м/c</string>
+    <string name="degreeLabel">Угол ветра</string>
+    <string name="degree">%1$d°</string>
+    <string name="tempMinMax">%1$.0f°/%2$.0f°</string>
+    <string name="feelsLike">Ощущается как </string>
+    <string name="tempWithCelsius">%1$.0f°C</string>
+    <string name="tempWithoutCelsius">%1$.0f°</string>
     <string name="precipitation">Осадки</string>
     <string name="humidity">Влажность</string>
     <string name="sunset">Закат</string>

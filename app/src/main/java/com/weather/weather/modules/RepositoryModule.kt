@@ -9,18 +9,19 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
+    single<ForecastRepository> {
+        ForecastRepositoryImpl(
+            api = get(),
+            dao = get(),
+            mapper = get()
+        )
+    }
+
     scope<StartScreenFragment> {
         scoped<GeoRepository> {
             GeoRepositoryImpl(
                 api = get(),
                 inMemoryStore = get(),
-                mapper = get()
-            )
-        }
-        scoped<ForecastRepository> {
-            ForecastRepositoryImpl(
-                api = get(),
-                dao = get(),
                 mapper = get()
             )
         }

@@ -7,6 +7,5 @@ data class WeatherMetricsEntity(
     val tempMax: Double,
     val humidity: Int,
     val cloudiness: Int,
-    val windSpeed: Double,
     val pop: Double,
 )

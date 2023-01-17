@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ForecastDao {
@@ -13,4 +14,7 @@ interface ForecastDao {
 
     @Query("DELETE FROM WeatherEntity")
     suspend fun clearAll()
+
+    @Query("SELECT * FROM WeatherEntity WHERE date == :day")
+    fun getForecastByDay(day: String): Flow<List<WeatherEntity>>
 }

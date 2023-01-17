@@ -19,6 +19,7 @@ class MainScreenFragment : BindingFragmentMVVM<MainScreenBinding>() {
             viewPager,
             WeatherFragmentsEnum.values().map { title -> getString(title.titleId) }
         )
+
     }
 
 }

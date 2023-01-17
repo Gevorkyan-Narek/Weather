@@ -105,9 +105,9 @@ class StartScreenViewModel(
     }
 
     fun onCitySelect(city: CityPres) {
+        _navigationEvent.postEvent()
         viewModelScope.launch {
             forecastUseCase.downloadForecast(geoMapper.toDomain(city))
-            _navigationEvent.postEvent()
         }
     }
 

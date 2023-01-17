@@ -13,7 +13,7 @@ import com.weather.core.datasource.db.WeatherEntityConverter
     entities = [
         WeatherEntity::class
     ],
-    version = 1,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(
@@ -25,7 +25,10 @@ abstract class AppDatabase : RoomDatabase() {
         private const val DATABASE_NAME = "WeatherDB"
 
         fun createDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()
+            return Room
+                .databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+                .build()
         }
 
     }
