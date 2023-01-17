@@ -1,5 +1,6 @@
 package com.weather.main.screen.mapper
 
+import com.weather.base.utils.toPercent
 import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.forecast.WeatherMetricsDomain
 import com.weather.core.domain.models.forecast.WeatherWindDomain
@@ -28,7 +29,7 @@ class ForecastPresMapper {
             tempMax = tempMax,
             humidity = humidity,
             cloudiness = cloudiness,
-            pop = pop
+            pop = pop.toPercent()
         )
     }
 

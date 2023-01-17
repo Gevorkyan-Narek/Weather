@@ -10,5 +10,5 @@ data class WeatherMetricsPres(
     /** Облачность, в %*/
     val cloudiness: Int,
     /** Вероятность осадков, в %*/
-    val pop: Double,
+    val pop: Int,
 )

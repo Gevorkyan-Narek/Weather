@@ -7,9 +7,11 @@ import com.weather.android.utils.observe
 import com.weather.custom.views.weatherfield.WeatherFieldUnitEnum
 import com.weather.main.screen.R
 import com.weather.main.screen.databinding.TodayScreenBinding
+import com.weather.main.screen.model.WeatherMetricsPres
 import com.weather.main.screen.model.WeatherPres
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.slf4j.LoggerFactory
+import kotlin.math.abs
 
 class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
 
@@ -46,9 +48,9 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
             }
             observe(todayForecastLiveData) { pres ->
                 LoggerFactory.getLogger(javaClass).debug("fullToday: $pres")
-                val max = pres.map(WeatherPres::metrics).maxBy { metrics -> metrics.tempMax }
-                val min = pres.map(WeatherPres::metrics).maxBy { metrics -> metrics.tempMin }
-                tempMinMax.text = getString(R.string.tempMinMax, max.tempMax, min.tempMin)
+                val max = pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).maxBy { abs(it) }
+                val min = pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
+                tempMinMax.text = getString(R.string.tempMinMax, max, min)
             }
         }
     }
