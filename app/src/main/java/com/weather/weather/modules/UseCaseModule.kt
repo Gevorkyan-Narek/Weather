@@ -11,7 +11,8 @@ val useCaseModule = module {
 
     single<ForecastUseCase> {
         ForecastUseCaseImpl(
-            repository = get()
+            repository = get(),
+            geoRepository = get()
         )
     }
 

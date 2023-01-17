@@ -1,4 +1,4 @@
-package com.weather.core.datasource.db
+package com.weather.core.datasource.db.forecast
 
 data class WeatherWindEntity(
     val speed: Double,

@@ -1,4 +1,4 @@
-package com.weather.core.datasource.db
+package com.weather.core.datasource.db.forecast
 
 import androidx.room.Embedded
 import androidx.room.Entity

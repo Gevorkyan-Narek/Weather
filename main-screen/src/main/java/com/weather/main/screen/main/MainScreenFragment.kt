@@ -3,10 +3,14 @@ package com.weather.main.screen.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.weather.android.utils.fragment.BindingFragmentMVVM
+import com.weather.android.utils.observe
 import com.weather.android.utils.setupWithViewPager2
 import com.weather.main.screen.databinding.MainScreenBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainScreenFragment : BindingFragmentMVVM<MainScreenBinding>() {
+
+    private val viewModel: MainScreenViewModel by viewModel()
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
@@ -19,7 +23,14 @@ class MainScreenFragment : BindingFragmentMVVM<MainScreenBinding>() {
             viewPager,
             WeatherFragmentsEnum.values().map { title -> getString(title.titleId) }
         )
+    }
 
+    override fun MainScreenBinding.observeViewModel() {
+        viewModel.run {
+            observe(cityTitle) { list ->
+                title.text = list.first().name
+            }
+        }
     }
 
 }

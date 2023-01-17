@@ -1,9 +1,9 @@
 package com.weather.core.data.impl.forecast
 
 import com.weather.base.utils.DateFormatter
-import com.weather.core.datasource.db.WeatherEntity
-import com.weather.core.datasource.db.WeatherMetricsEntity
-import com.weather.core.datasource.db.WeatherWindEntity
+import com.weather.core.datasource.db.forecast.WeatherEntity
+import com.weather.core.datasource.db.forecast.WeatherMetricsEntity
+import com.weather.core.datasource.db.forecast.WeatherWindEntity
 import com.weather.core.datasource.net.forecast.model.WeatherDescriptionResponse
 import com.weather.core.datasource.net.forecast.model.WeatherMetricsResponse
 import com.weather.core.datasource.net.forecast.model.WeatherResponse

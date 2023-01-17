@@ -1,12 +1,15 @@
 package com.weather.core.data.impl.geo
 
 import com.weather.android.utils.checkResult
+import com.weather.android.utils.mapList
 import com.weather.android.utils.safeApiCall
 import com.weather.base.utils.exist
 import com.weather.core.data.api.GeoRepository
+import com.weather.core.datasource.db.geo.CityDao
 import com.weather.core.datasource.inmemory.GeoInMemoryStore
 import com.weather.core.datasource.inmemory.model.GeoRelEnumsInMemory
 import com.weather.core.datasource.net.geo.GeoApi
+import com.weather.core.domain.models.geo.CityDomain
 import com.weather.core.domain.models.geo.GeoDomain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -15,6 +18,7 @@ import org.slf4j.LoggerFactory
 
 class GeoRepositoryImpl(
     private val api: GeoApi,
+    private val dao: CityDao,
     private val inMemoryStore: GeoInMemoryStore,
     private val mapper: GeoMapper,
     private val logger: Logger = LoggerFactory.getLogger(GeoRepositoryImpl::class.java),
@@ -29,7 +33,7 @@ class GeoRepositoryImpl(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCities(): Flow<GeoDomain> {
+    override fun getDownloadCities(): Flow<GeoDomain> {
         return inMemoryStore.geoInMemoryState.mapLatest(mapper::toDomain)
     }
 
@@ -59,5 +63,13 @@ class GeoRepositoryImpl(
                     inMemoryStore.saveInMemory(mapper.toMemory(response))
                 }
             }
+    }
+
+    override suspend fun saveCity(city: CityDomain) {
+        dao.insertReplace(mapper.toEntity(city))
+    }
+
+    override fun getCities(): Flow<List<CityDomain>> {
+        return dao.getCities().mapList(mapper::toDomain)
     }
 }

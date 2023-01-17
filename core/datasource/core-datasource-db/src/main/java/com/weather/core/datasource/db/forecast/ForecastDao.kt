@@ -1,4 +1,4 @@
-package com.weather.core.datasource.db
+package com.weather.core.datasource.db.forecast
 
 import androidx.room.Dao
 import androidx.room.Insert

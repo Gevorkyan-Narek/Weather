@@ -1,5 +1,6 @@
 package com.weather.core.data.impl.geo
 
+import com.weather.core.datasource.db.geo.CityEntity
 import com.weather.core.datasource.inmemory.model.CityInMemory
 import com.weather.core.datasource.inmemory.model.GeoInMemory
 import com.weather.core.datasource.inmemory.model.GeoLinkInMemory
@@ -23,6 +24,15 @@ class GeoMapper {
     }
 
     fun toDomain(inMemory: CityInMemory): CityDomain = inMemory.run {
+        CityDomain(
+            name = name,
+            countryCode = countryCode,
+            lat = lat,
+            lon = lon
+        )
+    }
+
+    fun toDomain(entity: CityEntity): CityDomain = entity.run {
         CityDomain(
             name = name,
             countryCode = countryCode,
@@ -73,6 +83,15 @@ class GeoMapper {
         GeoRelEnumsResponse.NEXT -> GeoRelEnumsInMemory.NEXT
         GeoRelEnumsResponse.PREV -> GeoRelEnumsInMemory.PREV
         GeoRelEnumsResponse.LAST -> GeoRelEnumsInMemory.LAST
+    }
+
+    fun toEntity(domain: CityDomain): CityEntity = domain.run {
+        CityEntity(
+            name = name,
+            countryCode = countryCode,
+            lat = lat,
+            lon = lon
+        )
     }
 
 }

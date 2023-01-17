@@ -5,15 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.weather.core.datasource.db.ForecastDao
-import com.weather.core.datasource.db.WeatherEntity
-import com.weather.core.datasource.db.WeatherEntityConverter
+import com.weather.core.datasource.db.forecast.ForecastDao
+import com.weather.core.datasource.db.forecast.WeatherEntity
+import com.weather.core.datasource.db.forecast.WeatherEntityConverter
+import com.weather.core.datasource.db.geo.CityDao
+import com.weather.core.datasource.db.geo.CityEntity
 
 @Database(
     entities = [
-        WeatherEntity::class
+        WeatherEntity::class,
+        CityEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(
@@ -34,4 +37,5 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun forecastDao(): ForecastDao
+    abstract fun cityDao(): CityDao
 }

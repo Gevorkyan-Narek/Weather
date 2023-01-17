@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface ForecastUseCase {
 
-    suspend fun downloadForecast(cityDomain: CityDomain)
+    fun getCities(): Flow<List<CityDomain>>
+
+    suspend fun downloadForecast()
 
     fun getTodayForecast(): Flow<List<WeatherDomain>>
 

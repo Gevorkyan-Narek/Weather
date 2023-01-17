@@ -4,7 +4,7 @@ import com.weather.android.utils.checkResult
 import com.weather.android.utils.safeApiCall
 import com.weather.base.utils.DateFormatter
 import com.weather.core.data.api.ForecastRepository
-import com.weather.core.datasource.db.ForecastDao
+import com.weather.core.datasource.db.forecast.ForecastDao
 import com.weather.core.datasource.net.forecast.ForecastApi
 import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.geo.CityDomain
