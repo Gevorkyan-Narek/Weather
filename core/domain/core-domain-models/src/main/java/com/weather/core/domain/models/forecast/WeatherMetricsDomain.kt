@@ -11,4 +11,5 @@ data class WeatherMetricsDomain(
     val cloudiness: Int,
     /** Вероятность осадков, в %*/
     val pop: Double,
+    val visibility: Int
 )

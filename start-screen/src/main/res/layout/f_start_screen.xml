@@ -5,6 +5,7 @@
     android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/Theme.Weather.Background"
     android:padding="@dimen/defaultIndent"
     app:layoutDescription="@xml/start_screen_motion_scene">
 

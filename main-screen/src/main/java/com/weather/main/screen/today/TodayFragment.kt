@@ -10,6 +10,7 @@ import com.weather.main.screen.R
 import com.weather.main.screen.databinding.TodayScreenBinding
 import com.weather.main.screen.model.WeatherMetricsPres
 import com.weather.main.screen.model.WeatherPres
+import com.weather.main.screen.today.adapter.TodayTimeAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.slf4j.LoggerFactory
 import kotlin.math.abs
@@ -18,10 +19,18 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
 
     private val viewModel: TodayViewModel by viewModel()
 
+    private val adapter by lazy {
+        TodayTimeAdapter(viewModel::timeClicked)
+    }
+
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
     ): TodayScreenBinding = TodayScreenBinding.inflate(inflater, container, false)
+
+    override fun TodayScreenBinding.initView() {
+        byTimeRecycler.adapter = adapter
+    }
 
     override fun TodayScreenBinding.observeViewModel() {
         with(viewModel) {
@@ -39,7 +48,6 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
                     humidityField.setFieldValue(humidity.toString(), WeatherFieldUnitEnum.PERCENT)
                 }
                 with(pres.wind) {
-                    windSpeed.text = getString(R.string.windSpeed, speed)
                     degreeValue.text = getString(R.string.degree, degree)
                     windField.setFieldValue(gust.toString(), WeatherFieldUnitEnum.SPEED)
                 }
@@ -51,6 +59,20 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
                 val min =
                     pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
                 tempMinMax.text = getString(R.string.tempMinMax, max, min)
+                adapter.submitList(pres)
+            }
+            observe(detailLiveData) { pres ->
+                with(pres.metrics) {
+                    detailsFeelsLikeValue.text = getString(R.string.tempWithCelsius, feelsLike)
+                    detailsHumidityValue.text = humidity.toString()
+                    detailsVisibilityValue.text = if (visibility > 1000) {
+                        getString(R.string.visibilityKilometers, visibility / 1000f)
+                    } else {
+                        getString(R.string.visibilityMeters, visibility)
+                    }
+                    detailsCloudinessValue.text = getString(R.string.withPercent, cloudiness)
+                }
+                setWeatherIcon(pres.shortInfo.first().icon, detailImage)
             }
         }
     }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import com.weather.base.utils.emptyString
+import com.weather.android.utils.emptyString
 import com.weather.custom.views.R
 import com.weather.custom.views.databinding.WeatherFieldBinding
 

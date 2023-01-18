@@ -9,7 +9,7 @@ apply from: "$rootDir/module-setup/viewbinding.gradle"
 dependencies {
 
     implementation project(":shared-styles")
-    implementation project(":utils:base-utils")
+    implementation project(":utils:android-utils")
 
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompat"

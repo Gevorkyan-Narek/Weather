@@ -14,4 +14,11 @@
     <string name="precipitation">Осадки</string>
     <string name="humidity">Влажность</string>
     <string name="sunset">Закат</string>
+    <string name="visibility">Видимость</string>
+    <string name="cloudiness">Облачность</string>
+    <string name="withPercent">%1$d%%</string>
+
+    <string name="details">Детали</string>
+    <string name="visibilityMeters">%1$d м</string>
+    <string name="visibilityKilometers">%1$.1f км</string>
 </resources>

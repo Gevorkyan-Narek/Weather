@@ -8,4 +8,5 @@ data class WeatherMetricsEntity(
     val humidity: Int,
     val cloudiness: Int,
     val pop: Double,
+    val visibility: Int,
 )

@@ -13,7 +13,20 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/status_color</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.Weather.Background">
         <item name="android:background">@color/bg_color</item>
+    </style>
+
+    <style name="Theme.Weather.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:background">@color/bg_color_night</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+    </style>
+
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <!-- TextView -->
@@ -47,6 +60,10 @@
 
     <style name="Theme.Weather.TextView.H3">
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Theme.Weather.TextView.H3.Bold">
+        <item name="fontFamily">sans-serif-black</item>
     </style>
 
     <style name="Theme.Weather.TextView.H3.Secondary">

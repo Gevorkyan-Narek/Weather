@@ -10,6 +10,7 @@ data class WeatherResponse(
     val weather: List<WeatherShortInfoResponse>,
     val clouds: WeatherCloudsResponse,
     val wind: WeatherWindResponse,
+    val visibility: Int,
     /** Вероятность осадков, в %*/
     val pop: Double
 )

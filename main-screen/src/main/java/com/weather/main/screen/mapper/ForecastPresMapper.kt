@@ -21,7 +21,7 @@ class ForecastPresMapper {
 
     fun toPres(domain: WeatherShortInfoDomain): WeatherShortInfoPres = domain.run {
         WeatherShortInfoPres(
-            description = description,
+            description = description.replaceFirstChar(Char::titlecase),
             icon = icon
         )
     }
@@ -34,7 +34,8 @@ class ForecastPresMapper {
             tempMax = tempMax,
             humidity = humidity,
             cloudiness = cloudiness,
-            pop = pop.toPercent()
+            pop = pop.toPercent(),
+            visibility = visibility
         )
     }
 

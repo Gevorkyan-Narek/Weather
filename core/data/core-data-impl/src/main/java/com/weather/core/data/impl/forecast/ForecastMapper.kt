@@ -13,17 +13,16 @@ import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.forecast.WeatherMetricsDomain
 import com.weather.core.domain.models.forecast.WeatherShortInfoDomain
 import com.weather.core.domain.models.forecast.WeatherWindDomain
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneId
+import org.threeten.bp.DateTimeUtils
+import java.sql.Timestamp
 
 class ForecastMapper {
 
     fun toEntity(net: WeatherResponse): WeatherEntity = net.run {
         WeatherEntity(
             date = DateFormatter.getDefaultFormatDate(dateTime * 1000),
-            dateTime = dateTime,
-            metrics = toEntity(metrics, clouds.cloudiness, pop),
+            dateTime = dateTime * 1000,
+            metrics = toEntity(metrics, clouds.cloudiness, pop, visibility),
             wind = toEntity(wind),
             shortInfo = weather.map(::toEntity),
         )
@@ -40,6 +39,7 @@ class ForecastMapper {
         net: WeatherMetricsResponse,
         cloudiness: Int,
         pop: Double,
+        visibility: Int,
     ): WeatherMetricsEntity = net.run {
         WeatherMetricsEntity(
             temp = temp,
@@ -48,7 +48,8 @@ class ForecastMapper {
             tempMax = tempMax,
             humidity = humidity,
             cloudiness = cloudiness,
-            pop = pop
+            pop = pop,
+            visibility = visibility
         )
     }
 
@@ -62,12 +63,10 @@ class ForecastMapper {
 
     fun toDomain(entity: WeatherEntity): WeatherDomain = entity.run {
         WeatherDomain(
-            dateTime = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(dateTime), ZoneId.systemDefault()
-            ),
+            dateTime = DateTimeUtils.toLocalDateTime(Timestamp(dateTime)),
             metrics = toDomain(metrics),
             wind = toDomain(wind),
-            shortInfo = shortInfo.map(::toDomain)
+            shortInfo = shortInfo.map(::toDomain),
         )
     }
 
@@ -86,7 +85,8 @@ class ForecastMapper {
             tempMax = tempMax,
             humidity = humidity,
             cloudiness = cloudiness,
-            pop = pop
+            pop = pop,
+            visibility = visibility
         )
     }
 
