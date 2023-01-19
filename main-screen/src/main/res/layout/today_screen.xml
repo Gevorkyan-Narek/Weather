@@ -94,7 +94,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/feelsLike"
-
         app:layout_constraintEnd_toStartOf="@id/feelsLikeTemp"
         app:layout_constraintStart_toEndOf="@id/verticalDivider1"
         app:layout_constraintTop_toBottomOf="@id/barrier"
@@ -189,11 +188,11 @@
         tools:fieldValue="21" />
 
     <com.weather.custom.views.weatherfield.WeatherField
-        android:id="@+id/sunsetField"
+        android:id="@+id/cloudinessField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/smallIndent"
-        app:fieldLabel="@string/sunset"
+        app:fieldLabel="@string/cloudiness"
         app:layout_constraintStart_toStartOf="@id/humidityField"
         app:layout_constraintTop_toBottomOf="@id/precipitationField"
         app:unit="percent"
@@ -207,7 +206,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sunsetField"
+        app:layout_constraintTop_toBottomOf="@id/cloudinessField"
         tools:itemCount="3"
         tools:listitem="@layout/weather_item" />
 

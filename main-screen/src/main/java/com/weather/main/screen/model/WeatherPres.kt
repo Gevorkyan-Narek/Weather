@@ -7,5 +7,4 @@ data class WeatherPres(
     val metrics: WeatherMetricsPres,
     val wind: WeatherWindPres,
     val shortInfo: List<WeatherShortInfoPres>,
-    val weatherTimeEnum: WeatherTimeEnum,
 )

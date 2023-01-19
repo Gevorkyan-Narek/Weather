@@ -46,6 +46,9 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
                     feelsLikeTemp.text = getString(R.string.tempWithCelsius, feelsLike)
                     precipitationField.setFieldValue(pop.toString(), WeatherFieldUnitEnum.PERCENT)
                     humidityField.setFieldValue(humidity.toString(), WeatherFieldUnitEnum.PERCENT)
+                    cloudinessField.setFieldValue(
+                        cloudiness.toString(), WeatherFieldUnitEnum.PERCENT
+                    )
                 }
                 with(pres.wind) {
                     degreeValue.text = getString(R.string.degree, degree)

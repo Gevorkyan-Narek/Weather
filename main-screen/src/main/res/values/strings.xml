@@ -13,7 +13,6 @@
     <string name="tempWithoutCelsius">%1$.0f°</string>
     <string name="precipitation">Осадки</string>
     <string name="humidity">Влажность</string>
-    <string name="sunset">Закат</string>
     <string name="visibility">Видимость</string>
     <string name="cloudiness">Облачность</string>
     <string name="withPercent">%1$d%%</string>

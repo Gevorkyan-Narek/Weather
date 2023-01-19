@@ -9,7 +9,6 @@ import com.weather.base.utils.DateFormatter
 import com.weather.core.domain.api.ForecastUseCase
 import com.weather.main.screen.mapper.ForecastPresMapper
 import com.weather.main.screen.model.WeatherPres
-import com.weather.main.screen.model.WeatherTimeEnum
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -31,7 +30,7 @@ class TodayViewModel(
     val todayForecastLiveData = todayForecastFlow.asLiveData()
 
     val currentForecastLiveData = todayForecastFlow.map { weatherPres ->
-        weatherPres.find { pres -> pres.weatherTimeEnum == WeatherTimeEnum.valueOf(LocalDateTime.now()) }
+        weatherPres.find { pres -> LocalDateTime.now() <= pres.dateTime }
     }.filterNotNull().asLiveData()
 
     private val _detailLiveData = MutableLiveData<WeatherPres>()

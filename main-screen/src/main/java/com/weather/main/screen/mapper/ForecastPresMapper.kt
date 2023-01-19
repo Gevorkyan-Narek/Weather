@@ -5,7 +5,10 @@ import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.forecast.WeatherMetricsDomain
 import com.weather.core.domain.models.forecast.WeatherShortInfoDomain
 import com.weather.core.domain.models.forecast.WeatherWindDomain
-import com.weather.main.screen.model.*
+import com.weather.main.screen.model.WeatherMetricsPres
+import com.weather.main.screen.model.WeatherPres
+import com.weather.main.screen.model.WeatherShortInfoPres
+import com.weather.main.screen.model.WeatherWindPres
 
 class ForecastPresMapper {
 
@@ -14,8 +17,7 @@ class ForecastPresMapper {
             dateTime = dateTime,
             metrics = toPres(metrics),
             shortInfo = shortInfo.map(::toPres),
-            wind = toPres(wind),
-            weatherTimeEnum = WeatherTimeEnum.valueOf(dateTime)
+            wind = toPres(wind)
         )
     }
 
