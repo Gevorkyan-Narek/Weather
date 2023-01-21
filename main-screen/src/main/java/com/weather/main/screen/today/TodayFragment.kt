@@ -12,7 +12,6 @@ import com.weather.main.screen.model.WeatherMetricsPres
 import com.weather.main.screen.model.WeatherPres
 import com.weather.main.screen.today.adapter.TodayTimeAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
 class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
@@ -37,46 +36,56 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
             observe(todayDate) { dateString ->
                 date.text = dateString
             }
-            observe(currentForecastLiveData) { pres ->
-                LoggerFactory.getLogger(javaClass).debug("current: $pres")
-                temp.text = getString(R.string.tempWithoutCelsius, pres.metrics.temp)
-                setWeatherIcon(pres.shortInfo.first().icon, weatherImage)
-                tempDescription.text = pres.shortInfo.joinToString { info -> info.description }
-                with(pres.metrics) {
-                    feelsLikeTemp.text = getString(R.string.tempWithCelsius, feelsLike)
-                    precipitationField.setFieldValue(pop.toString(), WeatherFieldUnitEnum.PERCENT)
-                    humidityField.setFieldValue(humidity.toString(), WeatherFieldUnitEnum.PERCENT)
-                    cloudinessField.setFieldValue(
-                        cloudiness.toString(), WeatherFieldUnitEnum.PERCENT
-                    )
-                }
-                with(pres.wind) {
-                    degreeValue.text = getString(R.string.degree, degree)
-                    windField.setFieldValue(gust.toString(), WeatherFieldUnitEnum.SPEED)
-                }
+            observe(currentWeatherLiveData, ::handleCurrentForecast)
+            observe(todayForecastLiveData, ::handleTodayForecast)
+            observe(detailLiveData, ::handleDetails)
+        }
+    }
+
+    private fun handleCurrentForecast(pres: WeatherPres) {
+        binding?.run {
+            temp.text = getString(R.string.tempWithoutCelsius, pres.metrics.temp)
+            setWeatherIcon(pres.shortInfo.first().icon, weatherImage)
+            tempDescription.text = pres.shortInfo.joinToString { info -> info.description }
+            with(pres.metrics) {
+                feelsLikeTemp.text = getString(R.string.tempWithCelsius, feelsLike)
+                precipitationField.setFieldValue(pop.toString(), WeatherFieldUnitEnum.PERCENT)
+                humidityField.setFieldValue(humidity.toString(), WeatherFieldUnitEnum.PERCENT)
+                cloudinessField.setFieldValue(
+                    cloudiness.toString(), WeatherFieldUnitEnum.PERCENT
+                )
             }
-            observe(todayForecastLiveData) { pres ->
-                LoggerFactory.getLogger(javaClass).debug("fullToday: $pres")
-                val max =
-                    pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).maxBy { abs(it) }
-                val min =
-                    pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
-                tempMinMax.text = getString(R.string.tempMinMax, max, min)
-                adapter.submitList(pres)
+            with(pres.wind) {
+                degreeValue.text = getString(R.string.degree, degree)
+                windField.setFieldValue(gust.toString(), WeatherFieldUnitEnum.SPEED)
             }
-            observe(detailLiveData) { pres ->
-                with(pres.metrics) {
-                    detailsFeelsLikeValue.text = getString(R.string.tempWithCelsius, feelsLike)
-                    detailsHumidityValue.text = humidity.toString()
-                    detailsVisibilityValue.text = if (visibility > 1000) {
-                        getString(R.string.visibilityKilometers, visibility / 1000f)
-                    } else {
-                        getString(R.string.visibilityMeters, visibility)
-                    }
-                    detailsCloudinessValue.text = getString(R.string.withPercent, cloudiness)
+        }
+    }
+
+    private fun handleTodayForecast(pres: List<WeatherPres>) {
+        binding?.run {
+            val max =
+                pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).maxBy { abs(it) }
+            val min =
+                pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
+            tempMinMax.text = getString(R.string.tempMinMax, max, min)
+            adapter.submitList(pres)
+        }
+    }
+
+    private fun handleDetails(pres: WeatherPres) {
+        binding?.run {
+            with(pres.metrics) {
+                detailsFeelsLikeValue.text = getString(R.string.tempWithCelsius, feelsLike)
+                detailsHumidityValue.text = humidity.toString()
+                detailsVisibilityValue.text = if (visibility > 1000) {
+                    getString(R.string.visibilityKilometers, visibility / 1000f)
+                } else {
+                    getString(R.string.visibilityMeters, visibility)
                 }
-                setWeatherIcon(pres.shortInfo.first().icon, detailImage)
+                detailsCloudinessValue.text = getString(R.string.withPercent, cloudiness)
             }
+            setWeatherIcon(pres.shortInfo.first().icon, detailImage)
         }
     }
 

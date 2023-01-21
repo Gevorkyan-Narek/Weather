@@ -29,7 +29,7 @@ class TodayViewModel(
 
     val todayForecastLiveData = todayForecastFlow.asLiveData()
 
-    val currentForecastLiveData = todayForecastFlow.map { weatherPres ->
+    val currentWeatherLiveData = todayForecastFlow.map { weatherPres ->
         weatherPres.find { pres -> LocalDateTime.now() <= pres.dateTime }
     }.filterNotNull().asLiveData()
 
