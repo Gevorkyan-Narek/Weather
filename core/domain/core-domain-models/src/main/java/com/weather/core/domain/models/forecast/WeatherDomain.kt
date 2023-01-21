@@ -1,13 +1,10 @@
 package com.weather.core.domain.models.forecast
 
-import java.util.Date
+import org.threeten.bp.LocalDateTime
 
 data class WeatherDomain(
-    val dateTime: Date,
+    val dateTime: LocalDateTime,
     val metrics: WeatherMetricsDomain,
-    val weatherDescription: List<WeatherDescriptionDomain>,
-    val clouds: WeatherCloudsDomain,
     val wind: WeatherWindDomain,
-    /** Вероятность осадков, в %*/
-    val pop: Double
+    val shortInfo: List<WeatherShortInfoDomain>,
 )

@@ -1,5 +1,6 @@
 package com.weather.core.data.impl.geo
 
+import com.weather.core.datasource.db.geo.CityEntity
 import com.weather.core.datasource.inmemory.model.CityInMemory
 import com.weather.core.datasource.inmemory.model.GeoInMemory
 import com.weather.core.datasource.inmemory.model.GeoLinkInMemory
@@ -15,14 +16,14 @@ import com.weather.core.domain.models.geo.GeoRelEnumsDomain
 
 class GeoMapper {
 
-    fun toDomain(net: GeoResponse): GeoDomain = net.run {
+    fun toDomain(inMemory: GeoInMemory): GeoDomain = inMemory.run {
         GeoDomain(
             data = data.map(::toDomain),
-            links = links?.mapNotNull(::toDomain).orEmpty()
+            links = links.mapNotNull(::toDomain)
         )
     }
 
-    fun toDomain(net: CityResponse): CityDomain = net.run {
+    fun toDomain(inMemory: CityInMemory): CityDomain = inMemory.run {
         CityDomain(
             name = name,
             countryCode = countryCode,
@@ -31,28 +32,37 @@ class GeoMapper {
         )
     }
 
-    fun toDomain(net: GeoLinkResponse?): GeoLinkDomain? = net?.run {
+    fun toDomain(entity: CityEntity): CityDomain = entity.run {
+        CityDomain(
+            name = name,
+            countryCode = countryCode,
+            lat = lat,
+            lon = lon
+        )
+    }
+
+    fun toDomain(inMemory: GeoLinkInMemory?): GeoLinkDomain? = inMemory?.run {
         GeoLinkDomain(
             rel = toDomain(rel),
             href = href
         )
     }
 
-    fun toDomain(net: GeoRelEnumsResponse): GeoRelEnumsDomain = when (net) {
-        GeoRelEnumsResponse.FIRST -> GeoRelEnumsDomain.FIRST
-        GeoRelEnumsResponse.NEXT -> GeoRelEnumsDomain.NEXT
-        GeoRelEnumsResponse.PREV -> GeoRelEnumsDomain.PREV
-        GeoRelEnumsResponse.LAST -> GeoRelEnumsDomain.LAST
+    fun toDomain(inMemory: GeoRelEnumsInMemory): GeoRelEnumsDomain = when (inMemory) {
+        GeoRelEnumsInMemory.FIRST -> GeoRelEnumsDomain.FIRST
+        GeoRelEnumsInMemory.NEXT -> GeoRelEnumsDomain.NEXT
+        GeoRelEnumsInMemory.PREV -> GeoRelEnumsDomain.PREV
+        GeoRelEnumsInMemory.LAST -> GeoRelEnumsDomain.LAST
     }
 
-    fun toMemory(domain: GeoDomain): GeoInMemory = domain.run {
+    fun toMemory(net: GeoResponse): GeoInMemory = net.run {
         GeoInMemory(
             data = data.map(::toMemory),
-            links = links.map(::toMemory)
+            links = links?.map(::toMemory).orEmpty()
         )
     }
 
-    fun toMemory(domain: CityDomain): CityInMemory = domain.run {
+    fun toMemory(net: CityResponse): CityInMemory = net.run {
         CityInMemory(
             name = name,
             countryCode = countryCode,
@@ -61,18 +71,27 @@ class GeoMapper {
         )
     }
 
-    fun toMemory(domain: GeoLinkDomain): GeoLinkInMemory = domain.run {
+    fun toMemory(net: GeoLinkResponse): GeoLinkInMemory = net.run {
         GeoLinkInMemory(
             rel = toMemory(rel),
             href = href
         )
     }
 
-    fun toMemory(domain: GeoRelEnumsDomain): GeoRelEnumsInMemory = when (domain) {
-        GeoRelEnumsDomain.FIRST -> GeoRelEnumsInMemory.FIRST
-        GeoRelEnumsDomain.NEXT -> GeoRelEnumsInMemory.NEXT
-        GeoRelEnumsDomain.PREV -> GeoRelEnumsInMemory.PREV
-        GeoRelEnumsDomain.LAST -> GeoRelEnumsInMemory.LAST
+    fun toMemory(net: GeoRelEnumsResponse): GeoRelEnumsInMemory = when (net) {
+        GeoRelEnumsResponse.FIRST -> GeoRelEnumsInMemory.FIRST
+        GeoRelEnumsResponse.NEXT -> GeoRelEnumsInMemory.NEXT
+        GeoRelEnumsResponse.PREV -> GeoRelEnumsInMemory.PREV
+        GeoRelEnumsResponse.LAST -> GeoRelEnumsInMemory.LAST
+    }
+
+    fun toEntity(domain: CityDomain): CityEntity = domain.run {
+        CityEntity(
+            name = name,
+            countryCode = countryCode,
+            lat = lat,
+            lon = lon
+        )
     }
 
 }

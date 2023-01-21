@@ -5,6 +5,7 @@
     android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/Theme.Weather.Background"
     android:padding="@dimen/defaultIndent"
     app:layoutDescription="@xml/start_screen_motion_scene">
 
@@ -25,6 +26,7 @@
         style="@style/Theme.Weather.TextView.H1.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/transparent"
         android:text="@string/your"
         app:layout_constraintBottom_toTopOf="@id/subHeader"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,6 +38,7 @@
         style="@style/Theme.Weather.TextView.H2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/transparent"
         android:text="@string/weather"
         app:layout_constraintBottom_toTopOf="@id/inputLayout"
         app:layout_constraintEnd_toEndOf="parent"

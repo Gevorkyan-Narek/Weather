@@ -3,24 +3,30 @@ package com.weather.startscreen
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.android.utils.fragment.BindingFragmentMVVM
-import com.weather.android.utils.fragment.getDrawable
-import com.weather.android.utils.fragment.observe
+import com.weather.android.utils.getDrawable
+import com.weather.android.utils.observe
 import com.weather.startscreen.adapter.CityAdapterItemDecoration
 import com.weather.startscreen.databinding.FStartScreenBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
+    companion object {
+        private const val MOTION_DELAY = 1500L
+    }
+
     private val viewModel: StartScreenViewModel by viewModel()
 
-    private val adapter by lazy { CitySearchAdapter(viewModel::onCitySelect) }
+    private val citySearchAdapter by lazy { CitySearchAdapter(viewModel::onCitySelect) }
 
-    private val layoutManager by lazy {
+    private val linearLayoutManager by lazy {
         LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
@@ -28,15 +34,12 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         )
     }
 
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
-
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            val visiblePos = layoutManager.findLastVisibleItemPosition()
+            val visiblePos = linearLayoutManager.findLastVisibleItemPosition()
             recyclerView.adapter?.let { adapter ->
                 if (visiblePos >= adapter.itemCount - 1) {
-                    logger.debug("$visiblePos/${adapter.itemCount}")
                     viewModel.onScrolled()
                 }
             }
@@ -52,36 +55,36 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         cityEditText.addTextChangedListener { editable ->
             viewModel.onCityTextChanged(editable?.trim().toString())
         }
-        suggestionsRecycler.layoutManager = layoutManager
-        suggestionsRecycler.adapter = adapter
-        suggestionsRecycler.addOnScrollListener(scrollListener)
-        suggestionsRecycler.addItemDecoration(
-            CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
-        )
+        with(suggestionsRecycler) {
+            layoutManager = linearLayoutManager
+            adapter = citySearchAdapter
+            addOnScrollListener(scrollListener)
+            addItemDecoration(
+                CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
+            )
+        }
+        lifecycleScope.launch {
+            delay(MOTION_DELAY)
+            motionLayout.setTransition(R.id.startTransition)
+            motionLayout.transitionToEnd()
+        }
     }
 
     override fun FStartScreenBinding.observeViewModel() {
         with(viewModel) {
-            observe(motionStartEvent) {
-                motionLayout.setTransition(R.id.startTransition)
-                motionLayout.transitionToEnd()
-            }
-            observe(matchCitiesLiveData) { pres ->
-                adapter.submitList(pres)
-            }
-            observe(emptySearchLiveData) { isSearching ->
-                if (isSearching) {
+            observe(motionEvent) { isNotBlank ->
+                if (isNotBlank) {
                     motionLayout.setTransition(R.id.chooseCityTransition)
                 } else {
                     motionLayout.setTransition(R.id.emptySearchTransition)
                 }
                 motionLayout.transitionToEnd()
             }
-            observe(insertNewCitiesLiveData) { pres ->
-                adapter.addCities(pres)
+            observe(searchList) { list ->
+                citySearchAdapter.submitList(list)
             }
-            observe(loadingEvent) {
-                adapter.addLoading()
+            observe(navigationEvent) {
+                findNavController().navigate(R.id.fromStartToWeatherScreen)
             }
         }
     }

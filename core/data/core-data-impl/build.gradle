@@ -8,11 +8,14 @@ apply from: "$rootDir/module-setup/main-setup.gradle"
 dependencies {
 
     implementation project(path: ":utils:android-utils")
+    implementation project(path: ":utils:base-utils")
+    implementation project(path: ':core:datasource:core-datasource-inmemory')
+    implementation project(path: ':core:datasource:core-datasource-db')
     implementation project(path: ':core:datasource:core-datasource-net')
     implementation project(path: ":core:data:core-data-api")
     implementation project(path: ":core:domain:core-domain-models")
-    implementation project(path: ':core:datasource:core-datasource-inmemory')
 
+    implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
     implementation "androidx.core:core-ktx:$ktxVersion"
 
     // Retrofit + OkHttp
@@ -27,7 +30,6 @@ dependencies {
 
     // Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
-
 
 
 }

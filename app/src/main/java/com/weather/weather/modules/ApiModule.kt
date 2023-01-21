@@ -1,5 +1,6 @@
 package com.weather.weather.modules
 
+import com.weather.base.utils.nullOrFalse
 import com.weather.core.datasource.net.forecast.ForecastApi
 import com.weather.core.datasource.net.geo.GeoApi
 import okhttp3.Interceptor
@@ -14,7 +15,7 @@ val apiModule = module {
     single<GeoApi> {
         provideRetrofit(
             baseUrl = "https://wft-geo-db.p.rapidapi.com",
-            interceptors = listOf(provideGeoInterceptor())
+            interceptors = listOf(provideGeoInterceptor(), provideBasicLoggingInterceptor())
         )
     }
 
@@ -55,13 +56,21 @@ private fun provideGeoInterceptor(): Interceptor {
     }
 }
 
+private fun provideBasicLoggingInterceptor(): Interceptor {
+    return HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BASIC
+    }
+}
+
 fun createOkHttpClient(interceptors: List<Interceptor>? = null): OkHttpClient {
     return OkHttpClient().newBuilder().apply {
         interceptors?.forEach { interceptor ->
             addInterceptor(interceptor)
         }
-        addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        })
+        if (interceptors?.contains(HttpLoggingInterceptor()).nullOrFalse()) {
+            addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+        }
     }.build()
 }

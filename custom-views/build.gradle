@@ -1,0 +1,18 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: "$rootDir/module-setup/main-setup.gradle"
+apply from: "$rootDir/module-setup/viewbinding.gradle"
+
+dependencies {
+
+    implementation project(":shared-styles")
+    implementation project(":utils:android-utils")
+
+    implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "androidx.appcompat:appcompat:$appCompat"
+    implementation "com.google.android.material:material:$material"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+}

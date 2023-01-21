@@ -1,5 +1,7 @@
 package com.weather.weather.modules
 
+import com.weather.main.screen.main.MainScreenViewModel
+import com.weather.main.screen.today.TodayViewModel
 import com.weather.startscreen.StartScreenFragment
 import com.weather.startscreen.StartScreenViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -12,9 +14,21 @@ val viewModelsModule = module {
             StartScreenViewModel(
                 geoUseCase = get(),
                 geoMapper = get(),
-                forecastUseCase = get()
             )
         }
+    }
+
+    viewModel {
+        MainScreenViewModel(
+            forecastUseCase = get()
+        )
+    }
+
+    viewModel {
+        TodayViewModel(
+            forecastUseCase = get(),
+            mapper = get()
+        )
     }
 
 }

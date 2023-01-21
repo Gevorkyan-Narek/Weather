@@ -6,5 +6,10 @@ data class WeatherMetricsDomain(
     val tempMin: Double,
     val tempMax: Double,
     /** Влажность */
-    val humidity: Int
+    val humidity: Int,
+    /** Облачность, в %*/
+    val cloudiness: Int,
+    /** Вероятность осадков, в %*/
+    val pop: Double,
+    val visibility: Int
 )

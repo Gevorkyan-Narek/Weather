@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 apply from: "$rootDir/module-setup/main-setup.gradle"
@@ -9,7 +10,10 @@ apply from: "$rootDir/module-setup/viewbinding.gradle"
 dependencies {
 
     implementation project(":shared-styles")
+    implementation project(":custom-views")
+    implementation project(":navigation")
     implementation project(":utils:android-utils")
+    implementation project(":utils:base-utils")
     implementation project(":core:domain:core-domain-api")
     implementation project(":core:domain:core-domain-models")
 
@@ -17,6 +21,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation "com.google.android.material:material:$material"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+    implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
 
     implementation "org.slf4j:slf4j-api:$slf4j"
 
@@ -28,6 +33,10 @@ dependencies {
     // Koin
     implementation "io.insert-koin:koin-android:$koinVersion"
     implementation "io.insert-koin:koin-androidx-navigation:$koinVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     testImplementation "junit:junit:$jUnit"
     androidTestImplementation "androidx.test.ext:junit:$extJUnit"

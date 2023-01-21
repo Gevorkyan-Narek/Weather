@@ -4,85 +4,114 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
-import com.weather.android.utils.fragment.liveData
-import com.weather.android.utils.fragment.postEvent
-import com.weather.core.domain.api.ForecastUseCase
+import com.weather.android.utils.liveData
+import com.weather.android.utils.postEvent
 import com.weather.core.domain.api.GeoUseCase
+import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.models.CityPres
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
-    private val forecastUseCase: ForecastUseCase,
-    private val logger: Logger = LoggerFactory.getLogger(StartScreenViewModel::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(StartScreenViewModel::class.java),
 ) : ViewModel() {
 
     companion object {
-        private const val MOTION_DELAY = 1500L
+        private const val TEXT_CHANGE_DEBOUNCE = 500L
+        private const val SCROLL_DEBOUNCE = 1500L
     }
 
-    private val _motionStartEvent = MutableLiveData<Unit>()
-    val motionStartEvent = _motionStartEvent.liveData()
+    private val _searchStateFlow = MutableStateFlow<String?>(null)
 
-    private val _emptySearchLiveData = MutableLiveData<Boolean>()
-    val emptySearchLiveData = _emptySearchLiveData.liveData().distinctUntilChanged()
+    private val searchStateFlow = _searchStateFlow
+        .filterNotNull()
+        .map { searchText ->
+            _motionEvent.postValue(searchText.isNotBlank())
+            searchText
+        }
+        .debounce(TEXT_CHANGE_DEBOUNCE)
+        .distinctUntilChanged()
+        .mapLatest { searchText ->
+            if (searchText.isNotBlank()) {
+                geoUseCase.downloadCities(searchText)
+            }
+        }
 
-    private val _matchCitiesLiveData = MutableLiveData<List<CityPres>>()
-    val matchCitiesLiveData = _matchCitiesLiveData.liveData()
+    private val _scrollStateFlow =
+        MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    private val _insertNewCitiesLiveData = MutableLiveData<List<CityPres>>()
-    val insertNewCitiesLiveData = _insertNewCitiesLiveData.liveData()
+    private val scrollStateFlow = _scrollStateFlow
+        .map {
+            if (geoUseCase.isHasMoreCities.first())
+                addLoading()
+        }
+        .debounce(SCROLL_DEBOUNCE)
+        .mapLatest {
+            geoUseCase.downloadMoreCities()
+        }
 
-    private val _loadingEvent = MutableLiveData<Unit>()
-    val loadingEvent = _loadingEvent.liveData()
+    private val _motionEvent = MutableLiveData<Boolean>()
+    val motionEvent = _motionEvent.liveData().distinctUntilChanged()
 
-    private var job: Job? = null
+    private val _searchList = MutableLiveData<List<CityAdapterInfo>>()
+    val searchList = _searchList.liveData().distinctUntilChanged()
+
+    private val _navigationEvent = MutableLiveData<Unit>()
+    val navigationEvent = _navigationEvent.liveData()
 
     init {
         viewModelScope.launch {
-            delay(MOTION_DELAY)
-            _motionStartEvent.postEvent()
+            geoUseCase.getDownloadCities().collect { domain ->
+                val matchList = geoMapper.toPres(domain).data
+                with(_searchList) {
+                    val validList = value.orEmpty().filterIsInstance<CityAdapterInfo.CityInfo>()
+                    logger.debug("validList $validList")
+                    postValue(
+                        validList +
+                                if (matchList.isEmpty()) {
+                                    listOf(CityAdapterInfo.NoMatch)
+                                } else {
+                                    matchList.map(CityAdapterInfo::CityInfo)
+                                }
+                    )
+                }
+            }
+        }
+        viewModelScope.launch {
+            searchStateFlow.collect()
+        }
+        viewModelScope.launch {
+            scrollStateFlow.collect()
         }
     }
 
     fun onCityTextChanged(cityPrefix: String) {
-        viewModelScope.launch {
-            val isPrefixNotBlank = cityPrefix.isNotBlank()
-            _emptySearchLiveData.postValue(isPrefixNotBlank)
-            if (isPrefixNotBlank) {
-                geoUseCase.downloadCities(cityPrefix)?.let { domain ->
-                    _matchCitiesLiveData.postValue(geoMapper.toPres(domain).data)
-                }
-            }
-        }
+        _searchList.postValue(listOf(CityAdapterInfo.Loading))
+        _searchStateFlow.tryEmit(cityPrefix)
     }
 
     fun onScrolled() {
-        viewModelScope.launch {
-            if (job != null) return@launch
-
-            job = launch {
-                _loadingEvent.postValue(Unit)
-                delay(3000)
-                val domain = geoUseCase.downloadMoreCities()
-                job = null
-                if (domain == null) {
-                    logger.debug("No new cities")
-                } else {
-                    _insertNewCitiesLiveData.postValue(geoMapper.toPres(domain).data)
-                }
-            }
-        }
+        _scrollStateFlow.tryEmit(Unit)
     }
 
     fun onCitySelect(city: CityPres) {
+        _navigationEvent.postEvent()
         viewModelScope.launch {
-            forecastUseCase.downloadForecast(geoMapper.toDomain(city))
+            geoUseCase.saveCity(geoMapper.toDomain(city))
+        }
+    }
+
+    private fun addLoading() {
+        if (_searchList.value?.find { it is CityAdapterInfo.Loading } == null) {
+            _searchList.postValue(_searchList.value.orEmpty() + listOf(CityAdapterInfo.Loading))
         }
     }
 
