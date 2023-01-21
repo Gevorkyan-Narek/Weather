@@ -8,4 +8,6 @@ apply from: "$rootDir/module-setup/main-setup.gradle"
 dependencies {
 
     implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+
 }
