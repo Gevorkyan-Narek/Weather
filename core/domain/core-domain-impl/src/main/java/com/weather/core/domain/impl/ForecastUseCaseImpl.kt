@@ -4,21 +4,22 @@ import com.weather.core.data.api.ForecastRepository
 import com.weather.core.data.api.GeoRepository
 import com.weather.core.domain.api.ForecastUseCase
 import com.weather.core.domain.models.forecast.WeatherDomain
-import com.weather.core.domain.models.geo.CityDomain
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class ForecastUseCaseImpl(
     private val repository: ForecastRepository,
-    private val geoRepository: GeoRepository
+    private val geoRepository: GeoRepository,
 ) : ForecastUseCase {
 
-    override fun getCities(): Flow<List<CityDomain>> {
-        return geoRepository.getCities()
-    }
-
-    override suspend fun downloadForecast() {
-        return repository.downloadForecast(geoRepository.getCities().first().first())
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            geoRepository.selectedCity.collect { city ->
+                repository.downloadForecast(city)
+            }
+        }
     }
 
     override fun getTodayForecast(): Flow<List<WeatherDomain>> {

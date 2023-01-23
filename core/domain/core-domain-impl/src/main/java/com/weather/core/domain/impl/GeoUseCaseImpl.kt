@@ -11,10 +11,12 @@ class GeoUseCaseImpl(
     private val repository: GeoRepository,
 ) : GeoUseCase {
 
+    override val selectedCity: Flow<CityDomain> = repository.selectedCity
+
     override val isHasMoreCities: Flow<Boolean> = repository.isHasMoreCities
 
-    override fun getDownloadCities(): Flow<GeoDomain> {
-        return repository.getDownloadCities()
+    override fun getCities(): Flow<List<CityDomain>> {
+        return repository.getCities()
     }
 
     override suspend fun downloadCities(namePrefix: String, offset: Int) {
@@ -27,7 +29,15 @@ class GeoUseCaseImpl(
         }
     }
 
+    override fun getDownloadCities(): Flow<GeoDomain> {
+        return repository.getDownloadCities()
+    }
+
     override suspend fun saveCity(city: CityDomain) {
         repository.saveCity(city)
+    }
+
+    override suspend fun reSelectCity(cityName: String) {
+        repository.updateSelectedCity(cityName)
     }
 }

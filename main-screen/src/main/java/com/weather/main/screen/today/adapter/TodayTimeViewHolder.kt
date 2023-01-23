@@ -1,9 +1,8 @@
 package com.weather.main.screen.today.adapter
 
-import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
+import com.weather.android.utils.getColorIf
 import com.weather.android.utils.setWeatherIcon
-import com.weather.android.utils.themeColor
 import com.weather.main.screen.R
 import com.weather.main.screen.databinding.WeatherItemBinding
 import com.weather.main.screen.model.WeatherPres
@@ -19,23 +18,21 @@ class TodayTimeViewHolder(
             temp.text = root.context.getString(R.string.tempWithoutCelsius, pres.metrics.temp)
             setWeatherIcon(pres.shortInfo.first().icon, icon)
             root.run {
-                strokeColor = context.getStrokeColor(isSelected)
-                setCardBackgroundColor(context.getBackgroundColor(isSelected))
+                strokeColor =
+                    getColorIf(isSelected, R.attr.colorOnSecondary, R.attr.colorSecondaryVariant)
+
+                setCardBackgroundColor(
+                    getColorIf(
+                        isSelected,
+                        R.attr.colorSecondary,
+                        R.attr.colorSecondaryVariant)
+                )
+
                 setOnClickListener {
                     action(pres)
                 }
             }
         }
     }
-
-    private fun Context.getStrokeColor(isSelected: Boolean): Int = themeColor(
-        if (isSelected) R.attr.colorOnSecondary
-        else R.attr.colorSecondaryVariant
-    )
-
-    private fun Context.getBackgroundColor(isSelected: Boolean) = themeColor(
-        if (isSelected) R.attr.colorSecondary
-        else R.attr.colorSecondaryVariant
-    )
 
 }

@@ -24,6 +24,9 @@ class GeoRepositoryImpl(
     private val logger: Logger = LoggerFactory.getLogger(GeoRepositoryImpl::class.java),
 ) : GeoRepository {
 
+    override val selectedCity: Flow<CityDomain>
+        get() = dao.selectedCities().filterNotNull().map(mapper::toDomain)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override val isHasMoreCities: Flow<Boolean>
         get() = inMemoryStore.geoInMemoryState.mapLatest { inMemory ->
@@ -66,10 +69,19 @@ class GeoRepositoryImpl(
     }
 
     override suspend fun saveCity(city: CityDomain) {
-        dao.insertReplace(mapper.toEntity(city))
+        val entity = mapper.toEntity(city)
+        dao.insertReplace(entity)
+        dao.updateSelectedCity(entity.copy(isSelected = true))
     }
 
     override fun getCities(): Flow<List<CityDomain>> {
         return dao.getCities().mapList(mapper::toDomain)
     }
+
+    override suspend fun updateSelectedCity(cityName: String) {
+        dao.getCity(cityName)?.let { entity ->
+            dao.updateSelectedCity(entity.copy(isSelected = true))
+        }
+    }
+
 }

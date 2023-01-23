@@ -2,6 +2,7 @@
 <resources>
     <string name="today">Сегодня</string>
     <string name="forecast">Прогноз</string>
+    <string name="cities">Список городов:</string>
 
     <string name="wind">Ветер</string>
     <string name="windSpeed">%1$.2f м/c</string>

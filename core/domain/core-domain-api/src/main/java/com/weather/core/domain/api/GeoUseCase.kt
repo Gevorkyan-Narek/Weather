@@ -6,6 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface GeoUseCase {
 
+    val selectedCity: Flow<CityDomain>
+
+    fun getCities(): Flow<List<CityDomain>>
+
     val isHasMoreCities: Flow<Boolean>
 
     fun getDownloadCities(): Flow<GeoDomain>
@@ -15,5 +19,7 @@ interface GeoUseCase {
     suspend fun downloadMoreCities()
 
     suspend fun saveCity(city: CityDomain)
+
+    suspend fun reSelectCity(cityName: String)
 
 }

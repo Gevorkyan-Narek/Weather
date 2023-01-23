@@ -46,4 +46,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tabLayout" />
 
+    <include
+        android:id="@+id/sideMenu"
+        layout="@layout/side_menu"
+        android:visibility="invisible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

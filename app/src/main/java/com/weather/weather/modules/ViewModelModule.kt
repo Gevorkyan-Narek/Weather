@@ -20,7 +20,7 @@ val viewModelsModule = module {
 
     viewModel {
         MainScreenViewModel(
-            forecastUseCase = get()
+            geoUseCase = get()
         )
     }
 
