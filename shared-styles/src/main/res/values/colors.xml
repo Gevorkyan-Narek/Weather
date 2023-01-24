@@ -6,6 +6,8 @@
     <color name="transparent">#00000000</color>
     <color name="dark_gray">#32333e</color>
     <color name="light_gray">#9C9C9C</color>
+    <color name="yellow">#FFBD00</color>
+    <color name="light_gray_2">#4DA6A8AC</color>
 
     <!-- Day -->
     <color name="primary">#154CD8</color>

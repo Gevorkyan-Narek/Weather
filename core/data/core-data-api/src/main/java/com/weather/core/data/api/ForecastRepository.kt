@@ -10,4 +10,6 @@ interface ForecastRepository {
 
     fun getTodayForecast(): Flow<List<WeatherDomain>>
 
+    fun getForecast(): Flow<List<WeatherDomain>>
+
 }

@@ -62,6 +62,10 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="Theme.Weather.TextView.H3.Yellow">
+        <item name="android:textColor">@color/yellow</item>
+    </style>
+
     <style name="Theme.Weather.TextView.H3.Bold">
         <item name="fontFamily">sans-serif-black</item>
     </style>

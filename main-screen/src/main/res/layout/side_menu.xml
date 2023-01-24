@@ -16,7 +16,7 @@
             style="@style/Theme.Weather.TextView.H2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cities"
+            android:text="@string/citiesList"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -151,7 +151,7 @@
     <View
         android:id="@+id/horizontalDivider"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/lineHeight"
         android:layout_marginHorizontal="@dimen/defaultIndent"
         android:layout_marginTop="@dimen/defaultIndent"
         android:background="@drawable/line_with_gap"
@@ -228,7 +228,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_gradient"
+            android:background="@drawable/bg_gradient_details"
             android:padding="@dimen/defaultIndent">
 
             <TextView

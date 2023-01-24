@@ -26,4 +26,8 @@ class ForecastUseCaseImpl(
         return repository.getTodayForecast()
     }
 
+    override fun getForecast(): Flow<List<WeatherDomain>> {
+        return repository.getForecast()
+    }
+
 }

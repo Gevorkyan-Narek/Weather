@@ -68,7 +68,7 @@ class TodayFragment : BindingFragmentMVVM<TodayScreenBinding>() {
                 pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).maxBy { abs(it) }
             val min =
                 pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
-            tempMinMax.text = getString(R.string.tempMinMax, max, min)
+            tempMinMax.text = getString(R.string.tempMaxMin, max, min)
             adapter.submitList(pres)
         }
     }
