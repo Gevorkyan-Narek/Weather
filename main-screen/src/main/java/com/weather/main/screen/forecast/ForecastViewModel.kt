@@ -32,11 +32,11 @@ class ForecastViewModel(
                 icon = entry.value.first().shortInfo.first().icon,
                 description = entry.value.first().shortInfo.first().description,
                 tempMax = entry.value.map(WeatherDomain::metrics)
-                    .maxOf { metrics -> abs(metrics.tempMax) },
+                    .maxBy { metrics -> abs(metrics.temp) }.temp,
                 tempMin = entry.value.map(WeatherDomain::metrics)
-                    .minOf { metrics -> abs(metrics.tempMin) },
+                    .minBy { metrics -> abs(metrics.temp) }.temp,
                 humidity = entry.value.map(WeatherDomain::metrics)
-                    .maxOf(WeatherMetricsDomain::humidity)
+                    .map(WeatherMetricsDomain::humidity).average().toInt()
             )
         }
     }

@@ -16,9 +16,10 @@ class ForecastViewHolder(private val binding: ForecastItemBinding) :
             dayOfWeek.text = item.dateTime.dayOfWeek.getDisplayName(TextStyle.SHORT_STANDALONE,
                 Locale.forLanguageTag("ru"))
 
-            date.text = item.dateTime.format(DateTimeFormatter.ofPattern("MMMM d"))
+            date.text = item.dateTime.format(DateTimeFormatter.ofPattern("d MMMM"))
             setWeatherIcon(item.icon, icon)
-            tempMinMax.text = root.context.getString(R.string.tempMaxMin, item.tempMax, item.tempMin)
+            tempMinMax.text =
+                root.context.getString(R.string.tempMaxMin, item.tempMax, item.tempMin)
             humidity.text = root.context.getString(R.string.withPercent, item.humidity)
             description.text = item.description.replaceFirstChar(Char::titlecase)
         }
