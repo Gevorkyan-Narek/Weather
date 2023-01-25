@@ -1,6 +1,7 @@
 package com.weather.core.data.impl.forecast
 
 import com.weather.android.utils.checkResult
+import com.weather.android.utils.mapList
 import com.weather.android.utils.safeApiCall
 import com.weather.base.utils.DateFormatter
 import com.weather.core.data.api.ForecastRepository
@@ -9,15 +10,11 @@ import com.weather.core.datasource.net.forecast.ForecastApi
 import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.geo.CityDomain
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class ForecastRepositoryImpl(
     private val api: ForecastApi,
     private val dao: ForecastDao,
     private val mapper: ForecastMapper,
-    private val logger: Logger = LoggerFactory.getLogger(ForecastRepository::class.java),
 ) : ForecastRepository {
 
     companion object {
@@ -38,10 +35,13 @@ class ForecastRepositoryImpl(
     }
 
     override fun getTodayForecast(): Flow<List<WeatherDomain>> {
-        return dao.getForecastByDay(DateFormatter.getCurrentDateInDefaultFormat())
-            .map { weatherList ->
-                logger.debug("todayForecast: $weatherList")
-                weatherList.map(mapper::toDomain)
-            }
+        return dao
+            .getForecastByDay(DateFormatter.getCurrentDateInDefaultFormat())
+            .mapList(mapper::toDomain)
     }
+
+    override fun getForecast(): Flow<List<WeatherDomain>> {
+        return dao.getForecast().mapList(mapper::toDomain)
+    }
+
 }

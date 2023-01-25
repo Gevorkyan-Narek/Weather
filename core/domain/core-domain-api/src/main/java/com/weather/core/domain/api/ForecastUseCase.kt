@@ -7,4 +7,6 @@ interface ForecastUseCase {
 
     fun getTodayForecast(): Flow<List<WeatherDomain>>
 
+    fun getForecast(): Flow<List<WeatherDomain>>
+
 }

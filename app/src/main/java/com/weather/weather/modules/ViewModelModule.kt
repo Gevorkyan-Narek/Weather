@@ -1,5 +1,6 @@
 package com.weather.weather.modules
 
+import com.weather.main.screen.forecast.ForecastViewModel
 import com.weather.main.screen.main.MainScreenViewModel
 import com.weather.main.screen.today.TodayViewModel
 import com.weather.startscreen.StartScreenFragment
@@ -28,6 +29,12 @@ val viewModelsModule = module {
         TodayViewModel(
             forecastUseCase = get(),
             mapper = get()
+        )
+    }
+
+    viewModel {
+        ForecastViewModel(
+            forecastUseCase = get()
         )
     }
 
