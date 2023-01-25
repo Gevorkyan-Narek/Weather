@@ -4,5 +4,6 @@ data class CityDomain(
     val name: String,
     val countryCode: String,
     val lat: Double,
-    val lon: Double
+    val lon: Double,
+    val isSelected: Boolean
 )

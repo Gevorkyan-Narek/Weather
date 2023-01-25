@@ -28,7 +28,8 @@ class GeoMapper {
             name = name,
             countryCode = countryCode,
             lat = lat,
-            lon = lon
+            lon = lon,
+            isSelected = false
         )
     }
 
@@ -37,7 +38,8 @@ class GeoMapper {
             name = name,
             countryCode = countryCode,
             lat = lat,
-            lon = lon
+            lon = lon,
+            isSelected = entity.isSelected
         )
     }
 

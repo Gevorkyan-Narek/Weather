@@ -1,33 +1,22 @@
 package com.weather.main.screen.main
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import com.weather.android.utils.liveData
-import com.weather.android.utils.mapList
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.core.domain.models.geo.CityDomain
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class MainScreenViewModel(
-    private val geoUseCase: GeoUseCase,
-) : ViewModel() {
+class MainScreenViewModel(geoUseCase: GeoUseCase) : ViewModel() {
 
-    val cities = geoUseCase.getCities().mapList(CityDomain::name).asLiveData()
+    private val _locationMenuLiveData = MutableLiveData<Unit>()
+    val locationMenuLiveData = _locationMenuLiveData.liveData()
 
     val cityTitle = geoUseCase.selectedCity.asLiveData().map(CityDomain::name)
 
-    private val _menuClickLiveData = MutableLiveData<Unit>()
-    val menuVisibilityLiveData = _menuClickLiveData.liveData()
-
-    fun citySelected(cityName: String) {
-        _menuClickLiveData.postValue(Unit)
-        viewModelScope.launch(Dispatchers.IO) {
-            geoUseCase.reSelectCity(cityName)
-        }
-    }
-
-    fun menuClicked() {
-        _menuClickLiveData.postValue(Unit)
+    fun locationClicked() {
+        _locationMenuLiveData.postValue(Unit)
     }
 
 }
