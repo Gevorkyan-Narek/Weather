@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/indent"
-    android:background="@drawable/bg_gradient_forecast_item"
+    android:background="@drawable/bg_gradient"
     android:paddingHorizontal="@dimen/defaultIndent"
     android:paddingVertical="@dimen/smallIndent">
 

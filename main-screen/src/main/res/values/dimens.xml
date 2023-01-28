@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="littleIndent">7dp</dimen>
-    <dimen name="smallIndent">10dp</dimen>
     <dimen name="defaultIndent">15dp</dimen>
     <dimen name="largeIndent">20dp</dimen>
     <dimen name="veryLargeIndent">25dp</dimen>

@@ -7,9 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.android.utils.fragment.BindingFragment
-import com.weather.android.utils.getDrawable
 import com.weather.android.utils.observe
-import com.weather.startscreen.adapter.CityAdapterItemDecoration
 import com.weather.startscreen.adapter.SuggestionsOnScrollListener
 import com.weather.startscreen.databinding.FStartScreenBinding
 import kotlinx.coroutines.delay
@@ -57,9 +55,9 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
             adapter = citySearchAdapter
             citySearchAdapter.submitList(null)
             addOnScrollListener(scrollListener)
-            addItemDecoration(
-                CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
-            )
+//            addItemDecoration(
+//                CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
+//            )
         }
         lifecycleScope.launch {
             delay(MOTION_DELAY)
