@@ -50,7 +50,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/description"
-        style="@style/Theme.Weather.TextView.H3"
+        style="@style/Theme.Weather.TextView.H3.Yellow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/smallIndent"
