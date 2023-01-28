@@ -6,6 +6,7 @@
     <string name="forecast">Прогноз</string>
     <string name="cities">Города</string>
     <string name="addCity">Добавить город</string>
+    <string name="noMatch">Город не найден</string>
 
     <string name="wind">Ветер</string>
     <string name="windSpeed">%1$.2f м/c</string>

@@ -15,7 +15,7 @@ val useCaseModule = module {
         )
     }
 
-    single<GeoUseCase> {
+    factory<GeoUseCase> {
         GeoUseCaseImpl(
             repository = get()
         )

@@ -4,6 +4,7 @@ plugins {
 }
 
 apply from: "$rootDir/module-setup/main-setup.gradle"
+apply from: "$rootDir/module-setup/viewbinding.gradle"
 
 dependencies {
 

@@ -6,17 +6,17 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.weather.android.utils.fragment.BindingFragmentMVVM
+import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.getDrawable
 import com.weather.android.utils.observe
 import com.weather.startscreen.adapter.CityAdapterItemDecoration
+import com.weather.startscreen.adapter.SuggestionsOnScrollListener
 import com.weather.startscreen.databinding.FStartScreenBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
+class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
 
     companion object {
         private const val MOTION_DELAY = 1500L
@@ -34,16 +34,13 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         )
     }
 
-    private val scrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-            val visiblePos = linearLayoutManager.findLastVisibleItemPosition()
-            recyclerView.adapter?.let { adapter ->
-                if (visiblePos >= adapter.itemCount - 1) {
-                    viewModel.onScrolled()
-                }
+    private val scrollListener by lazy {
+        SuggestionsOnScrollListener(
+            linearLayoutManager,
+            onScrolledListener = { _, _, _ ->
+                viewModel.onScrolled()
             }
-        }
+        )
     }
 
     override fun onCreateBinding(
@@ -58,6 +55,7 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
         with(suggestionsRecycler) {
             layoutManager = linearLayoutManager
             adapter = citySearchAdapter
+            citySearchAdapter.submitList(null)
             addOnScrollListener(scrollListener)
             addItemDecoration(
                 CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
@@ -72,16 +70,20 @@ class StartScreenFragment : BindingFragmentMVVM<FStartScreenBinding>() {
 
     override fun FStartScreenBinding.observeViewModel() {
         with(viewModel) {
-            observe(motionEvent) { isNotBlank ->
-                if (isNotBlank) {
-                    motionLayout.setTransition(R.id.chooseCityTransition)
-                } else {
+            observe(searchList, citySearchAdapter::updateItems)
+            observe(motionEvent) { isBlank ->
+                if (isBlank) {
                     motionLayout.setTransition(R.id.emptySearchTransition)
+                } else {
+                    motionLayout.setTransition(R.id.chooseCityTransition)
                 }
                 motionLayout.transitionToEnd()
             }
-            observe(searchList) { list ->
-                citySearchAdapter.submitList(list)
+            observe(loadingLiveData) {
+                citySearchAdapter.addLoading()
+            }
+            observe(clearSearchListEvent) {
+                citySearchAdapter.clear()
             }
             observe(navigationEvent) {
                 findNavController().navigate(R.id.fromStartToWeatherScreen)

@@ -9,7 +9,6 @@ dependencies {
 
     implementation project(path: ":utils:android-utils")
     implementation project(path: ":utils:base-utils")
-    implementation project(path: ':core:datasource:core-datasource-inmemory')
     implementation project(path: ':core:datasource:core-datasource-db')
     implementation project(path: ':core:datasource:core-datasource-net')
     implementation project(path: ":core:data:core-data-api")

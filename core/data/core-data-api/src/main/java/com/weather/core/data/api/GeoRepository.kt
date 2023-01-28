@@ -6,11 +6,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface GeoRepository {
 
+    val savedCities: Flow<List<CityDomain>>
+
+    val downloadedCities: Flow<GeoDomain>
+
     val selectedCity: Flow<CityDomain>
 
-    val isHasMoreCities: Flow<Boolean>
-
-    fun getDownloadCities(): Flow<GeoDomain>
+    suspend fun isHasMoreCities(): Boolean
 
     suspend fun downloadCities(namePrefix: String, offset: Int)
 
@@ -18,8 +20,6 @@ interface GeoRepository {
 
     suspend fun saveCity(city: CityDomain)
 
-    fun getCities(): Flow<List<CityDomain>>
-
-    suspend fun updateSelectedCity(cityName: String)
+    suspend fun updateSelectedCity(city: CityDomain)
 
 }

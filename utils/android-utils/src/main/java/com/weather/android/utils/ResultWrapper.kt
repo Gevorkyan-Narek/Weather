@@ -18,7 +18,6 @@ suspend inline fun <T> safeApiCall(crossinline apiCall: suspend () -> T): Result
 }
 
 suspend inline fun <reified T> ResultWrapper<T>.checkResult(
-    crossinline loading: () -> Unit = {},
     crossinline fail: (Throwable) -> Unit = {},
     crossinline success: suspend (T) -> Unit,
 ) {
@@ -31,10 +30,6 @@ suspend inline fun <reified T> ResultWrapper<T>.checkResult(
         is ResultWrapper.Error -> {
             logger.error("error: $error")
             fail(this.error)
-        }
-        is ResultWrapper.Loading -> {
-            logger.info("loading")
-            loading()
         }
     }
 }

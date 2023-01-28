@@ -1,6 +1,5 @@
 package com.weather.weather.modules
 
-import com.weather.main.screen.dialog.CityDialogViewModel
 import com.weather.main.screen.forecast.ForecastViewModel
 import com.weather.main.screen.main.MainScreenViewModel
 import com.weather.main.screen.today.TodayViewModel
@@ -22,7 +21,8 @@ val viewModelsModule = module {
 
     viewModel {
         MainScreenViewModel(
-            geoUseCase = get()
+            geoUseCase = get(),
+            mapper = get()
         )
     }
 
@@ -36,12 +36,6 @@ val viewModelsModule = module {
     viewModel {
         ForecastViewModel(
             forecastUseCase = get()
-        )
-    }
-
-    viewModel {
-        CityDialogViewModel(
-            geoUseCase = get()
         )
     }
 

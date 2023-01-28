@@ -20,7 +20,6 @@ val repositoryModule = module {
         GeoRepositoryImpl(
             api = get(),
             dao = get(),
-            inMemoryStore = get(),
             mapper = get()
         )
     }

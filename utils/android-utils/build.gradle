@@ -10,6 +10,7 @@ apply from: "$rootDir/module-setup/viewbinding.gradle"
 dependencies {
 
     implementation project(path: ':core:domain:core-domain-models')
+    implementation project(path: ':shared-styles')
 
     implementation "org.slf4j:slf4j-api:$slf4j"
 
