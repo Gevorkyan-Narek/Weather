@@ -73,6 +73,7 @@ class MainScreenFragment : BindingFragment<MainScreenBinding>() {
             observe(stateBottomSheetLiveData) { state ->
                 bottomSheet.toBottomSheetBehaviour().state = state
                 if (state == BottomSheetBehavior.STATE_HIDDEN) {
+                    cityEditText.text?.clear()
                     citySelectAdapter.showSavedCities()
                 }
             }

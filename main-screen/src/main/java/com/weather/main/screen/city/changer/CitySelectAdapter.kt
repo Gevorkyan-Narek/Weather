@@ -65,7 +65,9 @@ class CitySelectAdapter(
         super.submitList(items)
     }
 
-    fun updateItems(list: List<CityAdapterInfo>) {
+    fun updateItems(list: List<CityAdapterInfo>?) {
+        if (list == null) return
+
         when {
             items.all { info -> info is CityAdapterInfo.Loading } && list.isEmpty() -> {
                 items.clear()

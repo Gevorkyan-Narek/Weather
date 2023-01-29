@@ -4,12 +4,14 @@ import androidx.lifecycle.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.weather.android.utils.liveData
 import com.weather.android.utils.mapList
+import com.weather.base.utils.nullOrTrue
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.core.domain.models.geo.CityDomain
 import com.weather.main.screen.city.changer.CityAdapterInfo
 import com.weather.main.screen.city.changer.model.CityInfoItemPres
 import com.weather.main.screen.mapper.CityPresMapper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
@@ -28,6 +30,10 @@ class MainScreenViewModel(
 
     val downloadCities = geoUseCase.downloadedCities
         .mapList { domain -> CityAdapterInfo.NewCityInfo(mapper.toPres(domain)) }
+        .map { list ->
+            if (cityPrefixChangedLiveData.value.nullOrTrue()) null
+            else list
+        }
         .asLiveData()
 
     private val _cityPrefixChangedLiveData = MutableLiveData(true)
