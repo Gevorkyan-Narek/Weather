@@ -116,9 +116,11 @@ class CitySelectAdapter(
     }
 
     private fun deleteClick(item: CityAdapterInfo.CityInfo, position: Int) {
-        savedItems.remove(item)
-        items.remove(item)
-        notifyItemRemoved(position)
+        if (items.size > 1) {
+            savedItems.remove(item)
+            items.remove(item)
+            notifyItemRemoved(position)
+        }
         onDeleteClick(item.city)
     }
 

@@ -68,7 +68,7 @@ class GeoUseCaseImpl(
     }
 
     override suspend fun reSelectCity(city: CityDomain) {
-        repository.updateSelectedCity(city.copy(isSelected = true))
+        repository.updateSelectedCity(city)
     }
 
     override suspend fun searchCity(cityName: String) {

@@ -74,10 +74,11 @@ class GeoRepositoryImpl(
     }
 
     override suspend fun removeSavedCity(city: CityDomain) {
-        if (city.isSelected) {
-            dao.setSelectedCity(dao.getCities().first().first())
-        }
         dao.remove(mapper.toEntity(city))
+        val newSelectedCity = dao.getCities().first().first().copy(isSelected = true)
+        if (city.isSelected) {
+            dao.updateSelectedCity(newSelectedCity)
+        }
     }
 
 }
