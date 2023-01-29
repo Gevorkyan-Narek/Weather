@@ -22,14 +22,14 @@
 
     <TextView
         android:id="@+id/temp"
-        style="@style/Theme.Weather.TextView.H1.Bold.Secondary"
+        style="@style/Theme.Weather.TextView.H1.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="50dp"
         android:textSize="64sp"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@id/tempDescription"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/weatherImage"
         app:layout_constraintTop_toBottomOf="@id/date"
         tools:text="33°" />
 
@@ -38,7 +38,7 @@
         style="@style/Theme.Weather.ImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="@dimen/veryLargeIndent"
         android:layout_marginTop="@dimen/littleIndent"
         android:scaleType="matrix"
         android:src="@drawable/ic_sun_with_cloud"
@@ -48,12 +48,12 @@
 
     <TextView
         android:id="@+id/tempDescription"
-        style="@style/Theme.Weather.TextView.H4"
+        style="@style/Theme.Weather.TextView.H3.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/barrier"
-        app:layout_constraintEnd_toEndOf="@id/temp"
-        app:layout_constraintStart_toStartOf="@id/temp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/weatherImage"
         app:layout_constraintTop_toBottomOf="@id/temp"
         tools:text="Partly Cloudy" />
 
