@@ -24,7 +24,7 @@ class GeoUseCaseImpl(
     override val selectedCity = repository.selectedCity
 
     private val _downloadMoreCitiesStateFlow =
-        MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     override val downloadMoreCitiesStateFlow = _downloadMoreCitiesStateFlow
         .filterNotNull()

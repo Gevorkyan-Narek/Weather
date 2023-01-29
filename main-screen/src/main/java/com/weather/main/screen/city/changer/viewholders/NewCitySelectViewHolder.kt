@@ -2,6 +2,7 @@ package com.weather.main.screen.city.changer.viewholders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.main.screen.city.changer.model.CityInfoItemPres
 import com.weather.main.screen.databinding.CityItemBinding
@@ -20,6 +21,7 @@ class NewCitySelectViewHolder(
     fun bind(item: CityInfoItemPres, onNewCitySelect: (CityInfoItemPres) -> Unit) {
         binding.run {
             city.text = item.name
+            delete.isVisible = false
             root.setOnClickListener {
                 onNewCitySelect(item)
             }

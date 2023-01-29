@@ -22,7 +22,7 @@ class CityViewHolder(
     fun bind(
         item: CityInfoItemPres,
         onSavedCitySelect: (CityInfoItemPres) -> Unit,
-        onDeleteClick: (CityInfoItemPres) -> Unit,
+        onDeleteClick: () -> Unit,
     ) {
         binding.run {
             city.text = item.name
@@ -34,7 +34,7 @@ class CityViewHolder(
                 )
             )
             delete.setOnClickListener {
-                onDeleteClick(item)
+                onDeleteClick()
             }
             root.setOnClickListener {
                 onSavedCitySelect(item)

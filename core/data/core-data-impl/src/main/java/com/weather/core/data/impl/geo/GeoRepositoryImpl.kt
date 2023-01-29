@@ -29,7 +29,7 @@ class GeoRepositoryImpl(
 
     private val _downloadedCities =
         MutableSharedFlow<GeoResponse>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    override val downloadedCities = _downloadedCities.filterNotNull().map(mapper::toDomain)
+    override val downloadedCities = _downloadedCities.map(mapper::toDomain)
 
     override val selectedCity = dao.selectedCities().filterNotNull().map(mapper::toDomain)
 

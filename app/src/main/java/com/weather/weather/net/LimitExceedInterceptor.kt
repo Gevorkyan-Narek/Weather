@@ -20,11 +20,11 @@ class LimitExceedInterceptor : Interceptor {
         var i = 1
         var resp = chain.proceed(chain.request())
         while (resp.code == LIMIT_EXCEEDED && i <= RETRY_COUNT) {
-            i++
             logger.info("Retry. Count $i/$RETRY_COUNT")
             Thread.sleep(WAIT)
             resp.closeQuietly()
             resp = chain.proceed(chain.request())
+            i++
         }
         return resp
     }

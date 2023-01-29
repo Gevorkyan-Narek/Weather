@@ -1,6 +1,5 @@
 package com.weather.main.screen.city.changer
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -53,7 +52,11 @@ class CitySelectAdapter(
                 holder as NoMatchViewHolder
             }
             is CityAdapterInfo.CityInfo -> {
-                (holder as CityViewHolder).bind(item.city, onSavedCitySelect, onDeleteClick)
+                (holder as CityViewHolder).bind(
+                    item.city,
+                    onSavedCitySelect,
+                    onDeleteClick = { deleteClick(item, position) }
+                )
             }
         }
     }
@@ -84,16 +87,19 @@ class CitySelectAdapter(
     }
 
     fun setSavedItems(list: List<CityAdapterInfo.CityInfo>) {
-        savedItems.clear()
-        savedItems.addAll(list)
-        showSavedCities()
+        if (savedItems != list) {
+            savedItems.clear()
+            savedItems.addAll(list)
+            showSavedCities()
+        }
     }
 
     fun clear() {
-        Log.d("CitySelectAdapter", "Clear")
-        val size = items.size
-        items.clear()
-        notifyItemRangeRemoved(0, size)
+        if (items.isNotEmpty()) {
+            val size = items.size
+            items.clear()
+            notifyItemRangeRemoved(0, size)
+        }
     }
 
     fun showSavedCities() {
@@ -103,10 +109,17 @@ class CitySelectAdapter(
     }
 
     fun addLoading() {
-        if (!items.contains(CityAdapterInfo.Loading)) {
+        if (!items.contains(CityAdapterInfo.Loading) && !items.all { item -> item is CityAdapterInfo.CityInfo }) {
             items.add(CityAdapterInfo.Loading)
             notifyItemInserted(items.size)
         }
+    }
+
+    private fun deleteClick(item: CityAdapterInfo.CityInfo, position: Int) {
+        savedItems.remove(item)
+        items.remove(item)
+        notifyItemRemoved(position)
+        onDeleteClick(item.city)
     }
 
 }

@@ -16,7 +16,7 @@ val repositoryModule = module {
         )
     }
 
-    single<GeoRepository> {
+    factory<GeoRepository> {
         GeoRepositoryImpl(
             api = get(),
             dao = get(),
