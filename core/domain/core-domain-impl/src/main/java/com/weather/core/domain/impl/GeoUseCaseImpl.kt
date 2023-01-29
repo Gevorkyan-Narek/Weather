@@ -3,10 +3,12 @@ package com.weather.core.domain.impl
 import com.weather.core.data.api.GeoRepository
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.core.domain.models.geo.CityDomain
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class GeoUseCaseImpl(
@@ -18,32 +20,31 @@ class GeoUseCaseImpl(
         private const val SCROLL_DEBOUNCE = 1500L
     }
 
-    override val isLoading =
-        MutableSharedFlow<Unit>(replay = 2, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    override val isLoading = MutableSharedFlow<Unit>()
 
     override val selectedCity = repository.selectedCity
 
-    private val _downloadMoreCitiesStateFlow =
-        MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _downloadMoreCitiesSharedFlow = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
-    override val downloadMoreCitiesStateFlow = _downloadMoreCitiesStateFlow
-        .filterNotNull()
+    override val downloadMoreCitiesSharedFlow = _downloadMoreCitiesSharedFlow
         .map {
             if (repository.isHasMoreCities()) {
                 isLoading.emit(Unit)
             }
         }
         .debounce(SCROLL_DEBOUNCE)
-        .map {
+        .mapLatest {
             repository.downloadMoreCities()
         }
 
-    private val _searchStateFlow =
+    private val _searchSharedFlow =
         MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override val searchStateFlow = _searchStateFlow
+    override val searchSharedFlow = _searchSharedFlow
         .distinctUntilChanged()
-        .filterNotNull()
         .map { searchText ->
             isLoading.emit(Unit)
             searchText
@@ -59,8 +60,17 @@ class GeoUseCaseImpl(
 
     override val downloadedCities = repository.downloadedCities.map { geo -> geo.data }
 
-    override suspend fun downloadCities(namePrefix: String, offset: Int) {
-        return repository.downloadCities(namePrefix, offset)
+    override fun init(scope: CoroutineScope) {
+        scope.launch {
+            searchSharedFlow.collect()
+        }
+        scope.launch {
+            downloadMoreCitiesSharedFlow.collect()
+        }
+    }
+
+    override suspend fun downloadCities(namePrefix: String) {
+        return repository.downloadCities(namePrefix)
     }
 
     override suspend fun saveCity(city: CityDomain) {
@@ -72,11 +82,11 @@ class GeoUseCaseImpl(
     }
 
     override suspend fun searchCity(cityName: String) {
-        _searchStateFlow.emit(cityName)
+        _searchSharedFlow.emit(cityName)
     }
 
     override suspend fun downloadMoreCities() {
-        _downloadMoreCitiesStateFlow.emit(Unit)
+        _downloadMoreCitiesSharedFlow.emit(Unit)
     }
 
     override suspend fun removeSavedCity(city: CityDomain) {

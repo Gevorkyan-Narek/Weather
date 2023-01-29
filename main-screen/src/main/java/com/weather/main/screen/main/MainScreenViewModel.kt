@@ -10,7 +10,6 @@ import com.weather.main.screen.city.changer.CityAdapterInfo
 import com.weather.main.screen.city.changer.model.CityInfoItemPres
 import com.weather.main.screen.mapper.CityPresMapper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
@@ -40,12 +39,7 @@ class MainScreenViewModel(
     val showDeleteWarning = _showDeleteWarning.liveData()
 
     init {
-        viewModelScope.launch {
-            geoUseCase.searchStateFlow.collect()
-        }
-        viewModelScope.launch {
-            geoUseCase.downloadMoreCitiesStateFlow.collect()
-        }
+        geoUseCase.init(viewModelScope)
     }
 
     fun locationClicked() {

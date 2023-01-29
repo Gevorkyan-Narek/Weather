@@ -109,7 +109,7 @@ class CitySelectAdapter(
     }
 
     fun addLoading() {
-        if (!items.contains(CityAdapterInfo.Loading) && !items.all { item -> item is CityAdapterInfo.CityInfo }) {
+        if (!items.contains(CityAdapterInfo.Loading) && savedItems != items) {
             items.add(CityAdapterInfo.Loading)
             notifyItemInserted(items.size)
         }

@@ -8,7 +8,6 @@ import com.weather.core.domain.api.GeoUseCase
 import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.models.CityPres
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class StartScreenViewModel(
@@ -32,18 +31,13 @@ class StartScreenViewModel(
     val navigationEvent = _navigationEvent.liveData()
 
     init {
-        viewModelScope.launch {
-            geoUseCase.searchStateFlow.collect()
-        }
-        viewModelScope.launch {
-            geoUseCase.downloadMoreCitiesStateFlow.collect()
-        }
+        geoUseCase.init(viewModelScope)
     }
 
     fun onCityTextChanged(cityPrefix: String) {
         _motionEvent.postValue(cityPrefix.isBlank())
         _clearSearchListEvent.postValue(Unit)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             geoUseCase.searchCity(cityPrefix)
         }
     }
@@ -56,7 +50,7 @@ class StartScreenViewModel(
 
     fun onCitySelect(city: CityPres) {
         _navigationEvent.postEvent()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             geoUseCase.saveCity(geoMapper.toDomain(city))
         }
     }

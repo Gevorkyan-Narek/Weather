@@ -55,9 +55,6 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
             adapter = citySearchAdapter
             citySearchAdapter.submitList(null)
             addOnScrollListener(scrollListener)
-//            addItemDecoration(
-//                CityAdapterItemDecoration(getDrawable(requireContext(), R.drawable.line))
-//            )
         }
         lifecycleScope.launch {
             delay(MOTION_DELAY)

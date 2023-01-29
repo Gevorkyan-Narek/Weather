@@ -14,7 +14,7 @@ interface GeoRepository {
 
     suspend fun isHasMoreCities(): Boolean
 
-    suspend fun downloadCities(namePrefix: String, offset: Int)
+    suspend fun downloadCities(namePrefix: String)
 
     suspend fun downloadMoreCities()
 

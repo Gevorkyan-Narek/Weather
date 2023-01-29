@@ -1,13 +1,14 @@
 package com.weather.core.domain.api
 
 import com.weather.core.domain.models.geo.CityDomain
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface GeoUseCase {
 
-    val searchStateFlow: Flow<Unit>
+    val searchSharedFlow: Flow<Unit>
 
-    val downloadMoreCitiesStateFlow: Flow<Unit>
+    val downloadMoreCitiesSharedFlow: Flow<Unit>
 
     val savedCities: Flow<List<CityDomain>>
 
@@ -17,7 +18,9 @@ interface GeoUseCase {
 
     val selectedCity: Flow<CityDomain>
 
-    suspend fun downloadCities(namePrefix: String, offset: Int = 0)
+    fun init(scope: CoroutineScope)
+
+    suspend fun downloadCities(namePrefix: String)
 
     suspend fun downloadMoreCities()
 

@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -25,6 +27,12 @@ class GeoRepositoryImpl(
     private val logger: Logger = LoggerFactory.getLogger(GeoRepositoryImpl::class.java),
 ) : GeoRepository {
 
+    companion object {
+        private const val OFFSET = 0
+        private const val LIMIT = 10
+        private const val LANG_CODE = "ru"
+    }
+
     override val savedCities = dao.getCities().mapList(mapper::toDomain)
 
     private val _downloadedCities =
@@ -33,28 +41,33 @@ class GeoRepositoryImpl(
 
     override val selectedCity = dao.selectedCities().filterNotNull().map(mapper::toDomain)
 
-    override suspend fun downloadCities(namePrefix: String, offset: Int) {
-        logger.info("Download city: $namePrefix, offset: $offset")
-        return safeApiCall {
-            api.downloadCities(
-                namePrefix = namePrefix,
-                offset = offset,
-                limit = 10,
-                languageCode = "ru"
-            )
-        }.checkResult(success = _downloadedCities::emit)
+    private val loadMoreLock = Mutex()
+
+    override suspend fun downloadCities(namePrefix: String) {
+        logger.info("Download city: $namePrefix")
+        loadMoreLock.withLock {
+            return safeApiCall {
+                api.downloadCities(
+                    namePrefix = namePrefix,
+                    offset = OFFSET,
+                    limit = LIMIT,
+                    languageCode = LANG_CODE
+                )
+            }.checkResult(success = _downloadedCities::emit)
+        }
     }
 
     override suspend fun downloadMoreCities() {
-        downloadedCities.first()
-            .links
-            .find { link -> link.rel == GeoRelEnumsDomain.NEXT }
-            ?.let { geoLink ->
-                logger.info("Download more cities")
-                safeApiCall {
-                    api.downloadMoreCities(geoLink.href)
-                }.checkResult(success = _downloadedCities::emit)
-            }
+        if (!loadMoreLock.isLocked) {
+            downloadedCities.first()
+                .links
+                .find { link -> link.rel == GeoRelEnumsDomain.NEXT }
+                ?.let { geoLink ->
+                    safeApiCall {
+                        api.downloadMoreCities(geoLink.href)
+                    }.checkResult(success = _downloadedCities::emit)
+                }
+        }
     }
 
     override suspend fun saveCity(city: CityDomain) {
