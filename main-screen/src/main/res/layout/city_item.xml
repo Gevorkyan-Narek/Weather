@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/city"
-    style="@style/Theme.Weather.TextView.H3"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="@dimen/indent"
-    android:background="@drawable/bg_gradient"
-    android:backgroundTint="@color/light_gray_2"
-    android:paddingStart="@dimen/defaultIndent"
-    android:paddingVertical="@dimen/smallIndent"
-    tools:text="London" />
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/city"
+        style="@style/Theme.Weather.TextView.H3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/bg_gradient"
+        android:backgroundTint="@color/light_gray_2"
+        android:paddingVertical="@dimen/smallIndent"
+        android:paddingStart="@dimen/defaultIndent"
+        tools:text="London" />
+
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:backgroundTint="@color/transparent"
+        android:src="@drawable/ic_delete"
+        app:tint="?attr/colorSecondary"
+        tools:ignore="ContentDescription" />
+
+</LinearLayout>

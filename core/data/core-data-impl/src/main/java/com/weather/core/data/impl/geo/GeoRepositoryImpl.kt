@@ -73,4 +73,11 @@ class GeoRepositoryImpl(
         }
     }
 
+    override suspend fun removeSavedCity(city: CityDomain) {
+        if (city.isSelected) {
+            dao.setSelectedCity(dao.getCities().first().first())
+        }
+        dao.remove(mapper.toEntity(city))
+    }
+
 }

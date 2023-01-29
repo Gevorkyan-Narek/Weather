@@ -22,4 +22,6 @@ interface GeoRepository {
 
     suspend fun updateSelectedCity(city: CityDomain)
 
+    suspend fun removeSavedCity(city: CityDomain)
+
 }

@@ -27,4 +27,6 @@ interface GeoUseCase {
 
     suspend fun searchCity(cityName: String)
 
+    suspend fun removeSavedCity(city: CityDomain)
+
 }

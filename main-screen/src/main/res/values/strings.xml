@@ -25,4 +25,6 @@
     <string name="details">Детали</string>
     <string name="visibilityMeters">%1$d м</string>
     <string name="visibilityKilometers">%1$.1f км</string>
+
+    <string name="deleteWarning">Нельзя удалить единственный сохраненный город</string>
 </resources>

@@ -2,6 +2,7 @@ package com.weather.main.screen.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -9,6 +10,7 @@ import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
 import com.weather.android.utils.setupWithViewPager2
 import com.weather.android.utils.toBottomSheetBehaviour
+import com.weather.main.screen.R
 import com.weather.main.screen.city.changer.CitySelectAdapter
 import com.weather.main.screen.databinding.MainScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,7 +39,8 @@ class MainScreenFragment : BindingFragment<MainScreenBinding>() {
     private val citySelectAdapter by lazy {
         CitySelectAdapter(
             viewModel::onCitySelect,
-            viewModel::onNewCitySelect
+            viewModel::onNewCitySelect,
+            viewModel::onCityDelete
         )
     }
 
@@ -91,6 +94,9 @@ class MainScreenFragment : BindingFragment<MainScreenBinding>() {
                 } else {
                     citySelectAdapter.clear()
                 }
+            }
+            observe(showDeleteWarning) {
+                Toast.makeText(context, R.string.deleteWarning, Toast.LENGTH_SHORT).show()
             }
         }
     }

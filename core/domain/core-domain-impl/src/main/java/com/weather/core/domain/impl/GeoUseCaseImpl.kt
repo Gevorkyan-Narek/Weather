@@ -79,4 +79,8 @@ class GeoUseCaseImpl(
         _downloadMoreCitiesStateFlow.emit(Unit)
     }
 
+    override suspend fun removeSavedCity(city: CityDomain) {
+        repository.removeSavedCity(city)
+    }
+
 }

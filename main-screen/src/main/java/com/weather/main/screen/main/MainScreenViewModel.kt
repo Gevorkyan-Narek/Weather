@@ -36,6 +36,9 @@ class MainScreenViewModel(
 
     val loadingLiveData = geoUseCase.isLoading.asLiveData()
 
+    private val _showDeleteWarning = MutableLiveData<Unit>()
+    val showDeleteWarning = _showDeleteWarning.liveData()
+
     init {
         viewModelScope.launch {
             geoUseCase.searchStateFlow.collect()
@@ -73,6 +76,16 @@ class MainScreenViewModel(
         _cityPrefixChangedLiveData.postValue(cityPrefix.isBlank())
         viewModelScope.launch(Dispatchers.IO) {
             geoUseCase.searchCity(cityPrefix)
+        }
+    }
+
+    fun onCityDelete(city: CityInfoItemPres) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (savedCities.value?.size == 1) {
+                _showDeleteWarning.postValue(Unit)
+            } else {
+                geoUseCase.removeSavedCity(mapper.toDomain(city))
+            }
         }
     }
 

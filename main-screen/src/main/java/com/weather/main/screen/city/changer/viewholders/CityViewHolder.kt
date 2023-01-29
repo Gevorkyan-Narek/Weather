@@ -19,7 +19,11 @@ class CityViewHolder(
     private val binding: CityItemBinding = inflateBinding(parent),
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: CityInfoItemPres, action: (CityInfoItemPres) -> Unit) {
+    fun bind(
+        item: CityInfoItemPres,
+        onSavedCitySelect: (CityInfoItemPres) -> Unit,
+        onDeleteClick: (CityInfoItemPres) -> Unit,
+    ) {
         binding.run {
             city.text = item.name
             city.setTextColor(
@@ -29,7 +33,12 @@ class CityViewHolder(
                     R.attr.colorPrimaryVariant
                 )
             )
-            root.setOnClickListener { action(item) }
+            delete.setOnClickListener {
+                onDeleteClick(item)
+            }
+            root.setOnClickListener {
+                onSavedCitySelect(item)
+            }
         }
     }
 

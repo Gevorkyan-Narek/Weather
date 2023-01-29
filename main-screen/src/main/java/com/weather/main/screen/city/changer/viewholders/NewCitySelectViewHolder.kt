@@ -17,11 +17,11 @@ class NewCitySelectViewHolder(
     private val binding: CityItemBinding = inflateBinding(parent),
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: CityInfoItemPres, newCitySelect: (CityInfoItemPres) -> Unit) {
+    fun bind(item: CityInfoItemPres, onNewCitySelect: (CityInfoItemPres) -> Unit) {
         binding.run {
             city.text = item.name
             root.setOnClickListener {
-                newCitySelect(item)
+                onNewCitySelect(item)
             }
         }
     }

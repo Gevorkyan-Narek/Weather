@@ -11,8 +11,9 @@ import com.weather.main.screen.city.changer.viewholders.NewCitySelectViewHolder
 import com.weather.main.screen.city.changer.viewholders.NoMatchViewHolder
 
 class CitySelectAdapter(
-    private val citySelectListener: (CityInfoItemPres) -> Unit,
-    private val newCitySelect: (CityInfoItemPres) -> Unit,
+    private val onSavedCitySelect: (CityInfoItemPres) -> Unit,
+    private val onNewCitySelect: (CityInfoItemPres) -> Unit,
+    private val onDeleteClick: (CityInfoItemPres) -> Unit,
 ) : ListAdapter<CityAdapterInfo, RecyclerView.ViewHolder>(CitySelectAdapterDiffUtils()) {
 
     private val savedItems = mutableListOf<CityAdapterInfo.CityInfo>()
@@ -43,7 +44,7 @@ class CitySelectAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
             is CityAdapterInfo.NewCityInfo -> {
-                (holder as NewCitySelectViewHolder).bind(item.city, newCitySelect)
+                (holder as NewCitySelectViewHolder).bind(item.city, onNewCitySelect)
             }
             is CityAdapterInfo.Loading -> {
                 holder as LoadingViewHolder
@@ -52,7 +53,7 @@ class CitySelectAdapter(
                 holder as NoMatchViewHolder
             }
             is CityAdapterInfo.CityInfo -> {
-                (holder as CityViewHolder).bind(item.city, citySelectListener)
+                (holder as CityViewHolder).bind(item.city, onSavedCitySelect, onDeleteClick)
             }
         }
     }
