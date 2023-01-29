@@ -64,9 +64,9 @@
         android:background="@drawable/bg_rectangle_corner"
         android:backgroundTint="?attr/colorSecondaryVariant"
         android:orientation="vertical"
+        android:padding="@dimen/defaultIndent"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        android:padding="@dimen/defaultIndent"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -100,6 +100,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inputLayout"
             tools:listitem="@layout/city_item" />
-
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -5,10 +5,17 @@ import com.weather.main.screen.main.MainScreenViewModel
 import com.weather.main.screen.today.TodayViewModel
 import com.weather.startscreen.StartScreenFragment
 import com.weather.startscreen.StartScreenViewModel
+import com.weather.weather.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelsModule = module {
+
+    viewModel {
+        MainViewModel(
+            connectionUseCase = get()
+        )
+    }
 
     scope<StartScreenFragment> {
         viewModel {

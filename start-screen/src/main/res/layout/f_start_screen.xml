@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/motionLayout"
+    style="@style/Theme.Weather.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/Theme.Weather.Background"
     android:padding="@dimen/defaultIndent"
     app:layoutDescription="@xml/start_screen_motion_scene">
 
