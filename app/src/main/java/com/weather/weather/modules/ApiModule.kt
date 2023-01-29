@@ -1,6 +1,5 @@
 package com.weather.weather.modules
 
-import com.weather.base.utils.nullOrFalse
 import com.weather.core.datasource.net.forecast.ForecastApi
 import com.weather.core.datasource.net.geo.GeoApi
 import com.weather.weather.net.GeoHeaderInterceptor
@@ -15,9 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 private val geoInterceptors = listOf(
     GeoHeaderInterceptor(),
     LimitExceedInterceptor(),
-    HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BASIC
-    }
+    provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level.BASIC)
 )
 
 val apiModule = module {
@@ -32,9 +29,7 @@ val apiModule = module {
     single<ForecastApi> {
         provideRetrofit(
             baseUrl = "https://api.openweathermap.org/data/2.5/",
-            interceptors = listOf(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
-            })
+            interceptors = listOf(provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level.BASIC))
         )
     }
 
@@ -51,15 +46,15 @@ inline fun <reified T> provideRetrofit(
         .build().create(T::class.java)
 }
 
+fun provideHttpLoggingInterceptor(logLevel: HttpLoggingInterceptor.Level) =
+    HttpLoggingInterceptor().apply {
+        level = logLevel
+    }
+
 fun createOkHttpClient(interceptors: List<Interceptor>? = null): OkHttpClient {
     return OkHttpClient().newBuilder().apply {
         interceptors?.forEach { interceptor ->
             addInterceptor(interceptor)
-        }
-        if (interceptors?.contains(HttpLoggingInterceptor()).nullOrFalse()) {
-            addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
         }
     }.build()
 }

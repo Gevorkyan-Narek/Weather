@@ -34,6 +34,7 @@ class GeoRepositoryImpl(
     override val selectedCity = dao.selectedCities().filterNotNull().map(mapper::toDomain)
 
     override suspend fun downloadCities(namePrefix: String, offset: Int) {
+        logger.info("Download city: $namePrefix, offset: $offset")
         return safeApiCall {
             api.downloadCities(
                 namePrefix = namePrefix,
@@ -48,8 +49,8 @@ class GeoRepositoryImpl(
         downloadedCities.first()
             .links
             .find { link -> link.rel == GeoRelEnumsDomain.NEXT }
-            .also { logger.info("geoLink: $it") }
             ?.let { geoLink ->
+                logger.info("Download more cities")
                 safeApiCall {
                     api.downloadMoreCities(geoLink.href)
                 }.checkResult(success = _downloadedCities::emit)

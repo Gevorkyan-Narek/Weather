@@ -1,9 +1,8 @@
 package com.weather.weather.net
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import okhttp3.internal.closeQuietly
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -21,12 +20,11 @@ class LimitExceedInterceptor : Interceptor {
         var i = 1
         var resp = chain.proceed(chain.request())
         while (resp.code == LIMIT_EXCEEDED && i <= RETRY_COUNT) {
-            runBlocking {
-                i++
-                logger.info("Retry. Count $i/$RETRY_COUNT")
-                delay(WAIT)
-                resp = chain.proceed(chain.request())
-            }
+            i++
+            logger.info("Retry. Count $i/$RETRY_COUNT")
+            Thread.sleep(WAIT)
+            resp.closeQuietly()
+            resp = chain.proceed(chain.request())
         }
         return resp
     }
