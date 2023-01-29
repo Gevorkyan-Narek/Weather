@@ -7,7 +7,7 @@
     android:id="@+id/city"
     android:layout_marginVertical="@dimen/littleIndent"
     android:background="@drawable/bg_gradient"
-    android:backgroundTint="@color/light_gray_2"
+    android:backgroundTint="?attr/colorPrimaryVariant"
     android:paddingStart="@dimen/defaultIndent"
     android:paddingVertical="@dimen/smallIndent"
     tools:text="London" />

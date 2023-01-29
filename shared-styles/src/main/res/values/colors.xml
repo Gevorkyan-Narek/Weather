@@ -8,15 +8,15 @@
     <color name="light_gray">#9C9C9C</color>
     <color name="yellow">#BFFFBD00</color>
     <color name="light_gray_2">#4DA6A8AC</color>
-    <color name="red">#66FF0000</color>
+    <color name="red">#39FF0000</color>
 
     <!-- Day -->
-    <color name="primary">#154CD8</color>
+    <color name="primary">#ffffff</color>
     <color name="primary_variant">#305FD8</color>
-    <color name="secondary">#3E3E3E</color>
-    <color name="secondary_variant">#AD1A1A1A</color>
+    <color name="secondary">#3546E1</color>
+    <color name="secondary_variant">#154CD8</color>
     <color name="status_color">#C9CFD8</color>
-    <color name="bg_color">#F1F4F8</color>
+    <color name="bg_color">#318DCF</color>
 
     <!-- Night -->
     <color name="primary_night">#F1F3F6</color>
