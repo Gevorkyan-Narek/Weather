@@ -50,12 +50,13 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/description"
-        style="@style/Theme.Weather.TextView.H3.Yellow"
+        style="@style/Theme.Weather.TextView.H3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/smallIndent"
-        android:maxLines="2"
         android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/metricLayout"
         app:layout_constraintStart_toEndOf="@id/icon"
