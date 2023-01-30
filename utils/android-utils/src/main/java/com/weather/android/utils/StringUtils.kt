@@ -1,11 +1,17 @@
 package com.weather.android.utils
 
+import android.view.View
+import androidx.annotation.StringRes
 import androidx.viewbinding.ViewBinding
 
 private const val EMPTY_STRING = ""
 
 fun emptyString() = EMPTY_STRING
 
-fun ViewBinding.getString(id: Int, vararg formatArgs: Any): String {
-    return root.context.getString(id, formatArgs)
+fun ViewBinding.getString(@StringRes resId: Int, vararg objects: Any): String {
+    return root.getString(resId, *objects)
+}
+
+fun View.getString(@StringRes resId: Int, vararg objects: Any): String {
+    return context.getString(resId, *objects)
 }

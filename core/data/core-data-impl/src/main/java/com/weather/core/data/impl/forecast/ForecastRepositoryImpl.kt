@@ -36,7 +36,7 @@ class ForecastRepositoryImpl(
 
     override fun getTodayForecast(): Flow<List<WeatherDomain>> {
         return dao
-            .getForecastByDay(DateFormatter.getCurrentDateInDefaultFormat())
+            .getNearestForecast(DateFormatter.getCurrentDateTime())
             .mapList(mapper::toDomain)
     }
 

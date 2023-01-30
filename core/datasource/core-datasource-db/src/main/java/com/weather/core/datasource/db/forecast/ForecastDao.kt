@@ -16,8 +16,8 @@ interface ForecastDao {
     @Query("DELETE FROM WeatherEntity")
     suspend fun clearAll()
 
-    @Query("SELECT * FROM WeatherEntity WHERE date == :day")
-    fun getForecastByDay(day: String): Flow<List<WeatherEntity>>
+    @Query("SELECT * FROM WeatherEntity WHERE date > :date")
+    fun getNearestForecast(date: Long): Flow<List<WeatherEntity>>
 
     @Query("SELECT * FROM WeatherEntity")
     fun getForecast(): Flow<List<WeatherEntity>>

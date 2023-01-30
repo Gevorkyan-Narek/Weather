@@ -1,5 +1,10 @@
 package com.weather.base.utils
 
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneOffset
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.TextStyle
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,11 +13,16 @@ object DateFormatter {
     /** Воскренье, 15 Января */
     private const val TODAY_PATTERN = "EEEE, d MMM"
     private const val DEFAULT_PATTERN = "dd.MM.yyyy"
+    private const val TIME_PATTERN = "HH:mm"
+    private const val DAY_MONTH_PATTERN = "d MMMM"
 
-    private val todayDateFormatter = SimpleDateFormat(TODAY_PATTERN, Locale.forLanguageTag("RU"))
-    private val defaultDateFormatter =
-        SimpleDateFormat(DEFAULT_PATTERN, Locale.forLanguageTag("RU"))
+    private val ruLocale = Locale.forLanguageTag("RU")
 
+    private val todayDateFormatter = SimpleDateFormat(TODAY_PATTERN, ruLocale)
+    private val defaultDateFormatter = SimpleDateFormat(DEFAULT_PATTERN, ruLocale)
+
+    private val dayMonthDateTimeFormatter =
+        DateTimeFormatter.ofPattern(DAY_MONTH_PATTERN)
 
     /**
      * @return Сегодняшняя дата в формате: Воскренье, 15 Января
@@ -29,11 +39,32 @@ object DateFormatter {
         return defaultDateFormatter.format(Date(date))
     }
 
+    fun getCurrentDateTime(): Long {
+        return LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+    }
+
     /**
-     * @return Получить текущую дату в формате: dd.MM.yyyy
+     * @param date - дата, которую надо отформатировать
+     * @return Получить время в формате HH:mm
      */
-    fun getCurrentDateInDefaultFormat(): String {
-        return getDefaultFormatDate(Date().time)
+    fun getTime(date: LocalDateTime): String {
+        return date.format(DateTimeFormatter.ofPattern(TIME_PATTERN))
+    }
+
+    /**
+     * @param date - дата, которую надо отформатировать
+     * @return Получить время в формате d MMMM
+     */
+    fun getDayMonth(date: LocalDate): String {
+        return date.format(dayMonthDateTimeFormatter)
+    }
+
+    /**
+     * @param date - дата, которую надо отформатировать
+     * @return Получить день недели в формате "ЧТ"
+     */
+    fun getDayOfWeek(date: LocalDate): String {
+        return date.dayOfWeek.getDisplayName(TextStyle.SHORT_STANDALONE, ruLocale)
     }
 
 }
