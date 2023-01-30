@@ -55,7 +55,7 @@ class CitySelectAdapter(
                 (holder as CityViewHolder).bind(
                     item.city,
                     onSavedCitySelect,
-                    onDeleteClick = { deleteClick(item, position) }
+                    onDeleteClick = { deleteClick(item) }
                 )
             }
         }
@@ -117,8 +117,9 @@ class CitySelectAdapter(
         }
     }
 
-    private fun deleteClick(item: CityAdapterInfo.CityInfo, position: Int) {
+    private fun deleteClick(item: CityAdapterInfo.CityInfo) {
         if (items.size > 1) {
+            val position = items.indexOf(item)
             savedItems.remove(item)
             items.remove(item)
             notifyItemRemoved(position)
