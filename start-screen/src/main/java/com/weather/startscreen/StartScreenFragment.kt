@@ -3,22 +3,15 @@ package com.weather.startscreen
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
 import com.weather.startscreen.adapter.SuggestionsOnScrollListener
 import com.weather.startscreen.databinding.FStartScreenBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
-
-    companion object {
-        private const val MOTION_DELAY = 1500L
-    }
 
     private val viewModel: StartScreenViewModel by viewModel()
 
@@ -56,16 +49,15 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
             citySearchAdapter.submitList(null)
             addOnScrollListener(scrollListener)
         }
-        lifecycleScope.launch {
-            delay(MOTION_DELAY)
-            motionLayout.setTransition(R.id.startTransition)
-            motionLayout.transitionToEnd()
-        }
     }
 
     override fun FStartScreenBinding.observeViewModel() {
         with(viewModel) {
             observe(searchList, citySearchAdapter::updateItems)
+            observe(motionStartEvent) {
+                motionLayout.setTransition(R.id.startTransition)
+                motionLayout.transitionToEnd()
+            }
             observe(motionEvent) { isBlank ->
                 if (isBlank) {
                     motionLayout.setTransition(R.id.emptySearchTransition)

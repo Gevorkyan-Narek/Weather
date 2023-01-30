@@ -8,12 +8,17 @@ import com.weather.core.domain.api.GeoUseCase
 import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.models.CityPres
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
 ) : ViewModel() {
+
+    companion object {
+        private const val MOTION_DELAY = 1500L
+    }
 
     private val _motionEvent = MutableLiveData<Boolean>()
     val motionEvent = _motionEvent.liveData().distinctUntilChanged()
@@ -30,8 +35,21 @@ class StartScreenViewModel(
     private val _navigationEvent = MutableLiveData<Unit>()
     val navigationEvent = _navigationEvent.liveData()
 
+    private val _motionStartEvent = MutableLiveData<Unit>()
+    val motionStartEvent = _motionStartEvent.liveData()
+
     init {
         geoUseCase.init(viewModelScope)
+        viewModelScope.launch {
+            geoUseCase.savedCities.collect { cities ->
+                delay(MOTION_DELAY)
+                if (cities.isEmpty()) {
+                    _motionStartEvent.postValue(Unit)
+                } else {
+                    _navigationEvent.postEvent()
+                }
+            }
+        }
     }
 
     fun onCityTextChanged(cityPrefix: String) {
