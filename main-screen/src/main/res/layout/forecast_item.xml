@@ -9,88 +9,66 @@
     android:paddingHorizontal="@dimen/defaultIndent"
     android:paddingVertical="@dimen/smallIndent">
 
-    <LinearLayout
-        android:id="@+id/dateLayout"
+    <TextView
+        android:id="@+id/date"
+        style="@style/Theme.Weather.TextView.H4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/icon"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="12 сентября" />
 
-        <TextView
-            android:id="@+id/dayOfWeek"
-            style="@style/Theme.Weather.TextView.H4.Secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Суббота" />
-
-        <TextView
-            android:id="@+id/date"
-            style="@style/Theme.Weather.TextView.H4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/indent"
-            tools:text="Сентябрь 12" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/icon"
+    <TextView
+        android:id="@+id/tempMinMax"
+        style="@style/Theme.Weather.TextView.H2"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/smallIndent"
-        android:scaleType="center"
-        app:layout_constraintBottom_toBottomOf="@id/dateLayout"
-        app:layout_constraintEnd_toStartOf="@id/description"
-        app:layout_constraintStart_toEndOf="@id/dateLayout"
-        app:layout_constraintTop_toTopOf="@id/dateLayout"
-        tools:ignore="ContentDescription"
-        tools:src="@drawable/ic_rain" />
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/description"
+        app:layout_constraintEnd_toStartOf="@id/humidity"
+        app:layout_constraintStart_toStartOf="@id/description"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="33° / 28°" />
+
+    <TextView
+        android:id="@+id/humidity"
+        style="@style/Theme.Weather.TextView.H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/littleIndent"
+        app:drawableStartCompat="@drawable/blob"
+        app:layout_constraintBottom_toTopOf="@id/description"
+        app:layout_constraintEnd_toEndOf="@id/description"
+        app:layout_constraintStart_toEndOf="@id/tempMinMax"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="30%" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/description"
         style="@style/Theme.Weather.TextView.H3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/smallIndent"
+        android:layout_marginStart="@dimen/smallIndent"
+        android:background="@drawable/bg_rectangle_corner"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:ellipsize="end"
-        android:maxLines="2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/metricLayout"
-        app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="ЯсноЯсноЯсноЯ сноЯсноЯсносноЯсноЯсносноЯсноЯсно" />
-
-    <LinearLayout
-        android:id="@+id/metricLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="vertical"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="@dimen/indent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toEndOf="@id/icon"
+        tools:text="ЯсноЯсноЯсноЯ сноЯсноЯсносноЯсноЯсносноЯсноЯсно" />
 
-        <TextView
-            android:id="@+id/tempMinMax"
-            style="@style/Theme.Weather.TextView.H3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="33°/28°" />
-
-        <TextView
-            android:id="@+id/humidity"
-            style="@style/Theme.Weather.TextView.H3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/indent"
-            android:drawablePadding="@dimen/littleIndent"
-            app:drawableStartCompat="@drawable/blob"
-            tools:text="30%" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_rain" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

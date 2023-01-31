@@ -11,7 +11,6 @@ class ForecastViewHolder(private val binding: ForecastItemBinding) :
 
     fun bind(item: ForecastItemPres) {
         binding.run {
-            dayOfWeek.text = DateFormatter.getDayOfWeek(item.dateTime)
             date.text = DateFormatter.getDayMonth(item.dateTime)
             item.icon?.run {
                 icon.setImageResource(this)
