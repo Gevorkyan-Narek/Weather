@@ -4,7 +4,6 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.TextStyle
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,11 +35,14 @@ object DateFormatter {
      * @return Получить дату в формате: dd.MM.yyyy
      */
     fun getDefaultFormatDate(date: Long): String {
-        return defaultDateFormatter.format(Date(date))
+        return (defaultDateFormatter.format(Date(toMs(date))))
     }
 
+    /**
+     * @return Возвращает следующие сутки в миллисекундах
+     */
     fun getCurrentDateTime(): Long {
-        return LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+        return toMs(LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC))
     }
 
     /**
@@ -59,12 +61,8 @@ object DateFormatter {
         return date.format(dayMonthDateTimeFormatter)
     }
 
-    /**
-     * @param date - дата, которую надо отформатировать
-     * @return Получить день недели в формате "ЧТ"
-     */
-    fun getDayOfWeek(date: LocalDate): String {
-        return date.dayOfWeek.getDisplayName(TextStyle.SHORT_STANDALONE, ruLocale)
+    fun toMs(date: Long): Long {
+        return date * 1000
     }
 
 }

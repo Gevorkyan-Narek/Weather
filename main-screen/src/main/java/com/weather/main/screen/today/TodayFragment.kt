@@ -15,6 +15,10 @@ import kotlin.math.abs
 
 class TodayFragment : BindingFragment<TodayScreenBinding>() {
 
+    companion object {
+        private const val ONE_KM = 1000L
+    }
+
     private val viewModel: TodayViewModel by viewModel()
 
     private val adapter by lazy {
@@ -81,8 +85,8 @@ class TodayFragment : BindingFragment<TodayScreenBinding>() {
             with(pres.metrics) {
                 detailsFeelsLikeValue.text = getString(R.string.tempWithCelsius, feelsLike)
                 detailsHumidityValue.text = humidity.toString()
-                detailsVisibilityValue.text = if (visibility > 1000) {
-                    getString(R.string.visibilityKilometers, visibility / 1000f)
+                detailsVisibilityValue.text = if (visibility > ONE_KM) {
+                    getString(R.string.visibilityKilometers, visibility / ONE_KM)
                 } else {
                     getString(R.string.visibilityMeters, visibility)
                 }

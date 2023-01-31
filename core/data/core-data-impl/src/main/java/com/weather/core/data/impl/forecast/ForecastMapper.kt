@@ -20,8 +20,8 @@ class ForecastMapper {
 
     fun toEntity(net: WeatherResponse): WeatherEntity = net.run {
         WeatherEntity(
-            date = DateFormatter.getDefaultFormatDate(dateTime * 1000),
-            dateTime = dateTime * 1000,
+            date = DateFormatter.getDefaultFormatDate(dateTime),
+            dateTime = DateFormatter.toMs(dateTime),
             metrics = toEntity(metrics, clouds.cloudiness, pop, visibility),
             wind = toEntity(wind),
             shortInfo = toEntity(weather.firstOrNull()),
