@@ -77,4 +77,6 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
             }
         }
     }
+
+
 }
