@@ -4,6 +4,6 @@
     <stroke
         android:color="?attr/colorSecondary"
         android:width="1dp"
-        android:dashWidth="15dp"
-        android:dashGap="5dp" />
+        android:dashWidth="@dimen/defaultIndent"
+        android:dashGap="@dimen/indent" />
 </shape>
