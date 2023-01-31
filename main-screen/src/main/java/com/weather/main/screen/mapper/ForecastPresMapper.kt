@@ -5,10 +5,7 @@ import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.forecast.WeatherMetricsDomain
 import com.weather.core.domain.models.forecast.WeatherShortInfoDomain
 import com.weather.core.domain.models.forecast.WeatherWindDomain
-import com.weather.main.screen.model.WeatherMetricsPres
-import com.weather.main.screen.model.WeatherPres
-import com.weather.main.screen.model.WeatherShortInfoPres
-import com.weather.main.screen.model.WeatherWindPres
+import com.weather.main.screen.model.*
 
 class ForecastPresMapper {
 
@@ -16,15 +13,15 @@ class ForecastPresMapper {
         WeatherPres(
             dateTime = dateTime,
             metrics = toPres(metrics),
-            shortInfo = shortInfo.map(::toPres),
+            shortInfo = toPres(shortInfo),
             wind = toPres(wind)
         )
     }
 
-    fun toPres(domain: WeatherShortInfoDomain): WeatherShortInfoPres = domain.run {
+    fun toPres(domain: WeatherShortInfoDomain?): WeatherShortInfoPres? = domain?.run {
         WeatherShortInfoPres(
             description = description.replaceFirstChar(Char::titlecase),
-            icon = icon
+            icon = WeatherIconsEnum.getDrawable(icon)
         )
     }
 

@@ -4,7 +4,7 @@ import org.threeten.bp.LocalDate
 
 data class ForecastItemPres(
     val dateTime: LocalDate,
-    val icon: String,
+    val icon: Int?,
     val description: String,
     val tempMin: Double,
     val tempMax: Double,

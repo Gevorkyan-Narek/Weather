@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
-import com.weather.android.utils.setWeatherIcon
 import com.weather.custom.views.weatherfield.WeatherFieldUnitEnum
 import com.weather.main.screen.R
 import com.weather.main.screen.databinding.TodayScreenBinding
@@ -45,8 +44,12 @@ class TodayFragment : BindingFragment<TodayScreenBinding>() {
     private fun handleCurrentForecast(pres: WeatherPres) {
         binding?.run {
             temp.text = getString(R.string.tempWithoutCelsius, pres.metrics.temp)
-            setWeatherIcon(pres.shortInfo.first().icon, weatherImage)
-            tempDescription.text = pres.shortInfo.joinToString { info -> info.description }
+            pres.shortInfo?.let { shortInfo ->
+                if (shortInfo.icon != null) {
+                    weatherImage.setImageResource(shortInfo.icon)
+                }
+                tempDescription.text = shortInfo.description
+            }
             with(pres.metrics) {
                 feelsLikeTemp.text = getString(R.string.tempWithCelsius, feelsLike)
                 precipitationField.setFieldValue(pop.toString(), WeatherFieldUnitEnum.PERCENT)
@@ -85,7 +88,9 @@ class TodayFragment : BindingFragment<TodayScreenBinding>() {
                 }
                 detailsCloudinessValue.text = getString(R.string.withPercent, cloudiness)
             }
-            setWeatherIcon(pres.shortInfo.first().icon, detailImage)
+            pres.shortInfo?.icon?.run {
+                detailImage.setImageResource(this)
+            }
         }
     }
 

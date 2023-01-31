@@ -24,11 +24,11 @@ class ForecastMapper {
             dateTime = dateTime * 1000,
             metrics = toEntity(metrics, clouds.cloudiness, pop, visibility),
             wind = toEntity(wind),
-            shortInfo = weather.map(::toEntity),
+            shortInfo = toEntity(weather.firstOrNull()),
         )
     }
 
-    fun toEntity(net: WeatherShortInfoResponse): WeatherShortInfoEntity = net.run {
+    fun toEntity(net: WeatherShortInfoResponse?): WeatherShortInfoEntity? = net?.run {
         WeatherShortInfoEntity(
             description = description,
             icon = icon
@@ -66,11 +66,11 @@ class ForecastMapper {
             dateTime = DateTimeUtils.toLocalDateTime(Timestamp(dateTime)),
             metrics = toDomain(metrics),
             wind = toDomain(wind),
-            shortInfo = shortInfo.map(::toDomain),
+            shortInfo = toDomain(shortInfo),
         )
     }
 
-    fun toDomain(entity: WeatherShortInfoEntity): WeatherShortInfoDomain = entity.run {
+    fun toDomain(entity: WeatherShortInfoEntity?): WeatherShortInfoDomain? = entity?.run {
         WeatherShortInfoDomain(
             description = description,
             icon = icon

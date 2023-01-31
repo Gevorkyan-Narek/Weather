@@ -28,8 +28,9 @@
             android:id="@+id/icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:scaleType="center"
             android:layout_marginVertical="@dimen/indent"
-            tools:src="@drawable/ic_sun"
+            tools:src="@drawable/ic_day"
             tools:ignore="ContentDescription" />
 
         <TextView

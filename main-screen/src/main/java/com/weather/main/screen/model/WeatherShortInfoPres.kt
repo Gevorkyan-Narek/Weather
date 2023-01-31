@@ -1,6 +1,8 @@
 package com.weather.main.screen.model
 
+import androidx.annotation.DrawableRes
+
 data class WeatherShortInfoPres(
     val description: String,
-    val icon: String,
+    @DrawableRes val icon: Int?,
 )

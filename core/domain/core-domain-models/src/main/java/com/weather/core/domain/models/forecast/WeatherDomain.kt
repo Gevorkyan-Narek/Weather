@@ -6,5 +6,5 @@ data class WeatherDomain(
     val dateTime: LocalDateTime,
     val metrics: WeatherMetricsDomain,
     val wind: WeatherWindDomain,
-    val shortInfo: List<WeatherShortInfoDomain>,
+    val shortInfo: WeatherShortInfoDomain?,
 )

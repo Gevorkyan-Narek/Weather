@@ -3,7 +3,6 @@ package com.weather.main.screen.today.adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.android.utils.getColorIf
 import com.weather.android.utils.getString
-import com.weather.android.utils.setWeatherIcon
 import com.weather.base.utils.DateFormatter
 import com.weather.main.screen.R
 import com.weather.main.screen.databinding.WeatherItemBinding
@@ -17,7 +16,9 @@ class TodayTimeViewHolder(
         binding.run {
             time.text = DateFormatter.getTime(pres.dateTime)
             temp.text = getString(R.string.tempWithoutCelsius, pres.metrics.temp)
-            setWeatherIcon(pres.shortInfo.first().icon, icon)
+            pres.shortInfo?.icon?.run {
+                icon.setImageResource(this)
+            }
             root.run {
                 strokeColor =
                     getColorIf(isSelected, R.attr.colorOnSecondary, R.attr.colorSecondaryVariant)

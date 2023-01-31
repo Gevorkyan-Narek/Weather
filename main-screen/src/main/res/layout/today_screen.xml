@@ -38,13 +38,13 @@
         style="@style/Theme.Weather.ImageView"
         android:layout_width="160dp"
         android:layout_height="160dp"
+
         android:layout_marginStart="@dimen/veryLargeIndent"
         android:layout_marginTop="@dimen/littleIndent"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_sun_with_cloud"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_day" />
 
     <TextView
         android:id="@+id/tempDescription"
@@ -247,7 +247,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detailLabel"
                 tools:ignore="ContentDescription"
-                tools:src="@drawable/ic_sun" />
+                tools:src="@drawable/ic_day" />
 
             <TextView
                 android:id="@+id/detailsFeelsLikeLabel"

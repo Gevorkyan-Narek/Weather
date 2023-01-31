@@ -6,5 +6,5 @@ data class WeatherPres(
     val dateTime: LocalDateTime,
     val metrics: WeatherMetricsPres,
     val wind: WeatherWindPres,
-    val shortInfo: List<WeatherShortInfoPres>,
+    val shortInfo: WeatherShortInfoPres?,
 )

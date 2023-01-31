@@ -14,5 +14,6 @@ data class WeatherEntity(
     val metrics: WeatherMetricsEntity,
     @Embedded
     val wind: WeatherWindEntity,
-    val shortInfo: List<WeatherShortInfoEntity>,
+    @Embedded
+    val shortInfo: WeatherShortInfoEntity?,
 )
