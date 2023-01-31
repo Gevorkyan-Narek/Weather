@@ -30,13 +30,13 @@ class ForecastRepositoryImpl(
             )
         }.checkResult { response ->
             dao.clearAll()
-            dao.insertAll(response.forecast.map(mapper::toEntity))
+            dao.insertReplace(response.forecast.map(mapper::toEntity))
         }
     }
 
     override fun getTodayForecast(): Flow<List<WeatherDomain>> {
         return dao
-            .getNearestForecast(DateFormatter.getCurrentDateTime())
+            .getNearestForecast(DateFormatter.getNextDateTime())
             .mapList(mapper::toDomain)
     }
 

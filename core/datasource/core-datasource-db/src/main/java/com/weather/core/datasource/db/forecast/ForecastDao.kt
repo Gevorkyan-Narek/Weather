@@ -4,11 +4,12 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.weather.core.datasource.db.BaseDao
 import com.weather.core.datasource.db.forecast.model.WeatherEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ForecastDao {
+interface ForecastDao : BaseDao<WeatherEntity> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(entity: List<WeatherEntity>)

@@ -7,9 +7,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class WeatherEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val date: String,
     val dateTime: Long,
+    val date: String,
     @Embedded
     val metrics: WeatherMetricsEntity,
     @Embedded

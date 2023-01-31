@@ -41,7 +41,7 @@ object DateFormatter {
     /**
      * @return Возвращает следующие сутки в миллисекундах
      */
-    fun getCurrentDateTime(): Long {
+    fun getNextDateTime(): Long {
         return toMs(LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC))
     }
 

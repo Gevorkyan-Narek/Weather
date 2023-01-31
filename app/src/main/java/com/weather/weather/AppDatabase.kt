@@ -16,7 +16,7 @@ import com.weather.core.datasource.db.geo.CityEntity
         WeatherEntity::class,
         CityEntity::class
     ],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 @TypeConverters(

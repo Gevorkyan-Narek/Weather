@@ -16,7 +16,7 @@ import kotlin.math.abs
 class TodayFragment : BindingFragment<TodayScreenBinding>() {
 
     companion object {
-        private const val ONE_KM = 1000L
+        private const val ONE_KM = 1000f
     }
 
     private val viewModel: TodayViewModel by viewModel()
