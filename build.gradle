@@ -14,8 +14,8 @@ ext {
     navVersion = '2.5.3'
 
     jUnit = '4.13.2'
-    extJUnit = '1.1.4'
-    espressoCore = '3.5.0'
+    extJUnit = '1.1.5'
+    espressoCore = '3.5.1'
     lifeCycle = '2.5.1'
     koinVersion = '3.3.1'
 
@@ -26,5 +26,7 @@ ext {
     slf4j = '1.7.36'
     logback = '2.0.1'
 
-    coroutineVersion = '1.6.1'
+    coroutineVersion = '1.6.4'
+    roomVersion = "2.5.0"
+    threetenVersion = "1.4.4"
 }

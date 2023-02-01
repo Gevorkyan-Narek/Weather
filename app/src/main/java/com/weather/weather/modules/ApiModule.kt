@@ -2,6 +2,8 @@ package com.weather.weather.modules
 
 import com.weather.core.datasource.net.forecast.ForecastApi
 import com.weather.core.datasource.net.geo.GeoApi
+import com.weather.weather.net.GeoHeaderInterceptor
+import com.weather.weather.net.LimitExceedInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,18 +11,25 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+private val geoInterceptors = listOf(
+    GeoHeaderInterceptor(),
+    LimitExceedInterceptor(),
+    provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level.BASIC)
+)
+
 val apiModule = module {
 
     single<GeoApi> {
         provideRetrofit(
             baseUrl = "https://wft-geo-db.p.rapidapi.com",
-            interceptors = listOf(provideGeoInterceptor())
+            interceptors = geoInterceptors
         )
     }
 
     single<ForecastApi> {
         provideRetrofit(
-            baseUrl = "https://api.openweathermap.org/data/2.5/"
+            baseUrl = "https://api.openweathermap.org/data/2.5/",
+            interceptors = listOf(provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level.BASIC))
         )
     }
 
@@ -37,31 +46,15 @@ inline fun <reified T> provideRetrofit(
         .build().create(T::class.java)
 }
 
-private fun provideGeoInterceptor(): Interceptor {
-    return Interceptor { chain ->
-        val request = chain.request()
-            .newBuilder()
-            .addHeader(
-                "X-RapidAPI-Key",
-                "a5e150c4b0msh19c16faf0999953p16c6fbjsn6225c801e0a9"
-            )
-            .addHeader(
-                "X-RapidAPI-Host",
-                "wft-geo-db.p.rapidapi.com"
-            )
-            .build()
-        chain.proceed(request)
-
+fun provideHttpLoggingInterceptor(logLevel: HttpLoggingInterceptor.Level) =
+    HttpLoggingInterceptor().apply {
+        level = logLevel
     }
-}
 
 fun createOkHttpClient(interceptors: List<Interceptor>? = null): OkHttpClient {
     return OkHttpClient().newBuilder().apply {
         interceptors?.forEach { interceptor ->
             addInterceptor(interceptor)
         }
-        addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        })
     }.build()
 }

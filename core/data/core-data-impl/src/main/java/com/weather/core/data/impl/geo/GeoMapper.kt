@@ -1,9 +1,6 @@
 package com.weather.core.data.impl.geo
 
-import com.weather.core.datasource.inmemory.model.CityInMemory
-import com.weather.core.datasource.inmemory.model.GeoInMemory
-import com.weather.core.datasource.inmemory.model.GeoLinkInMemory
-import com.weather.core.datasource.inmemory.model.GeoRelEnumsInMemory
+import com.weather.core.datasource.db.geo.CityEntity
 import com.weather.core.datasource.net.geo.model.CityResponse
 import com.weather.core.datasource.net.geo.model.GeoLinkResponse
 import com.weather.core.datasource.net.geo.model.GeoRelEnumsResponse
@@ -27,7 +24,8 @@ class GeoMapper {
             name = name,
             countryCode = countryCode,
             lat = lat,
-            lon = lon
+            lon = lon,
+            isSelected = false
         )
     }
 
@@ -45,34 +43,24 @@ class GeoMapper {
         GeoRelEnumsResponse.LAST -> GeoRelEnumsDomain.LAST
     }
 
-    fun toMemory(domain: GeoDomain): GeoInMemory = domain.run {
-        GeoInMemory(
-            data = data.map(::toMemory),
-            links = links.map(::toMemory)
-        )
-    }
-
-    fun toMemory(domain: CityDomain): CityInMemory = domain.run {
-        CityInMemory(
+    fun toDomain(entity: CityEntity): CityDomain = entity.run {
+        CityDomain(
             name = name,
             countryCode = countryCode,
             lat = lat,
-            lon = lon
+            lon = lon,
+            isSelected = entity.isSelected
         )
     }
 
-    fun toMemory(domain: GeoLinkDomain): GeoLinkInMemory = domain.run {
-        GeoLinkInMemory(
-            rel = toMemory(rel),
-            href = href
+    fun toEntity(domain: CityDomain): CityEntity = domain.run {
+        CityEntity(
+            name = name,
+            countryCode = countryCode,
+            lat = lat,
+            lon = lon,
+            isSelected = domain.isSelected
         )
-    }
-
-    fun toMemory(domain: GeoRelEnumsDomain): GeoRelEnumsInMemory = when (domain) {
-        GeoRelEnumsDomain.FIRST -> GeoRelEnumsInMemory.FIRST
-        GeoRelEnumsDomain.NEXT -> GeoRelEnumsInMemory.NEXT
-        GeoRelEnumsDomain.PREV -> GeoRelEnumsInMemory.PREV
-        GeoRelEnumsDomain.LAST -> GeoRelEnumsInMemory.LAST
     }
 
 }

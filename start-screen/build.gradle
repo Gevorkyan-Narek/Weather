@@ -9,8 +9,10 @@ apply from: "$rootDir/module-setup/viewbinding.gradle"
 dependencies {
     implementation project(":shared-styles")
     implementation project(":utils:android-utils")
+    implementation project(":utils:base-utils")
     implementation project(":core:domain:core-domain-api")
     implementation project(":core:domain:core-domain-models")
+    implementation project(path: ':navigation')
 
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompat"
@@ -27,6 +29,9 @@ dependencies {
     // Koin
     implementation "io.insert-koin:koin-android:$koinVersion"
     implementation "io.insert-koin:koin-androidx-navigation:$koinVersion"
+
+    // Coroutine
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
     testImplementation "junit:junit:$jUnit"
     androidTestImplementation "androidx.test.ext:junit:$extJUnit"

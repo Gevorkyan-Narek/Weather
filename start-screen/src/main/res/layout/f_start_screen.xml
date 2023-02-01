@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/motionLayout"
+    style="@style/Theme.Weather.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_bg"
     android:padding="@dimen/defaultIndent"
     app:layoutDescription="@xml/start_screen_motion_scene">
 
@@ -26,6 +26,7 @@
         style="@style/Theme.Weather.TextView.H1.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/transparent"
         android:text="@string/your"
         app:layout_constraintBottom_toTopOf="@id/subHeader"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,8 +38,8 @@
         style="@style/Theme.Weather.TextView.H2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/transparent"
         android:text="@string/weather"
-        android:textColor="@color/lightGray"
         app:layout_constraintBottom_toTopOf="@id/inputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +62,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/city"
-        android:textColor="@color/lightGray"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,6 +83,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cityEditText"
+            style="@style/Theme.Weather.TextView.H4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_city"
@@ -99,6 +100,6 @@
         android:layout_marginTop="@dimen/defaultIndent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputLayout"
-        tools:listitem="@layout/suggestion_items"/>
+        tools:listitem="@layout/suggestion_items" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

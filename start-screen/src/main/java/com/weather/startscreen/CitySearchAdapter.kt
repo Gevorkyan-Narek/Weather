@@ -2,24 +2,29 @@ package com.weather.startscreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.weather.shared.styles.databinding.LoadingItemBinding
+import com.weather.startscreen.adapter.CityAdapterDiffUtils
 import com.weather.startscreen.adapter.CityAdapterInfo
-import com.weather.startscreen.adapter.CitySearchViewHolder
-import com.weather.startscreen.adapter.LoadingViewHolder
-import com.weather.startscreen.databinding.LoadingItemBinding
+import com.weather.startscreen.adapter.holders.CitySearchViewHolder
+import com.weather.startscreen.adapter.holders.LoadingViewHolder
+import com.weather.startscreen.adapter.holders.NoMatchViewHolder
+import com.weather.startscreen.databinding.NoMatchItemBinding
 import com.weather.startscreen.databinding.SuggestionItemsBinding
 import com.weather.startscreen.models.CityPres
 
 class CitySearchAdapter(
     private val citySelectListener: (CityPres) -> Unit,
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : ListAdapter<CityAdapterInfo, RecyclerView.ViewHolder>(CityAdapterDiffUtils()) {
+
+    private val items = mutableListOf<CityAdapterInfo>()
 
     private companion object {
         const val CITY_INFO_VIEW_TYPE = 0
         const val LOADING_VIEW_TYPE = 1
+        const val NO_MATCH_VIEW_TYPE = 2
     }
-
-    private val items = mutableListOf<CityAdapterInfo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -42,16 +47,30 @@ class CitySearchAdapter(
                     )
                 )
             }
+            NO_MATCH_VIEW_TYPE -> {
+                NoMatchViewHolder(
+                    NoMatchItemBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                )
+            }
             else -> {
                 throw RuntimeException("No view type")
             }
         }
     }
 
+    override fun submitList(list: MutableList<CityAdapterInfo>?) {
+        super.submitList(items)
+    }
+
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
             is CityAdapterInfo.CityInfo -> CITY_INFO_VIEW_TYPE
             is CityAdapterInfo.Loading -> LOADING_VIEW_TYPE
+            is CityAdapterInfo.NoMatch -> NO_MATCH_VIEW_TYPE
         }
     }
 
@@ -63,31 +82,43 @@ class CitySearchAdapter(
             is CityAdapterInfo.Loading -> {
                 holder as LoadingViewHolder
             }
+            is CityAdapterInfo.NoMatch -> {
+                holder as NoMatchViewHolder
+            }
         }
     }
 
-    override fun getItemCount(): Int = items.size
-
-    fun submitList(newList: List<CityPres>) {
-        val mappedList = newList.map(CityAdapterInfo::CityInfo)
-        items.clear()
-        items.addAll(mappedList)
-        notifyDataSetChanged()
+    fun updateItems(list: List<CityAdapterInfo>) {
+        when {
+            items.all { info -> info is CityAdapterInfo.Loading } && list.isEmpty() -> {
+                items.clear()
+                notifyItemRemoved(1)
+                items.add(CityAdapterInfo.NoMatch)
+                notifyItemInserted(items.size)
+            }
+            else -> {
+                items.removeIf { item -> item is CityAdapterInfo.Loading }.apply {
+                    if (this) {
+                        notifyItemRemoved(items.size + 1)
+                    }
+                }
+                val tempSize = items.size
+                items.addAll(list)
+                notifyItemRangeInserted(tempSize, items.size)
+            }
+        }
     }
 
-    fun addCities(newList: List<CityPres>) {
-        val mappedList = newList.map(CityAdapterInfo::CityInfo)
-        val positionNewInserted = items.size
-        items.remove(CityAdapterInfo.Loading)
-        items.addAll(mappedList)
-        notifyItemInserted(positionNewInserted)
+    fun clear() {
+        val size = items.size
+        items.clear()
+        notifyItemRangeRemoved(0, size)
     }
 
     fun addLoading() {
-        val found = items.find { info -> info is CityAdapterInfo.Loading }
-        if (found == null) {
+        if (!items.contains(CityAdapterInfo.Loading)) {
             items.add(CityAdapterInfo.Loading)
-            notifyItemInserted(items.size.dec())
+            notifyItemInserted(items.size)
         }
     }
 

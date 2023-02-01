@@ -1,89 +1,88 @@
 package com.weather.startscreen
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.viewModelScope
-import com.weather.android.utils.fragment.liveData
-import com.weather.android.utils.fragment.postEvent
-import com.weather.core.domain.api.ForecastUseCase
+import androidx.lifecycle.*
+import com.weather.android.utils.liveData
+import com.weather.android.utils.mapList
 import com.weather.core.domain.api.GeoUseCase
+import com.weather.navigation.IssueGraphNavigation
+import com.weather.navigation.NavigationToWithPopup
+import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.models.CityPres
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
-    private val forecastUseCase: ForecastUseCase,
-    private val logger: Logger = LoggerFactory.getLogger(StartScreenViewModel::class.java)
+    private val issueGraphNavigation: IssueGraphNavigation,
 ) : ViewModel() {
 
     companion object {
         private const val MOTION_DELAY = 1500L
     }
 
+    private val _motionEvent = MutableLiveData<Boolean>()
+    val motionEvent = _motionEvent.liveData().distinctUntilChanged()
+
+    private val _clearSearchListEvent = MutableLiveData<Unit>()
+    val clearSearchListEvent = _clearSearchListEvent.liveData()
+
+    val searchList = geoUseCase.downloadedCities
+        .mapList { domain -> CityAdapterInfo.CityInfo(geoMapper.toPres(domain)) }
+        .asLiveData()
+
+    val loadingLiveData = geoUseCase.isLoading.asLiveData()
+
+    private val _navigationEvent = MutableLiveData<NavigationToWithPopup>()
+    val navigationEvent = _navigationEvent.liveData()
+
     private val _motionStartEvent = MutableLiveData<Unit>()
     val motionStartEvent = _motionStartEvent.liveData()
 
-    private val _emptySearchLiveData = MutableLiveData<Boolean>()
-    val emptySearchLiveData = _emptySearchLiveData.liveData().distinctUntilChanged()
-
-    private val _matchCitiesLiveData = MutableLiveData<List<CityPres>>()
-    val matchCitiesLiveData = _matchCitiesLiveData.liveData()
-
-    private val _insertNewCitiesLiveData = MutableLiveData<List<CityPres>>()
-    val insertNewCitiesLiveData = _insertNewCitiesLiveData.liveData()
-
-    private val _loadingEvent = MutableLiveData<Unit>()
-    val loadingEvent = _loadingEvent.liveData()
-
-    private var job: Job? = null
-
     init {
+        geoUseCase.init(viewModelScope)
         viewModelScope.launch {
-            delay(MOTION_DELAY)
-            _motionStartEvent.postEvent()
+            geoUseCase.savedCities.collect { cities ->
+                delay(MOTION_DELAY)
+                if (cities.isEmpty()) {
+                    _motionStartEvent.postValue(Unit)
+                } else {
+                    navigate()
+                }
+            }
         }
     }
 
     fun onCityTextChanged(cityPrefix: String) {
-        viewModelScope.launch {
-            val isPrefixNotBlank = cityPrefix.isNotBlank()
-            _emptySearchLiveData.postValue(isPrefixNotBlank)
-            if (isPrefixNotBlank) {
-                geoUseCase.downloadCities(cityPrefix)?.let { domain ->
-                    _matchCitiesLiveData.postValue(geoMapper.toPres(domain).data)
-                }
-            }
+        _motionEvent.postValue(cityPrefix.isBlank())
+        _clearSearchListEvent.postValue(Unit)
+        viewModelScope.launch(Dispatchers.IO) {
+            geoUseCase.searchCity(cityPrefix)
         }
     }
 
     fun onScrolled() {
-        viewModelScope.launch {
-            if (job != null) return@launch
-
-            job = launch {
-                _loadingEvent.postValue(Unit)
-                delay(3000)
-                val domain = geoUseCase.downloadMoreCities()
-                job = null
-                if (domain == null) {
-                    logger.debug("No new cities")
-                } else {
-                    _insertNewCitiesLiveData.postValue(geoMapper.toPres(domain).data)
-                }
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            geoUseCase.downloadMoreCities()
         }
     }
 
     fun onCitySelect(city: CityPres) {
-        viewModelScope.launch {
-            forecastUseCase.downloadForecast(geoMapper.toDomain(city))
+        navigate()
+        viewModelScope.launch(Dispatchers.IO) {
+            geoUseCase.saveCity(geoMapper.toDomain(city))
         }
+    }
+
+    private fun navigate() {
+        _navigationEvent.postValue(
+            NavigationToWithPopup(
+                issueGraphNavigation.mainScreen,
+                issueGraphNavigation.startScreen,
+                inclusive = true
+            )
+        )
     }
 
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -39,20 +40,28 @@ dependencies {
 
     implementation project(":shared-styles")
     implementation project(":start-screen")
+    implementation project(":main-screen")
     implementation project(":utils:android-utils")
+    implementation project(":utils:base-utils")
 
     implementation project(path: ':core:domain:core-domain-api')
     implementation project(path: ':core:domain:core-domain-impl')
     implementation project(path: ':core:data:core-data-api')
     implementation project(path: ':core:data:core-data-impl')
     implementation project(path: ':core:datasource:core-datasource-net')
+    implementation project(path: ':core:datasource:core-datasource-db')
+    implementation project(path: ':navigation')
 
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompat"
     implementation "com.google.android.material:material:$material"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
-    implementation "org.slf4j:slf4j-api:$slf4j"
-    implementation "com.github.tony19:logback-android:$logback"
+    implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
+
+    // LifeCycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycle"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycle"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycle"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
@@ -68,7 +77,15 @@ dependencies {
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpLoggingInterceptorVersion"
-    implementation project(path: ':core:datasource:core-datasource-inmemory')
+
+    // Room
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+
+    // Logger
+    implementation "org.slf4j:slf4j-api:$slf4j"
+    implementation "com.github.tony19:logback-android:$logback"
 
     testImplementation "junit:junit:$jUnit"
     androidTestImplementation "androidx.test.ext:junit:$extJUnit"

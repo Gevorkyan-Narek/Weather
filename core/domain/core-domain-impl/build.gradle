@@ -12,4 +12,6 @@ dependencies {
     implementation project(path: ':core:domain:core-domain-models')
 
     implementation "androidx.core:core-ktx:$ktxVersion"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 }

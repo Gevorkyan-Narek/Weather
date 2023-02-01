@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.weather.core.data.impl">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.weather.core.data.impl">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
