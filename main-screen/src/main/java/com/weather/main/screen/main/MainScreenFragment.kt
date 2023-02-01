@@ -2,54 +2,23 @@ package com.weather.main.screen.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import androidx.navigation.fragment.findNavController
 import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
 import com.weather.android.utils.setupWithViewPager2
-import com.weather.android.utils.toBottomSheetBehaviour
-import com.weather.main.screen.R
-import com.weather.main.screen.city.changer.CitySelectAdapter
-import com.weather.main.screen.databinding.MainScreenBinding
+import com.weather.main.screen.databinding.FMainScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainScreenFragment : BindingFragment<MainScreenBinding>() {
+class MainScreenFragment : BindingFragment<FMainScreenBinding>() {
 
     private val viewModel: MainScreenViewModel by viewModel()
-
-    private val linearLayoutManager by lazy {
-        LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-    }
-
-    private val scrollListener by lazy {
-        SuggestionsOnScrollListener(
-            linearLayoutManager,
-            onScrolledListener = { _, _, _ ->
-                viewModel.onScrolled()
-            }
-        )
-    }
-
-    private val citySelectAdapter by lazy {
-        CitySelectAdapter(
-            viewModel::onCitySelect,
-            viewModel::onNewCitySelect,
-            viewModel::onCityDelete
-        )
-    }
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-    ): MainScreenBinding = MainScreenBinding.inflate(inflater, container, false)
+    ): FMainScreenBinding = FMainScreenBinding.inflate(inflater, container, false)
 
-    override fun MainScreenBinding.initView() {
+    override fun FMainScreenBinding.initView() {
         viewPager.adapter = MainScreenFragmentPagerAdapter(childFragmentManager, lifecycle)
         viewPager.isUserInputEnabled = false
         tabLayout.setupWithViewPager2(
@@ -59,46 +28,15 @@ class MainScreenFragment : BindingFragment<MainScreenBinding>() {
         location.setOnClickListener {
             viewModel.locationClicked()
         }
-        bottomSheet.toBottomSheetBehaviour().state = BottomSheetBehavior.STATE_HIDDEN
-        suggestionsRecycler.layoutManager = linearLayoutManager
-        suggestionsRecycler.addOnScrollListener(scrollListener)
-        suggestionsRecycler.adapter = citySelectAdapter
-        citySelectAdapter.submitList(null)
-        cityEditText.addTextChangedListener {
-            viewModel.onCityPrefixChanged(it?.toString().orEmpty())
-        }
     }
 
-    override fun MainScreenBinding.observeViewModel() {
+    override fun FMainScreenBinding.observeViewModel() {
         viewModel.run {
-            observe(stateBottomSheetLiveData) { state ->
-                bottomSheet.toBottomSheetBehaviour().state = state
-                if (state == BottomSheetBehavior.STATE_HIDDEN) {
-                    cityEditText.text?.clear()
-                    citySelectAdapter.showSavedCities()
-                }
+            observe(openBottomSheetFragment) { navigationTo ->
+                findNavController().navigate(navigationTo.actionId)
             }
             observe(cityTitle) { cityName ->
                 title.text = cityName
-            }
-            observe(loadingLiveData) {
-                citySelectAdapter.addLoading()
-            }
-            observe(savedCities) { list ->
-                citySelectAdapter.setSavedItems(list)
-            }
-            observe(downloadCities) { list ->
-                citySelectAdapter.updateItems(list)
-            }
-            observe(cityPrefixChangedLiveData) { isBlank ->
-                if (isBlank) {
-                    citySelectAdapter.showSavedCities()
-                } else {
-                    citySelectAdapter.clear()
-                }
-            }
-            observe(showDeleteWarning) {
-                Toast.makeText(context, R.string.deleteWarning, Toast.LENGTH_SHORT).show()
             }
         }
     }

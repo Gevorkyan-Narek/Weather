@@ -4,8 +4,8 @@ import androidx.lifecycle.*
 import com.weather.android.utils.liveData
 import com.weather.android.utils.mapList
 import com.weather.core.domain.api.GeoUseCase
-import com.weather.navigation.IssueGraphNavigation
-import com.weather.navigation.NavigationToWithPopup
+import com.weather.navigation.NavigationGraph
+import com.weather.navigation.NavigationInfo
 import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.models.CityPres
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
-    private val issueGraphNavigation: IssueGraphNavigation,
+    private val navigationGraph: NavigationGraph,
 ) : ViewModel() {
 
     companion object {
@@ -34,7 +34,7 @@ class StartScreenViewModel(
 
     val loadingLiveData = geoUseCase.isLoading.asLiveData()
 
-    private val _navigationEvent = MutableLiveData<NavigationToWithPopup>()
+    private val _navigationEvent = MutableLiveData<NavigationInfo.NavigationToWithPopup>()
     val navigationEvent = _navigationEvent.liveData()
 
     private val _motionStartEvent = MutableLiveData<Unit>()
@@ -77,9 +77,9 @@ class StartScreenViewModel(
 
     private fun navigate() {
         _navigationEvent.postValue(
-            NavigationToWithPopup(
-                issueGraphNavigation.mainScreen,
-                issueGraphNavigation.startScreen,
+            NavigationInfo.NavigationToWithPopup(
+                navigationGraph.mainScreen,
+                navigationGraph.startScreen,
                 inclusive = true
             )
         )

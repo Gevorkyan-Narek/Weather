@@ -15,6 +15,7 @@ dependencies {
     implementation project(":utils:base-utils")
     implementation project(":core:domain:core-domain-api")
     implementation project(":core:domain:core-domain-models")
+    implementation project(':navigation')
 
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompat"
