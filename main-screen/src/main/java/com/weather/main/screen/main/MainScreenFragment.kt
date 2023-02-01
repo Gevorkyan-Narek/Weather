@@ -51,6 +51,7 @@ class MainScreenFragment : BindingFragment<MainScreenBinding>() {
 
     override fun MainScreenBinding.initView() {
         viewPager.adapter = MainScreenFragmentPagerAdapter(childFragmentManager, lifecycle)
+        viewPager.isUserInputEnabled = false
         tabLayout.setupWithViewPager2(
             viewPager,
             WeatherFragmentsEnum.values().map { title -> getString(title.titleId) }
