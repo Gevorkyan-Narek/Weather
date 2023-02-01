@@ -13,6 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Weather"
+
 include ':app'
 include ':core:data'
 include ':core:domain'
@@ -23,3 +24,10 @@ include ':core:domain:core-domain-impl'
 include ':core:domain:core-domain-models'
 include ':core:datasource:core-datasource-db'
 include ':core:datasource:core-datasource-net'
+include ':start-screen'
+include ':shared-styles'
+include ':utils:android-utils'
+include ':utils:base-utils'
+include ':main-screen'
+include ':custom-views'
+include ':navigation'

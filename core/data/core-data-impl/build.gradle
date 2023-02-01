@@ -3,39 +3,32 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-android {
-    namespace 'com.example.core.data.impl'
-    compileSdk 32
-
-    defaultConfig {
-        minSdk 25
-        targetSdk 32
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-}
+apply from: "$rootDir/module-setup/main-setup.gradle"
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation project(path: ":utils:android-utils")
+    implementation project(path: ":utils:base-utils")
+    implementation project(path: ':core:datasource:core-datasource-db')
+    implementation project(path: ':core:datasource:core-datasource-net')
+    implementation project(path: ":core:data:core-data-api")
+    implementation project(path: ":core:domain:core-domain-models")
+
+    implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
+    implementation "androidx.core:core-ktx:$ktxVersion"
+
+    // Retrofit + OkHttp
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpLoggingInterceptorVersion"
+
+    // Logger
+    implementation "org.slf4j:slf4j-api:$slf4j"
+
+    // Coroutine
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+
+
 }
