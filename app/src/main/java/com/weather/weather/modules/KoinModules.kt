@@ -7,5 +7,6 @@ val koinModules = listOf(
     useCaseModule,
     daoModule,
     repositoryModule,
-    platformModule
+    platformModule,
+    navigationModule
 )

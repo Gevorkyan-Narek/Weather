@@ -11,7 +11,6 @@ dependencies {
 
     implementation project(":shared-styles")
     implementation project(":custom-views")
-    implementation project(":navigation")
     implementation project(":utils:android-utils")
     implementation project(":utils:base-utils")
     implementation project(":core:domain:core-domain-api")

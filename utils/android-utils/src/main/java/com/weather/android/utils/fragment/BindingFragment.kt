@@ -19,6 +19,7 @@ abstract class BindingFragment<B : ViewBinding> : ScopeFragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = onCreateBinding(inflater, container)
+        binding?.initView()
         return binding?.root
     }
 
@@ -33,7 +34,6 @@ abstract class BindingFragment<B : ViewBinding> : ScopeFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.run {
-            initView()
             observeViewModel()
         }
     }

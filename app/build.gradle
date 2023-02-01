@@ -41,7 +41,6 @@ dependencies {
     implementation project(":shared-styles")
     implementation project(":start-screen")
     implementation project(":main-screen")
-    implementation project(":navigation")
     implementation project(":utils:android-utils")
     implementation project(":utils:base-utils")
 
@@ -51,6 +50,7 @@ dependencies {
     implementation project(path: ':core:data:core-data-impl')
     implementation project(path: ':core:datasource:core-datasource-net')
     implementation project(path: ':core:datasource:core-datasource-db')
+    implementation project(path: ':navigation')
 
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.appcompat:appcompat:$appCompat"

@@ -26,6 +26,13 @@ class MainActivity : AppCompatActivity() {
                     connectionAlert.isVisible = !isExist
                 }
             }
+            observe(backPressed) {
+                finish()
+            }
         }
+    }
+
+    override fun onBackPressed() {
+        viewModel.onBackPressed()
     }
 }

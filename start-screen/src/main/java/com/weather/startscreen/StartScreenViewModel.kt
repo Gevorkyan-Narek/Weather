@@ -3,8 +3,9 @@ package com.weather.startscreen
 import androidx.lifecycle.*
 import com.weather.android.utils.liveData
 import com.weather.android.utils.mapList
-import com.weather.android.utils.postEvent
 import com.weather.core.domain.api.GeoUseCase
+import com.weather.navigation.IssueGraphNavigation
+import com.weather.navigation.NavigationToWithPopup
 import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.models.CityPres
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
+    private val issueGraphNavigation: IssueGraphNavigation,
 ) : ViewModel() {
 
     companion object {
@@ -32,7 +34,7 @@ class StartScreenViewModel(
 
     val loadingLiveData = geoUseCase.isLoading.asLiveData()
 
-    private val _navigationEvent = MutableLiveData<Unit>()
+    private val _navigationEvent = MutableLiveData<NavigationToWithPopup>()
     val navigationEvent = _navigationEvent.liveData()
 
     private val _motionStartEvent = MutableLiveData<Unit>()
@@ -46,7 +48,7 @@ class StartScreenViewModel(
                 if (cities.isEmpty()) {
                     _motionStartEvent.postValue(Unit)
                 } else {
-                    _navigationEvent.postEvent()
+                    navigate()
                 }
             }
         }
@@ -67,10 +69,20 @@ class StartScreenViewModel(
     }
 
     fun onCitySelect(city: CityPres) {
-        _navigationEvent.postEvent()
+        navigate()
         viewModelScope.launch(Dispatchers.IO) {
             geoUseCase.saveCity(geoMapper.toDomain(city))
         }
+    }
+
+    private fun navigate() {
+        _navigationEvent.postValue(
+            NavigationToWithPopup(
+                issueGraphNavigation.mainScreen,
+                issueGraphNavigation.startScreen,
+                inclusive = true
+            )
+        )
     }
 
 }

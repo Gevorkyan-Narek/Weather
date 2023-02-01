@@ -22,6 +22,7 @@ val viewModelsModule = module {
             StartScreenViewModel(
                 geoUseCase = get(),
                 geoMapper = get(),
+                issueGraphNavigation = get()
             )
         }
     }

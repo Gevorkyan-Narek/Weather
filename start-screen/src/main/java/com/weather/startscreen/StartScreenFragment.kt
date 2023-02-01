@@ -2,7 +2,9 @@ package com.weather.startscreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.android.utils.fragment.BindingFragment
@@ -72,8 +74,16 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
             observe(clearSearchListEvent) {
                 citySearchAdapter.clear()
             }
-            observe(navigationEvent) {
-                findNavController().navigate(R.id.fromStartToWeatherScreen)
+            observe(navigationEvent) { navigationInfo ->
+                val navOption = NavOptions.Builder()
+                    .setPopUpTo(navigationInfo.popupTo, navigationInfo.inclusive)
+                    .build()
+
+                findNavController().navigate(
+                    resId = navigationInfo.actionId,
+                    navOptions = navOption,
+                    args = bundleOf()
+                )
             }
         }
     }
