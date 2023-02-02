@@ -6,13 +6,9 @@
     style="@style/Theme.Weather.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_rectangle_corner"
     android:backgroundTint="?attr/colorSecondaryVariant"
     android:orientation="vertical"
-    android:padding="@dimen/defaultIndent"
-    app:behavior_hideable="true"
-    app:behavior_peekHeight="0dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    android:padding="@dimen/defaultIndent">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout"
@@ -23,7 +19,6 @@
         app:boxCornerRadiusBottomStart="@dimen/defaultIndent"
         app:boxCornerRadiusTopEnd="@dimen/defaultIndent"
         app:boxCornerRadiusTopStart="@dimen/defaultIndent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -43,7 +38,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/defaultIndent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputLayout"
         tools:listitem="@layout/city_item" />
 </LinearLayout>

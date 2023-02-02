@@ -29,7 +29,7 @@ class GeoUseCaseImpl(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
-    override val downloadMoreCitiesSharedFlow = _downloadMoreCitiesSharedFlow
+    private val downloadMoreCitiesSharedFlow = _downloadMoreCitiesSharedFlow
         .map {
             if (repository.isHasMoreCities()) {
                 isLoading.emit(Unit)
@@ -43,7 +43,7 @@ class GeoUseCaseImpl(
     private val _searchSharedFlow =
         MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override val searchSharedFlow = _searchSharedFlow
+    private val searchSharedFlow = _searchSharedFlow
         .distinctUntilChanged()
         .map { searchText ->
             isLoading.emit(Unit)

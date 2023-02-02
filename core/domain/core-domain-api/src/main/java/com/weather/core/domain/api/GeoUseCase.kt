@@ -6,10 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface GeoUseCase {
 
-    val searchSharedFlow: Flow<Unit>
-
-    val downloadMoreCitiesSharedFlow: Flow<Unit>
-
     val savedCities: Flow<List<CityDomain>>
 
     val downloadedCities: Flow<List<CityDomain>>
