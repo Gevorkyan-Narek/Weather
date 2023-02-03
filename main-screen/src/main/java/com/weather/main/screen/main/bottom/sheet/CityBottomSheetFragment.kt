@@ -1,5 +1,6 @@
 package com.weather.main.screen.main.bottom.sheet
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +65,7 @@ class CityBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun initView() {
         binding?.run {
+            root.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
             suggestionsRecycler.layoutManager = linearLayoutManager
             suggestionsRecycler.addOnScrollListener(scrollListener)
             suggestionsRecycler.adapter = citySelectAdapter
