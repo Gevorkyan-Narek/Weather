@@ -2,13 +2,13 @@ package com.weather.main.screen.today.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.weather.main.screen.databinding.WeatherItemBinding
 import com.weather.main.screen.model.WeatherPres
 
 class TodayTimeAdapter(
     private val action: (WeatherPres) -> Unit,
-) : RecyclerView.Adapter<TodayTimeViewHolder>() {
+) : ListAdapter<WeatherPres, TodayTimeViewHolder>(TodayTimeDiffUtil()) {
 
     private val items = mutableListOf<WeatherPres>()
     private var selectedItem: Int = 0
@@ -37,13 +37,13 @@ class TodayTimeAdapter(
         notifyItemChanged(selectedItem)
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun submitList(list: MutableList<WeatherPres>?) {
+        super.submitList(items)
+    }
 
-    fun submitList(list: List<WeatherPres>) {
-        val itemsSize = items.size
+    fun updateItems(list: List<WeatherPres>) {
         items.clear()
         items.addAll(list)
-        notifyItemRangeRemoved(0, itemsSize)
-        notifyItemRangeInserted(0, list.size)
+        notifyItemRangeChanged(0, list.size)
     }
 }

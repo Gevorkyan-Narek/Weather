@@ -29,7 +29,6 @@ class ForecastRepositoryImpl(
                 APP_ID
             )
         }.checkResult { response ->
-            dao.clearAll()
             dao.insertReplace(response.forecast.map(mapper::toEntity))
         }
     }

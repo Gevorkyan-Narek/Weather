@@ -32,6 +32,7 @@ class TodayFragment : BindingFragment<FTodayScreenBinding>() {
 
     override fun FTodayScreenBinding.initView() {
         byTimeRecycler.adapter = adapter
+        adapter.submitList(null)
     }
 
     override fun FTodayScreenBinding.observeViewModel() {
@@ -76,7 +77,7 @@ class TodayFragment : BindingFragment<FTodayScreenBinding>() {
             val min =
                 pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
             tempMinMax.text = getString(R.string.tempMaxMin, max, min)
-            adapter.submitList(pres)
+            adapter.updateItems(pres)
         }
     }
 
