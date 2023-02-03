@@ -22,6 +22,8 @@ class ForecastUseCaseImpl(
         }
     }
 
+    override val isDownloading = repository.isDownloading
+
     override fun getTodayForecast(): Flow<List<WeatherDomain>> {
         return repository.getTodayForecast()
     }

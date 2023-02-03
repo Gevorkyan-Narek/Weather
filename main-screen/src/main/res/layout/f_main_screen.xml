@@ -50,4 +50,16 @@
         app:tint="?attr/colorPrimary"
         tools:ignore="ContentDescription" />
 
+    <TextView
+        android:id="@+id/downloadWarning"
+        style="@style/Theme.Weather.TextView.H3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gradient_details"
+        android:gravity="center"
+        android:padding="@dimen/indent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Переход к городу Самара" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
