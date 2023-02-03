@@ -7,36 +7,73 @@ import androidx.lifecycle.viewModelScope
 import com.weather.android.utils.liveData
 import com.weather.android.utils.mapList
 import com.weather.android.utils.postEvent
-import com.weather.base.utils.nullOrTrue
 import com.weather.core.domain.api.GeoUseCase
+import com.weather.core.domain.models.geo.GeoLinkDomain
+import com.weather.core.domain.models.geo.GeoRelEnumsDomain
 import com.weather.main.screen.city.changer.CityAdapterInfo
 import com.weather.main.screen.city.changer.model.CityInfoItemPres
 import com.weather.main.screen.mapper.CityPresMapper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class CityBottomSheetViewModel(
     private val geoUseCase: GeoUseCase,
     private val mapper: CityPresMapper,
+    private val logger: Logger = LoggerFactory.getLogger(CityBottomSheetViewModel::class.java),
 ) : ViewModel() {
+
+    companion object {
+        private const val SAVED_ONE_CITY = 1
+        private const val DEBOUNCE = 1500L
+    }
 
     val savedCities = geoUseCase.savedCities
         .mapList { domain -> CityAdapterInfo.CityInfo(mapper.toPres(domain)) }
         .asLiveData()
 
-    val downloadCities = geoUseCase.downloadedCities
-        .mapList { domain -> CityAdapterInfo.NewCityInfo(mapper.toPres(domain)) }
-        .map { list ->
-            if (cityPrefixChangedLiveData.value.nullOrTrue()) null
-            else list
+    private val geoLinks = geoUseCase.downloadedCities
+        .mapLatest { domain -> domain.links }
+
+    val searchList = geoUseCase.downloadedCities
+        .map { domain ->
+            if (domain.data.isEmpty()) {
+                listOf(CityAdapterInfo.NoMatch)
+            } else {
+                domain.data.map { city ->
+                    CityAdapterInfo.NewCityInfo(mapper.toPres(city))
+                }
+            }
         }
         .asLiveData()
 
-    private val _cityPrefixChangedLiveData = MutableLiveData(true)
-    val cityPrefixChangedLiveData = _cityPrefixChangedLiveData.liveData()
+    val loadMoreCitiesList = geoUseCase.downloadedNextCities
+        .map { domain ->
+            domain.data.map { city ->
+                CityAdapterInfo.NewCityInfo(mapper.toPres(city))
+            }
+        }
+        .asLiveData()
 
-    val loadingLiveData = geoUseCase.isLoading.asLiveData()
+    private val _cityTextChanged =
+        MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    private val cityTextChanged = _cityTextChanged
+        .distinctUntilChanged()
+        .debounce(DEBOUNCE)
+
+    private val _onScrolled =
+        MutableSharedFlow<GeoLinkDomain?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    private val onScrolled = _onScrolled
+        .distinctUntilChanged()
+        .debounce(DEBOUNCE)
 
     private val _showDeleteWarning = MutableLiveData<Unit>()
     val showDeleteWarning = _showDeleteWarning.liveData()
@@ -44,20 +81,46 @@ class CityBottomSheetViewModel(
     private val _popBackStackEvent = MutableLiveData<Unit>()
     val popBackStackEvent = _popBackStackEvent.liveData()
 
+    private val _isLoading = MutableLiveData<Unit>()
+    val isLoading = _isLoading.liveData()
+
+    private val _addLoading = MutableLiveData<Unit>()
+    val addLoading = _addLoading.liveData()
+
+    private val _showSavedCities = MutableLiveData<Unit>()
+    val showSavedCities = _showSavedCities.liveData()
+
     init {
-        geoUseCase.init(viewModelScope)
+        viewModelScope.launch {
+            cityTextChanged.collectLatest { cityPrefix ->
+                logger.debug("Search new city: $cityPrefix")
+                geoUseCase.downloadCities(cityPrefix)
+            }
+        }
+        viewModelScope.launch {
+            onScrolled.collectLatest { link ->
+                if (link != null) {
+                    logger.debug("Scrolled: ${link.href}")
+                    geoUseCase.downloadNextCities(link)
+                }
+            }
+        }
     }
 
     fun onCityPrefixChanged(cityPrefix: String) {
-        _cityPrefixChangedLiveData.postValue(cityPrefix.isBlank())
         viewModelScope.launch(Dispatchers.IO) {
-            geoUseCase.searchCity(cityPrefix)
+            if (cityPrefix.isBlank()) {
+                _showSavedCities.postValue(Unit)
+            } else {
+                _isLoading.postValue(Unit)
+                _cityTextChanged.emit(cityPrefix)
+            }
         }
     }
 
     fun onCityDelete(city: CityInfoItemPres) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (savedCities.value?.size == 1) {
+            if (savedCities.value?.size == SAVED_ONE_CITY) {
                 _showDeleteWarning.postValue(Unit)
             } else {
                 geoUseCase.removeSavedCity(mapper.toDomain(city))
@@ -81,7 +144,12 @@ class CityBottomSheetViewModel(
 
     fun onScrolled() {
         viewModelScope.launch(Dispatchers.IO) {
-            geoUseCase.downloadMoreCities()
+            geoLinks.firstOrNull()?.find { link ->
+                link.rel == GeoRelEnumsDomain.NEXT
+            }?.let { nextLink ->
+                _addLoading.postValue(Unit)
+                _onScrolled.emit(nextLink)
+            }
         }
     }
 }

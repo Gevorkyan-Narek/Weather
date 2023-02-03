@@ -65,27 +65,21 @@ class CitySelectAdapter(
         super.submitList(items)
     }
 
-    fun updateItems(list: List<CityAdapterInfo>?) {
-        if (list == null) return
+    fun updateItems(list: List<CityAdapterInfo>) {
+        clear()
+        items.addAll(list)
+        notifyItemRangeInserted(0, list.size)
+    }
 
-        when {
-            items.all { info -> info is CityAdapterInfo.Loading } && list.isEmpty() -> {
-                items.clear()
-                notifyItemRemoved(1)
-                items.add(CityAdapterInfo.NoMatch)
-                notifyItemInserted(items.size)
-            }
-            else -> {
-                items.removeIf { item -> item is CityAdapterInfo.Loading }.apply {
-                    if (this) {
-                        notifyItemRemoved(items.size + 1)
-                    }
-                }
-                val tempSize = items.size
-                items.addAll(list)
-                notifyItemRangeInserted(tempSize, list.size)
+    fun loadMore(list: List<CityAdapterInfo>) {
+        items.removeIf { item -> item is CityAdapterInfo.Loading }.apply {
+            if (this) {
+                notifyItemRemoved(items.size + 1)
             }
         }
+        val tempSize = items.size
+        items.addAll(list)
+        notifyItemRangeInserted(tempSize, items.size)
     }
 
     fun setSavedItems(list: List<CityAdapterInfo.CityInfo>) {
@@ -93,14 +87,6 @@ class CitySelectAdapter(
             savedItems.clear()
             savedItems.addAll(list)
             showSavedCities()
-        }
-    }
-
-    fun clear() {
-        if (items.isNotEmpty()) {
-            val size = items.size
-            items.clear()
-            notifyItemRangeRemoved(0, size)
         }
     }
 
@@ -125,6 +111,21 @@ class CitySelectAdapter(
             notifyItemRemoved(position)
         }
         onDeleteClick(item.city)
+    }
+
+    fun clearAndShowLoading() {
+        if (items.isEmpty() || items.size != items.filterIsInstance<CityAdapterInfo.Loading>().size) {
+            clear()
+            addLoading()
+        }
+    }
+
+    fun clear() {
+        if (items.isNotEmpty()) {
+            val size = items.size
+            items.clear()
+            notifyItemRangeRemoved(0, size)
+        }
     }
 
 }

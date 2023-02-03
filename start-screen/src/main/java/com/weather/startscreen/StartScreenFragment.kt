@@ -56,6 +56,7 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
     override fun FStartScreenBinding.observeViewModel() {
         with(viewModel) {
             observe(searchList, citySearchAdapter::updateItems)
+            observe(loadMoreCitiesList, citySearchAdapter::loadMore)
             observe(motionStartEvent) {
                 motionLayout.setTransition(R.id.startTransition)
                 motionLayout.transitionToEnd()
@@ -68,11 +69,11 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
                 }
                 motionLayout.transitionToEnd()
             }
-            observe(loadingLiveData) {
-                citySearchAdapter.addLoading()
+            observe(isLoading) {
+                citySearchAdapter.clearAndShowLoading()
             }
-            observe(clearSearchListEvent) {
-                citySearchAdapter.clear()
+            observe(addLoading) {
+                citySearchAdapter.addLoading()
             }
             observe(navigationEvent) { navigationInfo ->
                 val navOption = NavOptions.Builder()

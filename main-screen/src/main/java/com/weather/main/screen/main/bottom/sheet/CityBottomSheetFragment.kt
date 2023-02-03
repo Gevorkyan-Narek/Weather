@@ -80,21 +80,23 @@ class CityBottomSheetFragment : BottomSheetDialogFragment() {
             observe(popBackStackEvent) {
                 findNavController().popBackStack()
             }
-            observe(loadingLiveData) {
+            observe(isLoading) {
+                citySelectAdapter.clearAndShowLoading()
+            }
+            observe(addLoading) {
                 citySelectAdapter.addLoading()
+            }
+            observe(loadMoreCitiesList) { list ->
+                citySelectAdapter.loadMore(list)
+            }
+            observe(searchList) { list ->
+                citySelectAdapter.updateItems(list)
+            }
+            observe(showSavedCities) {
+                citySelectAdapter.showSavedCities()
             }
             observe(savedCities) { list ->
                 citySelectAdapter.setSavedItems(list)
-            }
-            observe(downloadCities) { list ->
-                citySelectAdapter.updateItems(list)
-            }
-            observe(cityPrefixChangedLiveData) { isBlank ->
-                if (isBlank) {
-                    citySelectAdapter.showSavedCities()
-                } else {
-                    citySelectAdapter.clear()
-                }
             }
             observe(showDeleteWarning) {
                 Toast.makeText(context, R.string.deleteWarning, Toast.LENGTH_SHORT).show()

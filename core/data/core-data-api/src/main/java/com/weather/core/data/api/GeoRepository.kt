@@ -2,6 +2,7 @@ package com.weather.core.data.api
 
 import com.weather.core.domain.models.geo.CityDomain
 import com.weather.core.domain.models.geo.GeoDomain
+import com.weather.core.domain.models.geo.GeoLinkDomain
 import kotlinx.coroutines.flow.Flow
 
 interface GeoRepository {
@@ -10,13 +11,13 @@ interface GeoRepository {
 
     val downloadedCities: Flow<GeoDomain>
 
-    val selectedCity: Flow<CityDomain>
+    val downloadedNextCities: Flow<GeoDomain>
 
-    suspend fun isHasMoreCities(): Boolean
+    val selectedCity: Flow<CityDomain>
 
     suspend fun downloadCities(namePrefix: String)
 
-    suspend fun downloadMoreCities()
+    suspend fun downloadNextCities(geoLink: GeoLinkDomain)
 
     suspend fun saveCity(city: CityDomain)
 
