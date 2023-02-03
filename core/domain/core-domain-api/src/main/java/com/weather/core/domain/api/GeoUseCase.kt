@@ -1,35 +1,28 @@
 package com.weather.core.domain.api
 
 import com.weather.core.domain.models.geo.CityDomain
-import kotlinx.coroutines.CoroutineScope
+import com.weather.core.domain.models.geo.GeoDomain
+import com.weather.core.domain.models.geo.GeoLinkDomain
 import kotlinx.coroutines.flow.Flow
 
 interface GeoUseCase {
 
-    val searchSharedFlow: Flow<Unit>
-
-    val downloadMoreCitiesSharedFlow: Flow<Unit>
-
     val savedCities: Flow<List<CityDomain>>
 
-    val downloadedCities: Flow<List<CityDomain>>
+    val downloadedCities: Flow<GeoDomain>
 
-    val isLoading: Flow<Unit>
+    val downloadedNextCities: Flow<GeoDomain>
 
     val selectedCity: Flow<CityDomain>
 
-    fun init(scope: CoroutineScope)
-
     suspend fun downloadCities(namePrefix: String)
 
-    suspend fun downloadMoreCities()
+    suspend fun downloadNextCities(geoLinkDomain: GeoLinkDomain)
 
     suspend fun saveCity(city: CityDomain)
 
-    suspend fun reSelectCity(city: CityDomain)
-
-    suspend fun searchCity(cityName: String)
-
     suspend fun removeSavedCity(city: CityDomain)
+
+    suspend fun reSelectCity(city: CityDomain)
 
 }

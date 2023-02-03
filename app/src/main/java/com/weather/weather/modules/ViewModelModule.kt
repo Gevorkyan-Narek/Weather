@@ -2,6 +2,7 @@ package com.weather.weather.modules
 
 import com.weather.main.screen.forecast.ForecastViewModel
 import com.weather.main.screen.main.MainScreenViewModel
+import com.weather.main.screen.main.bottom.sheet.CityBottomSheetViewModel
 import com.weather.main.screen.today.TodayViewModel
 import com.weather.startscreen.StartScreenFragment
 import com.weather.startscreen.StartScreenViewModel
@@ -22,7 +23,7 @@ val viewModelsModule = module {
             StartScreenViewModel(
                 geoUseCase = get(),
                 geoMapper = get(),
-                issueGraphNavigation = get()
+                navigationGraph = get()
             )
         }
     }
@@ -30,7 +31,7 @@ val viewModelsModule = module {
     viewModel {
         MainScreenViewModel(
             geoUseCase = get(),
-            mapper = get()
+            navigationGraph = get()
         )
     }
 
@@ -44,6 +45,13 @@ val viewModelsModule = module {
     viewModel {
         ForecastViewModel(
             forecastUseCase = get()
+        )
+    }
+
+    viewModel {
+        CityBottomSheetViewModel(
+            geoUseCase = get(),
+            mapper = get()
         )
     }
 
