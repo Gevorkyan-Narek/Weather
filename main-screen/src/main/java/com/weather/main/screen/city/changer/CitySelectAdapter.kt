@@ -15,6 +15,8 @@ class CitySelectAdapter(
     private val onDeleteClick: (CityInfoItemPres) -> Unit,
 ) : ListAdapter<CityAdapterInfo, RecyclerView.ViewHolder>(CitySelectAdapterDiffUtils()) {
 
+    private var isShowSaved: Boolean = true
+
     private val savedItems = mutableListOf<CityAdapterInfo.CityInfo>()
     private val items = mutableListOf<CityAdapterInfo>()
 
@@ -65,26 +67,23 @@ class CitySelectAdapter(
         super.submitList(items)
     }
 
-    fun updateItems(list: List<CityAdapterInfo>?) {
-        if (list == null) return
+    fun updateItems(list: List<CityAdapterInfo>) {
+        if (isShowSaved.not())
+            clear()
+        items.addAll(list)
+        notifyItemRangeInserted(0, list.size)
+    }
 
-        when {
-            items.all { info -> info is CityAdapterInfo.Loading } && list.isEmpty() -> {
-                items.clear()
-                notifyItemRemoved(1)
-                items.add(CityAdapterInfo.NoMatch)
-                notifyItemInserted(items.size)
-            }
-            else -> {
-                items.removeIf { item -> item is CityAdapterInfo.Loading }.apply {
-                    if (this) {
-                        notifyItemRemoved(items.size + 1)
-                    }
+    fun loadMore(list: List<CityAdapterInfo>) {
+        if (isShowSaved.not()) {
+            items.removeIf { item -> item is CityAdapterInfo.Loading }.apply {
+                if (this) {
+                    notifyItemRemoved(items.size + 1)
                 }
-                val tempSize = items.size
-                items.addAll(list)
-                notifyItemRangeInserted(tempSize, list.size)
             }
+            val tempSize = items.size
+            items.addAll(list)
+            notifyItemRangeInserted(tempSize, items.size)
         }
     }
 
@@ -92,22 +91,17 @@ class CitySelectAdapter(
         if (savedItems != list) {
             savedItems.clear()
             savedItems.addAll(list)
-            showSavedCities()
+            showSavedCities(true)
         }
     }
 
-    fun clear() {
-        if (items.isNotEmpty()) {
-            val size = items.size
-            items.clear()
-            notifyItemRangeRemoved(0, size)
+    fun showSavedCities(isShow: Boolean) {
+        isShowSaved = isShow
+        if (isShow) {
+            clear()
+            items.addAll(savedItems)
+            notifyItemRangeInserted(0, savedItems.size)
         }
-    }
-
-    fun showSavedCities() {
-        clear()
-        items.addAll(savedItems)
-        notifyItemRangeInserted(0, savedItems.size)
     }
 
     fun addLoading() {
@@ -125,6 +119,21 @@ class CitySelectAdapter(
             notifyItemRemoved(position)
         }
         onDeleteClick(item.city)
+    }
+
+    fun clearAndShowLoading() {
+        if (items.isEmpty() || items.size != items.filterIsInstance<CityAdapterInfo.Loading>().size) {
+            clear()
+            addLoading()
+        }
+    }
+
+    fun clear() {
+        if (items.isNotEmpty()) {
+            val size = items.size
+            items.clear()
+            notifyItemRangeRemoved(0, size)
+        }
     }
 
 }

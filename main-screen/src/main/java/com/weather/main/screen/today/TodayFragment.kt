@@ -6,14 +6,14 @@ import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
 import com.weather.custom.views.weatherfield.WeatherFieldUnitEnum
 import com.weather.main.screen.R
-import com.weather.main.screen.databinding.TodayScreenBinding
+import com.weather.main.screen.databinding.FTodayScreenBinding
 import com.weather.main.screen.model.WeatherMetricsPres
 import com.weather.main.screen.model.WeatherPres
 import com.weather.main.screen.today.adapter.TodayTimeAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
-class TodayFragment : BindingFragment<TodayScreenBinding>() {
+class TodayFragment : BindingFragment<FTodayScreenBinding>() {
 
     companion object {
         private const val ONE_KM = 1000f
@@ -28,13 +28,14 @@ class TodayFragment : BindingFragment<TodayScreenBinding>() {
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-    ): TodayScreenBinding = TodayScreenBinding.inflate(inflater, container, false)
+    ): FTodayScreenBinding = FTodayScreenBinding.inflate(inflater, container, false)
 
-    override fun TodayScreenBinding.initView() {
+    override fun FTodayScreenBinding.initView() {
         byTimeRecycler.adapter = adapter
+        adapter.submitList(null)
     }
 
-    override fun TodayScreenBinding.observeViewModel() {
+    override fun FTodayScreenBinding.observeViewModel() {
         with(viewModel) {
             observe(todayDate) { dateString ->
                 date.text = dateString
@@ -76,7 +77,7 @@ class TodayFragment : BindingFragment<TodayScreenBinding>() {
             val min =
                 pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
             tempMinMax.text = getString(R.string.tempMaxMin, max, min)
-            adapter.submitList(pres)
+            adapter.updateItems(pres)
         }
     }
 

@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface ForecastUseCase {
 
+    val isDownloading: Flow<String?>
+
     fun getTodayForecast(): Flow<List<WeatherDomain>>
 
     fun getForecast(): Flow<List<WeatherDomain>>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheet"
+    style="@style/Theme.Weather.Background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="?attr/colorSecondaryVariant"
+    android:orientation="vertical"
+    android:padding="@dimen/defaultIndent">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomEnd="@dimen/defaultIndent"
+        app:boxCornerRadiusBottomStart="@dimen/defaultIndent"
+        app:boxCornerRadiusTopEnd="@dimen/defaultIndent"
+        app:boxCornerRadiusTopStart="@dimen/defaultIndent"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cityEditText"
+            style="@style/Theme.Weather.TextView.H4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/addCity"
+            android:inputType="textCapSentences"
+            android:maxLength="40"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/suggestionsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/defaultIndent"
+        tools:listitem="@layout/city_item" />
+</LinearLayout>
