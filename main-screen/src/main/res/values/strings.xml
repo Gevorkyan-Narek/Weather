@@ -27,4 +27,5 @@
     <string name="visibilityKilometers">%1$.1f км</string>
 
     <string name="deleteWarning">Нельзя удалить единственный сохраненный город</string>
+    <string name="cityDownload">Переход к городу %1$s</string>
 </resources>
