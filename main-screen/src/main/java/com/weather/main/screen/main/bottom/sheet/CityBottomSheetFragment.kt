@@ -94,8 +94,8 @@ class CityBottomSheetFragment : BottomSheetDialogFragment() {
             observe(searchList) { list ->
                 citySelectAdapter.updateItems(list)
             }
-            observe(showSavedCities) {
-                citySelectAdapter.showSavedCities()
+            observe(showSavedCities) { isShow ->
+                citySelectAdapter.showSavedCities(isShow)
             }
             observe(savedCities) { list ->
                 citySelectAdapter.setSavedItems(list)

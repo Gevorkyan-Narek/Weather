@@ -14,7 +14,6 @@ import com.weather.main.screen.city.changer.CityAdapterInfo
 import com.weather.main.screen.city.changer.model.CityInfoItemPres
 import com.weather.main.screen.mapper.CityPresMapper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
@@ -22,7 +21,7 @@ import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+@OptIn(FlowPreview::class)
 class CityBottomSheetViewModel(
     private val geoUseCase: GeoUseCase,
     private val mapper: CityPresMapper,
@@ -34,15 +33,15 @@ class CityBottomSheetViewModel(
         private const val DEBOUNCE = 1500L
     }
 
+    private val geoLinks = MutableLiveData<List<GeoLinkDomain>>(emptyList())
+
     val savedCities = geoUseCase.savedCities
         .mapList { domain -> CityAdapterInfo.CityInfo(mapper.toPres(domain)) }
         .asLiveData()
 
-    private val geoLinks = geoUseCase.downloadedCities
-        .mapLatest { domain -> domain.links }
-
     val searchList = geoUseCase.downloadedCities
         .map { domain ->
+            geoLinks.postValue(domain.links)
             if (domain.data.isEmpty()) {
                 listOf(CityAdapterInfo.NoMatch)
             } else {
@@ -55,6 +54,7 @@ class CityBottomSheetViewModel(
 
     val loadMoreCitiesList = geoUseCase.downloadedNextCities
         .map { domain ->
+            geoLinks.postValue(domain.links)
             domain.data.map { city ->
                 CityAdapterInfo.NewCityInfo(mapper.toPres(city))
             }
@@ -87,7 +87,7 @@ class CityBottomSheetViewModel(
     private val _addLoading = MutableLiveData<Unit>()
     val addLoading = _addLoading.liveData()
 
-    private val _showSavedCities = MutableLiveData<Unit>()
+    private val _showSavedCities = MutableLiveData<Boolean>()
     val showSavedCities = _showSavedCities.liveData()
 
     init {
@@ -110,8 +110,9 @@ class CityBottomSheetViewModel(
     fun onCityPrefixChanged(cityPrefix: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (cityPrefix.isBlank()) {
-                _showSavedCities.postValue(Unit)
+                _showSavedCities.postValue(true)
             } else {
+                _showSavedCities.postValue(false)
                 _isLoading.postValue(Unit)
                 _cityTextChanged.emit(cityPrefix)
             }
@@ -144,7 +145,7 @@ class CityBottomSheetViewModel(
 
     fun onScrolled() {
         viewModelScope.launch(Dispatchers.IO) {
-            geoLinks.firstOrNull()?.find { link ->
+            geoLinks.value?.find { link ->
                 link.rel == GeoRelEnumsDomain.NEXT
             }?.let { nextLink ->
                 _addLoading.postValue(Unit)

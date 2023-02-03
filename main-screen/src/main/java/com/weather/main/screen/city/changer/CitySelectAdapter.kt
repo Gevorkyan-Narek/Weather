@@ -15,6 +15,8 @@ class CitySelectAdapter(
     private val onDeleteClick: (CityInfoItemPres) -> Unit,
 ) : ListAdapter<CityAdapterInfo, RecyclerView.ViewHolder>(CitySelectAdapterDiffUtils()) {
 
+    private var isShowSaved: Boolean = true
+
     private val savedItems = mutableListOf<CityAdapterInfo.CityInfo>()
     private val items = mutableListOf<CityAdapterInfo>()
 
@@ -66,34 +68,40 @@ class CitySelectAdapter(
     }
 
     fun updateItems(list: List<CityAdapterInfo>) {
-        clear()
+        if (isShowSaved.not())
+            clear()
         items.addAll(list)
         notifyItemRangeInserted(0, list.size)
     }
 
     fun loadMore(list: List<CityAdapterInfo>) {
-        items.removeIf { item -> item is CityAdapterInfo.Loading }.apply {
-            if (this) {
-                notifyItemRemoved(items.size + 1)
+        if (isShowSaved.not()) {
+            items.removeIf { item -> item is CityAdapterInfo.Loading }.apply {
+                if (this) {
+                    notifyItemRemoved(items.size + 1)
+                }
             }
+            val tempSize = items.size
+            items.addAll(list)
+            notifyItemRangeInserted(tempSize, items.size)
         }
-        val tempSize = items.size
-        items.addAll(list)
-        notifyItemRangeInserted(tempSize, items.size)
     }
 
     fun setSavedItems(list: List<CityAdapterInfo.CityInfo>) {
         if (savedItems != list) {
             savedItems.clear()
             savedItems.addAll(list)
-            showSavedCities()
+            showSavedCities(true)
         }
     }
 
-    fun showSavedCities() {
-        clear()
-        items.addAll(savedItems)
-        notifyItemRangeInserted(0, savedItems.size)
+    fun showSavedCities(isShow: Boolean) {
+        isShowSaved = isShow
+        if (isShow) {
+            clear()
+            items.addAll(savedItems)
+            notifyItemRangeInserted(0, savedItems.size)
+        }
     }
 
     fun addLoading() {

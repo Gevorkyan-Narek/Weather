@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+@OptIn(FlowPreview::class)
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
@@ -28,11 +28,11 @@ class StartScreenViewModel(
         private const val MOTION_DELAY = 1500L
     }
 
-    private val geoLinks = geoUseCase.downloadedCities
-        .mapLatest { domain -> domain.links }
+    private val geoLinks = MutableLiveData<List<GeoLinkDomain>>(emptyList())
 
     val searchList = geoUseCase.downloadedCities
         .map { domain ->
+            geoLinks.postValue(domain.links)
             if (domain.data.isEmpty()) {
                 listOf(CityAdapterInfo.NoMatch)
             } else {
@@ -45,6 +45,7 @@ class StartScreenViewModel(
 
     val loadMoreCitiesList = geoUseCase.downloadedNextCities
         .map { domain ->
+            geoLinks.postValue(domain.links)
             domain.data.map { city ->
                 CityAdapterInfo.CityInfo(geoMapper.toPres(city))
             }
@@ -118,7 +119,7 @@ class StartScreenViewModel(
 
     fun onScrolled() {
         viewModelScope.launch(Dispatchers.IO) {
-            geoLinks.firstOrNull()?.find { link ->
+            geoLinks.value?.find { link ->
                 link.rel == GeoRelEnumsDomain.NEXT
             }?.let { nextLink ->
                 _addLoading.postValue(Unit)
