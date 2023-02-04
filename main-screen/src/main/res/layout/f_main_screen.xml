@@ -58,8 +58,9 @@
         android:background="@drawable/bg_gradient_details"
         android:gravity="center"
         android:padding="@dimen/indent"
+        android:text="@string/downloadWeather"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="Переход к городу Самара" />
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
