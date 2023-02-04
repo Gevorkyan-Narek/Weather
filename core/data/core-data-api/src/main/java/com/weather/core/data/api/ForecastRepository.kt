@@ -14,4 +14,6 @@ interface ForecastRepository {
 
     fun getForecast(): Flow<List<WeatherDomain>>
 
+    suspend fun removeOldForecast()
+
 }

@@ -87,6 +87,9 @@ dependencies {
     implementation "org.slf4j:slf4j-api:$slf4j"
     implementation "com.github.tony19:logback-android:$logback"
 
+    // CoroutineWorker
+    implementation("androidx.work:work-runtime-ktx:$coroutineWorkerVersion")
+
     testImplementation "junit:junit:$jUnit"
     androidTestImplementation "androidx.test.ext:junit:$extJUnit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCore"

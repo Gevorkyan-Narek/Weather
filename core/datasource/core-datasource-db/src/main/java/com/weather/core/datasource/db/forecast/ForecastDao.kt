@@ -23,4 +23,7 @@ interface ForecastDao : BaseDao<WeatherEntity> {
     @Query("SELECT * FROM WeatherEntity")
     fun getForecast(): Flow<List<WeatherEntity>>
 
+    @Query("DELETE FROM WeatherEntity WHERE dateTime < :date")
+    suspend fun removeBefore(date: Long)
+
 }

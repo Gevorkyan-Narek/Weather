@@ -44,6 +44,6 @@ class TodayTimeAdapter(
     fun updateItems(list: List<WeatherPres>) {
         items.clear()
         items.addAll(list)
-        notifyItemRangeChanged(0, list.size)
+        notifyDataSetChanged()
     }
 }
