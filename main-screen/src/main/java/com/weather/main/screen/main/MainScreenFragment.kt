@@ -7,7 +7,6 @@ import androidx.navigation.fragment.findNavController
 import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
 import com.weather.android.utils.setupWithViewPager2
-import com.weather.main.screen.R
 import com.weather.main.screen.databinding.FMainScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -40,11 +39,8 @@ class MainScreenFragment : BindingFragment<FMainScreenBinding>() {
             observe(cityTitle) { cityName ->
                 title.text = cityName
             }
-            observe(isDownloadLoadingWarning) { cityName ->
-                downloadWarning.isVisible = !cityName.isNullOrBlank()
-                if (!cityName.isNullOrBlank()) {
-                    downloadWarning.text = getString(R.string.cityDownload, cityName)
-                }
+            observe(isDownloadLoadingWarning) { isDownloading ->
+                downloadWarning.isVisible = isDownloading
             }
         }
     }

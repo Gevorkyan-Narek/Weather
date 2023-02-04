@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ForecastRepository {
 
-    val isDownloading: Flow<String?>
+    val isDownloading: Flow<Boolean>
 
     suspend fun downloadForecast(cityDomain: CityDomain)
 
