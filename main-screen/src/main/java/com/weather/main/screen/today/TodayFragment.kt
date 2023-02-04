@@ -7,11 +7,9 @@ import com.weather.android.utils.observe
 import com.weather.custom.views.weatherfield.WeatherFieldUnitEnum
 import com.weather.main.screen.R
 import com.weather.main.screen.databinding.FTodayScreenBinding
-import com.weather.main.screen.model.WeatherMetricsPres
 import com.weather.main.screen.model.WeatherPres
 import com.weather.main.screen.today.adapter.TodayTimeAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.math.abs
 
 class TodayFragment : BindingFragment<FTodayScreenBinding>() {
 
@@ -73,9 +71,9 @@ class TodayFragment : BindingFragment<FTodayScreenBinding>() {
     private fun handleTodayForecast(pres: List<WeatherPres>) {
         binding?.run {
             val max =
-                pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).maxBy { abs(it) }
+                pres.map(WeatherPres::metrics).maxBy { metrics -> metrics.temp }.temp
             val min =
-                pres.map(WeatherPres::metrics).map(WeatherMetricsPres::temp).minBy { abs(it) }
+                pres.map(WeatherPres::metrics).minBy { metrics -> metrics.temp }.temp
             tempMinMax.text = getString(R.string.tempMaxMin, max, min)
             adapter.updateItems(pres)
         }

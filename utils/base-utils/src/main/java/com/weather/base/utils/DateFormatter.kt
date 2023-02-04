@@ -65,4 +65,8 @@ object DateFormatter {
         return date * 1000
     }
 
+    fun timeIsMatch(date: LocalDateTime, hour: Int): Boolean {
+        return date.toLocalTime().hour == hour
+    }
+
 }
