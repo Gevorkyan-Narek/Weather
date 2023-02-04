@@ -2,6 +2,7 @@ package com.weather.main.screen.forecast
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.weather.base.utils.DateFormatter
 import com.weather.core.domain.api.ForecastUseCase
 import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.forecast.WeatherMetricsDomain
@@ -9,7 +10,6 @@ import com.weather.main.screen.forecast.adapter.ForecastItemPres
 import com.weather.main.screen.model.WeatherIconsEnum
 import kotlinx.coroutines.flow.map
 import org.threeten.bp.LocalDate
-import kotlin.math.abs
 
 class ForecastViewModel(
     forecastUseCase: ForecastUseCase,
@@ -26,19 +26,20 @@ class ForecastViewModel(
         return domainList.groupBy { domain -> domain.dateTime.toLocalDate() }
     }
 
-    // todo
     private fun uniteWeatherDomain(dateMap: Map<LocalDate, List<WeatherDomain>>): Map<LocalDate, ForecastItemPres> {
         return dateMap.mapValues { entry ->
-            val domain = entry.value.find { domain -> domain.dateTime.toLocalTime().hour == 16 } ?: entry.value.first()
+            val domain =
+                entry.value.find { domain -> DateFormatter.timeIsMatch(domain.dateTime, 15) }
+                    ?: entry.value.first()
             val description = domain.shortInfo?.description.orEmpty()
             ForecastItemPres(
                 dateTime = entry.key,
                 icon = WeatherIconsEnum.getDrawable(domain.shortInfo?.icon),
                 description = description,
                 tempMax = entry.value.map(WeatherDomain::metrics)
-                    .maxBy { metrics -> abs(metrics.temp) }.temp,
+                    .maxBy { metrics -> metrics.temp }.temp,
                 tempMin = entry.value.map(WeatherDomain::metrics)
-                    .minBy { metrics -> abs(metrics.temp) }.temp,
+                    .minBy { metrics -> metrics.temp }.temp,
                 humidity = entry.value.map(WeatherDomain::metrics)
                     .map(WeatherMetricsDomain::humidity).average().toInt()
             )

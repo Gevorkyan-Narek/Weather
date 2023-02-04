@@ -13,15 +13,13 @@ import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.forecast.WeatherMetricsDomain
 import com.weather.core.domain.models.forecast.WeatherShortInfoDomain
 import com.weather.core.domain.models.forecast.WeatherWindDomain
-import org.threeten.bp.DateTimeUtils
-import java.sql.Timestamp
 
 class ForecastMapper {
 
     fun toEntity(net: WeatherResponse): WeatherEntity = net.run {
         WeatherEntity(
             date = DateFormatter.getDefaultFormatDate(dateTime),
-            dateTime = DateFormatter.toMs(dateTime),
+            dateTime = dateTime,
             metrics = toEntity(metrics, clouds.cloudiness, pop, visibility),
             wind = toEntity(wind),
             shortInfo = toEntity(weather.firstOrNull()),
@@ -63,7 +61,7 @@ class ForecastMapper {
 
     fun toDomain(entity: WeatherEntity): WeatherDomain = entity.run {
         WeatherDomain(
-            dateTime = DateTimeUtils.toLocalDateTime(Timestamp(dateTime)),
+            dateTime = DateFormatter.toLocalDateTime(dateTime),
             metrics = toDomain(metrics),
             wind = toDomain(wind),
             shortInfo = toDomain(shortInfo),

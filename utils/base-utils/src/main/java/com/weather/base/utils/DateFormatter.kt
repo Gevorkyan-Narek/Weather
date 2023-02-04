@@ -4,8 +4,6 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
-import java.text.SimpleDateFormat
-import java.util.*
 
 object DateFormatter {
 
@@ -15,19 +13,20 @@ object DateFormatter {
     private const val TIME_PATTERN = "HH:mm"
     private const val DAY_MONTH_PATTERN = "d MMMM"
 
-    private val ruLocale = Locale.forLanguageTag("RU")
-
-    private val todayDateFormatter = SimpleDateFormat(TODAY_PATTERN, ruLocale)
-    private val defaultDateFormatter = SimpleDateFormat(DEFAULT_PATTERN, ruLocale)
-
     private val dayMonthDateTimeFormatter =
         DateTimeFormatter.ofPattern(DAY_MONTH_PATTERN)
+
+    private val defaultDateFormatter =
+        DateTimeFormatter.ofPattern(DEFAULT_PATTERN)
+
+    private val todayDateTimeFormatter =
+        DateTimeFormatter.ofPattern(TODAY_PATTERN)
 
     /**
      * @return Сегодняшняя дата в формате: Воскренье, 15 Января
      */
     fun getTodayDate(): String {
-        return todayDateFormatter.format(Date()).replaceFirstChar(Char::titlecase)
+        return LocalDateTime.now().format(todayDateTimeFormatter).replaceFirstChar(Char::titlecase)
     }
 
     /**
@@ -35,14 +34,14 @@ object DateFormatter {
      * @return Получить дату в формате: dd.MM.yyyy
      */
     fun getDefaultFormatDate(date: Long): String {
-        return (defaultDateFormatter.format(Date(toMs(date))))
+        return toLocalDateTime(date).format(defaultDateFormatter)
     }
 
     /**
      * @return Возвращает следующие сутки в миллисекундах
      */
     fun getNextDateTime(): Long {
-        return toMs(LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC))
+        return LocalDateTime.now().plusDays(1).toEpochSecond()
     }
 
     /**
@@ -61,8 +60,16 @@ object DateFormatter {
         return date.format(dayMonthDateTimeFormatter)
     }
 
-    fun toMs(date: Long): Long {
-        return date * 1000
+    fun timeIsMatch(date: LocalDateTime, hour: Int): Boolean {
+        return date.toLocalTime().hour == hour
+    }
+
+    fun LocalDateTime.toEpochSecond(): Long {
+        return toEpochSecond(ZoneOffset.UTC)
+    }
+
+    fun toLocalDateTime(dateTime: Long): LocalDateTime {
+        return LocalDateTime.ofEpochSecond(dateTime, 0, ZoneOffset.UTC)
     }
 
 }

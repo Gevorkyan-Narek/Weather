@@ -6,12 +6,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface ForecastRepository {
 
-    val isDownloading: Flow<String?>
+    val isDownloading: Flow<Boolean>
 
     suspend fun downloadForecast(cityDomain: CityDomain)
 
     fun getTodayForecast(): Flow<List<WeatherDomain>>
 
     fun getForecast(): Flow<List<WeatherDomain>>
+
+    suspend fun removeOldForecast()
 
 }
