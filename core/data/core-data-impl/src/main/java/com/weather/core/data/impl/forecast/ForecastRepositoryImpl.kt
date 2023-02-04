@@ -22,18 +22,18 @@ class ForecastRepositoryImpl(
         private const val APP_ID = "de20ab79873ea9f86f97dd46abb198ec"
     }
 
-    override val isDownloading = MutableStateFlow<String?>(null)
+    override val isDownloading = MutableStateFlow(false)
 
     override suspend fun downloadForecast(cityDomain: CityDomain) {
         safeApiCall {
-            isDownloading.emit(cityDomain.name)
+            isDownloading.emit(true)
             api.downloadForecast(
                 lat = cityDomain.lat,
                 lon = cityDomain.lon,
                 APP_ID
             )
         }.checkResult { response ->
-            isDownloading.emit(null)
+            isDownloading.emit(false)
             dao.insertReplace(response.forecast.map(mapper::toEntity))
         }
     }
