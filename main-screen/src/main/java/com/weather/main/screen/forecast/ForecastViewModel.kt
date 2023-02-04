@@ -29,7 +29,7 @@ class ForecastViewModel(
     private fun uniteWeatherDomain(dateMap: Map<LocalDate, List<WeatherDomain>>): Map<LocalDate, ForecastItemPres> {
         return dateMap.mapValues { entry ->
             val domain =
-                entry.value.find { domain -> DateFormatter.timeIsMatch(domain.dateTime, 16) }
+                entry.value.find { domain -> DateFormatter.timeIsMatch(domain.dateTime, 15) }
                     ?: entry.value.first()
             val description = domain.shortInfo?.description.orEmpty()
             ForecastItemPres(
