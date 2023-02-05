@@ -1,18 +1,17 @@
 package com.weather.core.data.impl.geo
 
-import com.weather.android.utils.checkResult
 import com.weather.android.utils.mapList
-import com.weather.android.utils.safeApiCall
 import com.weather.core.data.api.GeoRepository
 import com.weather.core.datasource.db.geo.CityDao
 import com.weather.core.datasource.net.geo.GeoApi
-import com.weather.core.domain.models.SearchStateDomain
+import com.weather.core.domain.models.DownloadStateDomain
 import com.weather.core.domain.models.geo.CityDomain
 import com.weather.core.domain.models.geo.GeoLinkDomain
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -31,49 +30,35 @@ class GeoRepositoryImpl(
 
     override val savedCities = dao.getCities().mapList(mapper::toDomain)
 
-    private val _downloadedCities = MutableStateFlow<SearchStateDomain?>(null)
-    override val downloadedCities = _downloadedCities.filterNotNull()
-
-    private val _downloadedNextCities = MutableStateFlow<SearchStateDomain?>(null)
-    override val downloadedNextCities = _downloadedNextCities.filterNotNull()
-
     override val selectedCity = dao.selectedCities().filterNotNull().map(mapper::toDomain)
 
-    override suspend fun downloadCities(namePrefix: String) {
-        return safeApiCall {
-            _downloadedCities.emit(SearchStateDomain.Loading)
-            api.downloadCities(
-                namePrefix = namePrefix,
-                offset = OFFSET,
-                limit = LIMIT,
-                languageCode = LANG_CODE
-            )
-        }.checkResult(
-            success = { response ->
-                logger.debug("Downloaded: $namePrefix")
-                _downloadedCities.emit(
-                    SearchStateDomain.Success(mapper.toDomain(response))
+    override suspend fun downloadCities(namePrefix: String): DownloadStateDomain {
+        return try {
+            withContext(Dispatchers.IO) {
+                val response = api.downloadCities(
+                    namePrefix = namePrefix,
+                    offset = OFFSET,
+                    limit = LIMIT,
+                    languageCode = LANG_CODE
                 )
-            },
-            fail = {
-                _downloadedCities.emit(SearchStateDomain.Error)
+                logger.debug("Downloaded: $namePrefix")
+                DownloadStateDomain.Success(mapper.toDomain(response))
             }
-        )
+        } catch (e: Exception) {
+            DownloadStateDomain.Error
+        }
     }
 
-    override suspend fun downloadNextCities(geoLink: GeoLinkDomain) {
-        safeApiCall {
-            api.downloadMoreCities(geoLink.href)
-        }.checkResult(
-            success = { response ->
-                logger.debug("Scrolled: $geoLink")
-                _downloadedNextCities.emit(
-                    SearchStateDomain.Success(mapper.toDomain(response)))
-            },
-            fail = {
-                _downloadedNextCities.emit(SearchStateDomain.Error)
+    override suspend fun downloadNextCities(geoLink: GeoLinkDomain): DownloadStateDomain {
+        return try {
+            withContext(Dispatchers.IO) {
+                val response = api.downloadMoreCities(geoLink.href)
+                logger.debug("New downloaded: $geoLink\n$response")
+                DownloadStateDomain.Success(mapper.toDomain(response))
             }
-        )
+        } catch (e: Exception) {
+            DownloadStateDomain.Error
+        }
     }
 
     override suspend fun saveCity(city: CityDomain) {
