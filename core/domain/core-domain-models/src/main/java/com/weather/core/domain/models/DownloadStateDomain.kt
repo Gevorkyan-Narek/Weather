@@ -1,7 +1,13 @@
 package com.weather.core.domain.models
 
-enum class DownloadStateDomain {
-    SUCCESS,
-    LOADING,
-    ERROR
+import com.weather.core.domain.models.geo.GeoDomain
+
+sealed class DownloadStateDomain {
+
+    object Error : DownloadStateDomain()
+
+    object Loading : DownloadStateDomain()
+
+    data class Success(val geoDomain: GeoDomain) : DownloadStateDomain()
+
 }

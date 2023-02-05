@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.weather.android.utils.emptyString
 import com.weather.android.utils.liveData
 import com.weather.core.domain.api.GeoUseCase
-import com.weather.core.domain.models.SearchStateDomain
+import com.weather.core.domain.models.DownloadStateDomain
 import com.weather.core.domain.models.geo.GeoLinkDomain
 import com.weather.core.domain.models.geo.GeoRelEnumsDomain
 import com.weather.navigation.NavigationGraph
@@ -31,13 +31,11 @@ class StartScreenViewModel(
 
     private val geoLinks = MutableLiveData<List<GeoLinkDomain>>(emptyList())
 
-    val searchList = geoUseCase.downloadedCities
-        .map(::mapToCityAdapterInfo)
-        .asLiveData()
+    private val _searchList = MutableLiveData<List<CityAdapterInfo>>()
+    val searchList = _searchList.liveData()
 
-    val loadMoreCitiesList = geoUseCase.downloadedNextCities
-        .map(::mapToCityAdapterInfo)
-        .asLiveData()
+    private val _loadMoreCitiesList = MutableLiveData<List<CityAdapterInfo>>()
+    val loadMoreCitiesList = _loadMoreCitiesList.liveData()
 
     private val _cityTextChanged = MutableStateFlow(emptyString())
     private val cityTextChanged = _cityTextChanged
@@ -79,13 +77,15 @@ class StartScreenViewModel(
         viewModelScope.launch {
             cityTextChanged.collectLatest { cityPrefix ->
                 logger.debug("Search new city: $cityPrefix")
-                geoUseCase.downloadCities(cityPrefix)
+                val cities = geoUseCase.downloadCities(cityPrefix)
+                _searchList.postValue(mapToCityAdapterInfo(cities))
             }
         }
         viewModelScope.launch {
             onScrolled.collectLatest { link ->
                 logger.debug("Scrolling UI: ${link.href}")
-                geoUseCase.downloadNextCities(link)
+                val nextCities = geoUseCase.downloadNextCities(link)
+                _loadMoreCitiesList.postValue(mapToCityAdapterInfo(nextCities))
             }
         }
     }
@@ -126,10 +126,10 @@ class StartScreenViewModel(
         )
     }
 
-    private fun mapToCityAdapterInfo(searchStateDomain: SearchStateDomain): List<CityAdapterInfo> {
-        return when (searchStateDomain) {
-            is SearchStateDomain.Success -> {
-                searchStateDomain.geoDomain.run {
+    private fun mapToCityAdapterInfo(downloadStateDomain: DownloadStateDomain): List<CityAdapterInfo> {
+        return when (downloadStateDomain) {
+            is DownloadStateDomain.Success -> {
+                downloadStateDomain.geoDomain.run {
                     if (data.isEmpty()) {
                         geoLinks.postValue(emptyList())
                         listOf(CityAdapterInfo.NoMatch)
@@ -141,11 +141,11 @@ class StartScreenViewModel(
                     }
                 }
             }
-            SearchStateDomain.Error -> {
+            DownloadStateDomain.Error -> {
                 geoLinks.postValue(emptyList())
                 listOf(CityAdapterInfo.Error)
             }
-            SearchStateDomain.Loading -> {
+            DownloadStateDomain.Loading -> {
                 geoLinks.postValue(emptyList())
                 listOf(CityAdapterInfo.Loading)
             }
