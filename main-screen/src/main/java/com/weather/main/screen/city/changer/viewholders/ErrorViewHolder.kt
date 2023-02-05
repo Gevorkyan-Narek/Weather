@@ -3,12 +3,12 @@ package com.weather.main.screen.city.changer.viewholders
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.weather.main.screen.databinding.NoMatchItemBinding
+import com.weather.shared.styles.databinding.ErrorItemBinding
 
-private fun inflateBinding(parent: ViewGroup) = NoMatchItemBinding.inflate(
+private fun inflateBinding(parent: ViewGroup) = ErrorItemBinding.inflate(
     LayoutInflater.from(parent.context),
     parent,
     false
 )
 
-class NoMatchViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(inflateBinding(parent).root)
+class ErrorViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(inflateBinding(parent).root)

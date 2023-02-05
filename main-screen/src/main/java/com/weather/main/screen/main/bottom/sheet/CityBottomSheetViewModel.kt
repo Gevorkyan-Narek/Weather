@@ -8,6 +8,7 @@ import com.weather.android.utils.liveData
 import com.weather.android.utils.mapList
 import com.weather.android.utils.postEvent
 import com.weather.core.domain.api.GeoUseCase
+import com.weather.core.domain.models.SearchStateDomain
 import com.weather.core.domain.models.geo.GeoLinkDomain
 import com.weather.core.domain.models.geo.GeoRelEnumsDomain
 import com.weather.main.screen.city.changer.CityAdapterInfo
@@ -40,25 +41,11 @@ class CityBottomSheetViewModel(
         .asLiveData()
 
     val searchList = geoUseCase.downloadedCities
-        .map { domain ->
-            geoLinks.postValue(domain.links)
-            if (domain.data.isEmpty()) {
-                listOf(CityAdapterInfo.NoMatch)
-            } else {
-                domain.data.map { city ->
-                    CityAdapterInfo.NewCityInfo(mapper.toPres(city))
-                }
-            }
-        }
+        .map(::mapToCityAdapterInfo)
         .asLiveData()
 
     val loadMoreCitiesList = geoUseCase.downloadedNextCities
-        .map { domain ->
-            geoLinks.postValue(domain.links)
-            domain.data.map { city ->
-                CityAdapterInfo.NewCityInfo(mapper.toPres(city))
-            }
-        }
+        .map(::mapToCityAdapterInfo)
         .asLiveData()
 
     private val _cityTextChanged =
@@ -148,8 +135,36 @@ class CityBottomSheetViewModel(
             geoLinks.value?.find { link ->
                 link.rel == GeoRelEnumsDomain.NEXT
             }?.let { nextLink ->
+                logger.debug("Next link")
                 _addLoading.postValue(Unit)
                 _onScrolled.emit(nextLink)
+            }
+        }
+    }
+
+    private fun mapToCityAdapterInfo(
+        searchStateDomain: SearchStateDomain,
+    ): List<CityAdapterInfo> {
+        return when (searchStateDomain) {
+            is SearchStateDomain.Success -> {
+                searchStateDomain.geoDomain.run {
+                    geoLinks.postValue(links)
+                    if (data.isEmpty()) {
+                        listOf(CityAdapterInfo.NoMatch)
+                    } else {
+                        data.map { city ->
+                            CityAdapterInfo.NewCityInfo(mapper.toPres(city))
+                        }
+                    }
+                }
+            }
+            SearchStateDomain.Error -> {
+                geoLinks.postValue(emptyList())
+                listOf(CityAdapterInfo.Error)
+            }
+            SearchStateDomain.Loading -> {
+                geoLinks.postValue(emptyList())
+                listOf(CityAdapterInfo.Loading)
             }
         }
     }

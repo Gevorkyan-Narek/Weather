@@ -1,17 +1,14 @@
 package com.weather.startscreen
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.weather.shared.styles.databinding.LoadingItemBinding
 import com.weather.startscreen.adapter.CityAdapterDiffUtils
 import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.adapter.holders.CitySearchViewHolder
+import com.weather.startscreen.adapter.holders.ErrorViewHolder
 import com.weather.startscreen.adapter.holders.LoadingViewHolder
 import com.weather.startscreen.adapter.holders.NoMatchViewHolder
-import com.weather.startscreen.databinding.NoMatchItemBinding
-import com.weather.startscreen.databinding.SuggestionItemsBinding
 import com.weather.startscreen.models.CityPres
 
 class CitySearchAdapter(
@@ -20,45 +17,13 @@ class CitySearchAdapter(
 
     private val items = mutableListOf<CityAdapterInfo>()
 
-    private companion object {
-        const val CITY_INFO_VIEW_TYPE = 0
-        const val LOADING_VIEW_TYPE = 1
-        const val NO_MATCH_VIEW_TYPE = 2
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CITY_INFO_VIEW_TYPE -> {
-                CitySearchViewHolder(
-                    SuggestionItemsBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    ),
-                    citySelectListener
-                )
-            }
-            LOADING_VIEW_TYPE -> {
-                LoadingViewHolder(
-                    LoadingItemBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    )
-                )
-            }
-            NO_MATCH_VIEW_TYPE -> {
-                NoMatchViewHolder(
-                    NoMatchItemBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    )
-                )
-            }
-            else -> {
-                throw RuntimeException("No view type")
-            }
+            CityAdapterInfo.CITY_INFO_VIEW_TYPE -> CitySearchViewHolder(parent)
+            CityAdapterInfo.LOADING_VIEW_TYPE -> LoadingViewHolder(parent)
+            CityAdapterInfo.NO_MATCH_VIEW_TYPE -> NoMatchViewHolder(parent)
+            CityAdapterInfo.ERROR_VIEW_TYPE -> ErrorViewHolder(parent)
+            else -> throw RuntimeException("No view type")
         }
     }
 
@@ -67,23 +32,22 @@ class CitySearchAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is CityAdapterInfo.CityInfo -> CITY_INFO_VIEW_TYPE
-            is CityAdapterInfo.Loading -> LOADING_VIEW_TYPE
-            is CityAdapterInfo.NoMatch -> NO_MATCH_VIEW_TYPE
-        }
+        return items[position].viewType
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
             is CityAdapterInfo.CityInfo -> {
-                (holder as CitySearchViewHolder).bind(item.city)
+                (holder as CitySearchViewHolder).bind(item.city, citySelectListener)
             }
             is CityAdapterInfo.Loading -> {
                 holder as LoadingViewHolder
             }
             is CityAdapterInfo.NoMatch -> {
                 holder as NoMatchViewHolder
+            }
+            is CityAdapterInfo.Error -> {
+                holder as ErrorViewHolder
             }
         }
     }

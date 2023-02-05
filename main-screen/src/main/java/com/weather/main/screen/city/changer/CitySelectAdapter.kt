@@ -4,10 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.main.screen.city.changer.model.CityInfoItemPres
-import com.weather.main.screen.city.changer.viewholders.CityViewHolder
-import com.weather.main.screen.city.changer.viewholders.LoadingViewHolder
-import com.weather.main.screen.city.changer.viewholders.NewCitySelectViewHolder
-import com.weather.main.screen.city.changer.viewholders.NoMatchViewHolder
+import com.weather.main.screen.city.changer.viewholders.*
 
 class CitySelectAdapter(
     private val onSavedCitySelect: (CityInfoItemPres) -> Unit,
@@ -22,21 +19,12 @@ class CitySelectAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CityAdapterInfo.CITY_VIEW_TYPE -> {
-                CityViewHolder(parent)
-            }
-            CityAdapterInfo.LOADING_VIEW_TYPE -> {
-                LoadingViewHolder(parent)
-            }
-            CityAdapterInfo.NO_MATCH_VIEW_TYPE -> {
-                NoMatchViewHolder(parent)
-            }
-            CityAdapterInfo.NEW_CITY_VIEW_TYPE -> {
-                NewCitySelectViewHolder(parent)
-            }
-            else -> {
-                throw RuntimeException("No view type")
-            }
+            CityAdapterInfo.CITY_VIEW_TYPE -> CityViewHolder(parent)
+            CityAdapterInfo.LOADING_VIEW_TYPE -> LoadingViewHolder(parent)
+            CityAdapterInfo.NO_MATCH_VIEW_TYPE -> NoMatchViewHolder(parent)
+            CityAdapterInfo.NEW_CITY_VIEW_TYPE -> NewCitySelectViewHolder(parent)
+            CityAdapterInfo.ERROR_VIEW_TYPE -> ErrorViewHolder(parent)
+            else -> throw RuntimeException("No view type")
         }
     }
 
@@ -60,6 +48,9 @@ class CitySelectAdapter(
                     onDeleteClick = { deleteClick(item) }
                 )
             }
+            is CityAdapterInfo.Error -> {
+                holder as ErrorViewHolder
+            }
         }
     }
 
@@ -68,8 +59,9 @@ class CitySelectAdapter(
     }
 
     fun updateItems(list: List<CityAdapterInfo>) {
-        if (isShowSaved.not())
+        if (isShowSaved.not()) {
             clear()
+        }
         items.addAll(list)
         notifyItemRangeInserted(0, list.size)
     }
