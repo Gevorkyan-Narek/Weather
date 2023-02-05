@@ -27,6 +27,7 @@
         android:padding="@dimen/smallIndent"
         android:text="@string/connection_error"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
