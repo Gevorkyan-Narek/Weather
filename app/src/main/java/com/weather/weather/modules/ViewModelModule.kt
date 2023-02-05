@@ -13,9 +13,7 @@ import org.koin.dsl.module
 val viewModelsModule = module {
 
     viewModel {
-        MainViewModel(
-            connectionUseCase = get()
-        )
+        MainViewModel()
     }
 
     scope<StartScreenFragment> {
@@ -32,7 +30,8 @@ val viewModelsModule = module {
         MainScreenViewModel(
             forecastUseCase = get(),
             geoUseCase = get(),
-            navigationGraph = get()
+            stateMapper = get(),
+            navigationGraph = get(),
         )
     }
 

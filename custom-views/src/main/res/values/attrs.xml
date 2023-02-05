@@ -9,4 +9,12 @@
             <enum name="speed" value="2" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="DownloadStateView">
+        <attr name="downloadState" format="enum">
+            <enum name="success" value="0" />
+            <enum name="loading" value="1" />
+            <enum name="error" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

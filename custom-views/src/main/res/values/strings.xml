@@ -6,4 +6,7 @@
 
     <string name="label">"%1$s: "</string>
     <string name="value">%1$s %2$s</string>
+
+    <string name="loading">Загрузка погоды…</string>
+    <string name="please_try_again">Произошла ошибка. Нажмите чтобы попробовать ещё раз</string>
 </resources>

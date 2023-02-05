@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/city"
     android:layout_marginVertical="@dimen/littleIndent"
-    android:background="@drawable/bg_gradient"
+    android:background="@drawable/bg_gradient_horizontal"
     android:backgroundTint="?attr/colorPrimaryVariant"
     android:paddingStart="@dimen/defaultIndent"
     android:paddingVertical="@dimen/smallIndent"

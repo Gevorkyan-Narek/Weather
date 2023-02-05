@@ -31,7 +31,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/downloadStateView"
         app:layout_constraintTop_toBottomOf="@id/tabLayout" />
 
     <ImageButton
@@ -50,17 +50,10 @@
         app:tint="?attr/colorPrimary"
         tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/downloadWarning"
-        style="@style/Theme.Weather.TextView.H3"
+    <com.weather.custom.views.downloadstate.DownloadStateView
+        android:id="@+id/downloadStateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_gradient_details"
-        android:gravity="center"
-        android:padding="@dimen/indent"
-        android:text="@string/downloadWeather"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

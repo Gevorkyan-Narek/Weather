@@ -8,6 +8,7 @@ import com.weather.base.utils.DateFormatter.toEpochSecond
 import com.weather.core.data.api.ForecastRepository
 import com.weather.core.datasource.db.forecast.ForecastDao
 import com.weather.core.datasource.net.forecast.ForecastApi
+import com.weather.core.domain.models.DownloadStateDomain
 import com.weather.core.domain.models.forecast.WeatherDomain
 import com.weather.core.domain.models.geo.CityDomain
 import kotlinx.coroutines.flow.Flow
@@ -25,20 +26,25 @@ class ForecastRepositoryImpl(
         private const val THREE_HOUR = 3L
     }
 
-    override val isDownloading = MutableStateFlow(false)
+    override val downloadState = MutableStateFlow(DownloadStateDomain.SUCCESS)
 
     override suspend fun downloadForecast(cityDomain: CityDomain) {
         safeApiCall {
-            isDownloading.emit(true)
+            downloadState.emit(DownloadStateDomain.LOADING)
             api.downloadForecast(
                 lat = cityDomain.lat,
                 lon = cityDomain.lon,
                 APP_ID
             )
-        }.checkResult { response ->
-            isDownloading.emit(false)
-            dao.insertReplace(response.forecast.map(mapper::toEntity))
-        }
+        }.checkResult(
+            success = { response ->
+                downloadState.emit(DownloadStateDomain.SUCCESS)
+                dao.insertReplace(response.forecast.map(mapper::toEntity))
+            },
+            fail = {
+                downloadState.emit(DownloadStateDomain.ERROR)
+            }
+        )
     }
 
     override fun getTodayForecast(): Flow<List<WeatherDomain>> {
@@ -56,5 +62,4 @@ class ForecastRepositoryImpl(
             dao.removeBefore(this)
         }
     }
-
 }

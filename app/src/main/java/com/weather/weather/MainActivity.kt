@@ -2,7 +2,6 @@ package com.weather.weather
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import com.weather.android.utils.observe
 import com.weather.weather.callback.BackPressedCallback
 import com.weather.weather.databinding.ActivityMainBinding
@@ -25,11 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.run {
-            observe(connectionLiveData) { isExist ->
-                binding.run {
-                    connectionAlert.isVisible = !isExist
-                }
-            }
             observe(backPressed) {
                 finish()
             }
