@@ -69,8 +69,8 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
                 }
                 motionLayout.transitionToEnd()
             }
-            observe(isLoading) {
-                citySearchAdapter.clearAndShowLoading()
+            observe(clearSearchList) {
+                citySearchAdapter.clear()
             }
             observe(addLoading) {
                 citySearchAdapter.addLoading()

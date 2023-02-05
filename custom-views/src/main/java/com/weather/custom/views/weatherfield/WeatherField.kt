@@ -32,7 +32,9 @@ class WeatherField @JvmOverloads constructor(
         ).apply {
             fieldLabel = getString(R.styleable.WeatherField_fieldLabel).orEmpty()
             val value = getString(R.styleable.WeatherField_fieldValue).orEmpty()
-            val unit = WeatherFieldUnitEnum.valueOf(getInteger(R.styleable.WeatherField_unit, 0))
+            val unit = WeatherFieldUnitEnum.valueOf(
+                getInteger(R.styleable.WeatherField_unit, 0)
+            )
 
             setFieldValue(value, unit)
             recycle()

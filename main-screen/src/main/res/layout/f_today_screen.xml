@@ -233,7 +233,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_gradient_details"
+                android:background="@drawable/bg_gradient_vertical"
                 android:padding="@dimen/defaultIndent">
 
                 <TextView

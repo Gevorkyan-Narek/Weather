@@ -7,13 +7,15 @@
     <color name="dark_gray">#32333e</color>
     <color name="light_gray">#9C9C9C</color>
     <color name="light_gray_2">#4DA6A8AC</color>
-    <color name="red">#39FF0000</color>
+    <color name="red">#7C1212</color>
     <color name="light_blue">#025FA3</color>
+    <color name="light_yellow">#D6D443</color>
+    <color name="dark_yellow">#BFFFBD00</color>
 
     <!-- Day -->
     <color name="primary">@color/white</color>
     <color name="primary_variant">#A2BED1</color>
-    <color name="color_on_primary">#D6D443</color>
+    <color name="color_on_primary">@color/light_yellow</color>
     <color name="secondary">#94D2FF</color>
     <color name="secondary_variant">#216FA8</color>
     <color name="color_on_secondary">@color/white</color>
@@ -23,7 +25,7 @@
     <!-- Night -->
     <color name="primary_night">#F1F3F6</color>
     <color name="primary_variant_night">#666973</color>
-    <color name="color_on_primary_night">#BFFFBD00</color>
+    <color name="color_on_primary_night">@color/dark_yellow</color>
     <color name="secondary_night">#9B9EAD</color>
     <color name="secondary_variant_night">#3b3c49</color>
     <color name="color_on_secondary_night">@color/white</color>

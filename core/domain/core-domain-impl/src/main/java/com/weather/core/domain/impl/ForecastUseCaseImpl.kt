@@ -7,6 +7,7 @@ import com.weather.core.domain.models.forecast.WeatherDomain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class ForecastUseCaseImpl(
@@ -22,7 +23,7 @@ class ForecastUseCaseImpl(
         }
     }
 
-    override val isDownloading = repository.isDownloading
+    override val downloadState = repository.downloadState
 
     override fun getTodayForecast(): Flow<List<WeatherDomain>> {
         return repository.getTodayForecast()
@@ -30,6 +31,12 @@ class ForecastUseCaseImpl(
 
     override fun getForecast(): Flow<List<WeatherDomain>> {
         return repository.getForecast()
+    }
+
+    override suspend fun reDownloadForecast() {
+        geoRepository.selectedCity.firstOrNull()?.let { city ->
+            repository.downloadForecast(city)
+        }
     }
 
 }

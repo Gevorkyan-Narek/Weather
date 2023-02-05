@@ -2,7 +2,6 @@ package com.weather.main.screen.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
@@ -29,6 +28,9 @@ class MainScreenFragment : BindingFragment<FMainScreenBinding>() {
         location.setOnClickListener {
             viewModel.locationClicked()
         }
+        downloadStateView.setOnErrorClickListener {
+            viewModel.downloadErrorClicked()
+        }
     }
 
     override fun FMainScreenBinding.observeViewModel() {
@@ -39,8 +41,8 @@ class MainScreenFragment : BindingFragment<FMainScreenBinding>() {
             observe(cityTitle) { cityName ->
                 title.text = cityName
             }
-            observe(isDownloadLoadingWarning) { isDownloading ->
-                downloadWarning.isVisible = isDownloading
+            observe(downloadStateLiveData) { state ->
+                downloadStateView.downloadState = state
             }
         }
     }

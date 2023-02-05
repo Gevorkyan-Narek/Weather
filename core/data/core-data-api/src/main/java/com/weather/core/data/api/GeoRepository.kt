@@ -1,7 +1,7 @@
 package com.weather.core.data.api
 
+import com.weather.core.domain.models.SearchStateDomain
 import com.weather.core.domain.models.geo.CityDomain
-import com.weather.core.domain.models.geo.GeoDomain
 import com.weather.core.domain.models.geo.GeoLinkDomain
 import kotlinx.coroutines.flow.Flow
 
@@ -9,9 +9,9 @@ interface GeoRepository {
 
     val savedCities: Flow<List<CityDomain>>
 
-    val downloadedCities: Flow<GeoDomain>
+    val downloadedCities: Flow<SearchStateDomain>
 
-    val downloadedNextCities: Flow<GeoDomain>
+    val downloadedNextCities: Flow<SearchStateDomain>
 
     val selectedCity: Flow<CityDomain>
 

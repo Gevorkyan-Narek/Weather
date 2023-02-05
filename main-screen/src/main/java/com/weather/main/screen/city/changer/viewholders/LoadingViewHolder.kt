@@ -11,7 +11,4 @@ private fun inflateBinding(parent: ViewGroup) = LoadingItemBinding.inflate(
     false
 )
 
-class LoadingViewHolder(
-    parent: ViewGroup,
-    binding: LoadingItemBinding = inflateBinding(parent),
-) : RecyclerView.ViewHolder(binding.root)
+class LoadingViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(inflateBinding(parent).root)
