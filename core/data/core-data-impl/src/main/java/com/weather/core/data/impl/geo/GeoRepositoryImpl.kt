@@ -63,7 +63,6 @@ class GeoRepositoryImpl(
 
     override suspend fun downloadNextCities(geoLink: GeoLinkDomain) {
         safeApiCall {
-            _downloadedCities.emit(SearchStateDomain.Loading)
             api.downloadMoreCities(geoLink.href)
         }.checkResult(
             success = { response ->

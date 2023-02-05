@@ -76,14 +76,7 @@ class CitySearchAdapter(
         }
     }
 
-    fun clearAndShowLoading() {
-        if (items.isEmpty() || items.size != items.filterIsInstance<CityAdapterInfo.Loading>().size) {
-            clear()
-            addLoading()
-        }
-    }
-
-    private fun clear() {
+    fun clear() {
         val size = items.size
         items.clear()
         notifyItemRangeRemoved(0, size)
