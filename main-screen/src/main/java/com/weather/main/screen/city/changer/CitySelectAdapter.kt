@@ -61,9 +61,9 @@ class CitySelectAdapter(
     fun updateItems(list: List<CityAdapterInfo>) {
         if (isShowSaved.not()) {
             clear()
+            items.addAll(list)
+            notifyItemRangeInserted(0, list.size)
         }
-        items.addAll(list)
-        notifyItemRangeInserted(0, list.size)
     }
 
     fun loadMore(list: List<CityAdapterInfo>) {
@@ -111,13 +111,6 @@ class CitySelectAdapter(
             notifyItemRemoved(position)
         }
         onDeleteClick(item.city)
-    }
-
-    fun clearAndShowLoading() {
-        if (items.isEmpty() || items.size != items.filterIsInstance<CityAdapterInfo.Loading>().size) {
-            clear()
-            addLoading()
-        }
     }
 
     fun clear() {
