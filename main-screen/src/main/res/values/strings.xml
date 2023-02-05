@@ -27,5 +27,4 @@
     <string name="visibilityKilometers">%1$.1f км</string>
 
     <string name="deleteWarning">Нельзя удалить единственный сохраненный город</string>
-    <string name="downloadWeather">Загрузка погоды…</string>
 </resources>

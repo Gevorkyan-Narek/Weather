@@ -1,6 +1,14 @@
 package com.weather.startscreen.adapter.holders
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.shared.styles.databinding.LoadingItemBinding
 
-class LoadingViewHolder(binding: LoadingItemBinding) : RecyclerView.ViewHolder(binding.root)
+private fun inflateBinding(parent: ViewGroup) = LoadingItemBinding.inflate(
+    LayoutInflater.from(parent.context),
+    parent,
+    false
+)
+
+class LoadingViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(inflateBinding(parent).root)

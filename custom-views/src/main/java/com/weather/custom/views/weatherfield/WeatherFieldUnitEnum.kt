@@ -11,11 +11,7 @@ enum class WeatherFieldUnitEnum(@StringRes val unit: Int) {
 
     companion object {
 
-        fun valueOf(unit: Int) = when (unit) {
-            1 -> PERCENT
-            2 -> SPEED
-            else -> NONE
-        }
+        fun valueOf(value: Int) = values()[value]
 
     }
 

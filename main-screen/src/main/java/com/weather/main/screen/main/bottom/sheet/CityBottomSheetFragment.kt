@@ -82,8 +82,8 @@ class CityBottomSheetFragment : BottomSheetDialogFragment() {
             observe(popBackStackEvent) {
                 findNavController().popBackStack()
             }
-            observe(isLoading) {
-                citySelectAdapter.clearAndShowLoading()
+            observe(clearSearchList) {
+                citySelectAdapter.clear()
             }
             observe(addLoading) {
                 citySelectAdapter.addLoading()
