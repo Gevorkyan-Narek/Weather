@@ -5,7 +5,6 @@ import com.weather.android.utils.emptyString
 import com.weather.android.utils.liveData
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.core.domain.models.DownloadStateDomain
-import com.weather.core.domain.models.geo.GeoLinkDomain
 import com.weather.navigation.NavigationGraph
 import com.weather.navigation.NavigationInfo
 import com.weather.startscreen.adapter.CityAdapterInfo
@@ -25,33 +24,26 @@ class StartScreenViewModel(
 ) : ViewModel() {
 
     companion object {
-        private const val DEBOUNCE = 1000L
+        private const val DEBOUNCE = 1500L
         private const val MOTION_DELAY = 1500L
         private const val NO_OFFSET = 0
     }
 
-    private val geoLinks = MutableLiveData<List<GeoLinkDomain>>(emptyList())
-
     private val _searchList = MutableLiveData<List<CityAdapterInfo>>()
-    val searchList = _searchList.liveData()
+    val searchList = _searchList.distinctUntilChanged()
 
     private val _loadMoreCitiesList = MutableLiveData<List<CityAdapterInfo>>()
-    val loadMoreCitiesList = _loadMoreCitiesList.liveData()
+    val loadMoreCitiesList = _loadMoreCitiesList.distinctUntilChanged()
 
-    private val _cityTextChanged = MutableStateFlow(emptyString())
-    private val cityTextChanged = _cityTextChanged.debounce(DEBOUNCE)
-
-    private val _onScrolled = MutableStateFlow(NO_OFFSET)
-    private val onScrolled = _onScrolled.debounce(DEBOUNCE)
-
+    private val cityTextChanged = MutableStateFlow(emptyString())
+    private val onScrolled = MutableStateFlow(NO_OFFSET)
     private val isMoreDownload = MutableStateFlow(true)
 
     private val listUpdateFlow = combine(
-        cityTextChanged,
-        onScrolled,
+        cityTextChanged.debounce(DEBOUNCE),
+        onScrolled.debounce(DEBOUNCE),
         isMoreDownload
     ) { cityPrefix, offset, isMoreDownload ->
-        geoLinks.postValue(emptyList())
         logger.debug("Offset: $offset, prefix: $cityPrefix, isMore: $isMoreDownload")
         when {
             cityPrefix.isBlank() -> {
@@ -94,12 +86,6 @@ class StartScreenViewModel(
                 }
             }
         }
-        viewModelScope.launch {
-            cityTextChanged.collect()
-        }
-        viewModelScope.launch {
-            onScrolled.collect()
-        }
         viewModelScope.launch(singleThread) {
             listUpdateFlow.collectLatest { (cities, offset) ->
                 logger.debug("Pre map: $offset, cities: $cities")
@@ -118,14 +104,14 @@ class StartScreenViewModel(
         _clearSearchList.postValue(Unit)
         viewModelScope.launch(singleThread) {
             logger.debug("Emit prefix: $cityPrefix")
-            _cityTextChanged.emit(cityPrefix)
+            cityTextChanged.emit(cityPrefix)
             isMoreDownload.emit(true)
         }
     }
 
     fun onScrolled(offset: Int) {
         viewModelScope.launch(singleThread) {
-            _onScrolled.emit(offset)
+            onScrolled.emit(offset)
         }
     }
 
@@ -150,12 +136,10 @@ class StartScreenViewModel(
         return when (downloadStateDomain) {
             is DownloadStateDomain.Success -> {
                 downloadStateDomain.geoDomain.run {
+                    isMoreDownload.emit(data.isNotEmpty())
                     if (data.isEmpty()) {
-                        isMoreDownload.emit(false)
                         listOf(CityAdapterInfo.NoMatch)
                     } else {
-                        isMoreDownload.emit(true)
-                        geoLinks.postValue(links)
                         data.map { city ->
                             CityAdapterInfo.CityInfo(geoMapper.toPres(city))
                         }
@@ -171,7 +155,6 @@ class StartScreenViewModel(
                 listOf(CityAdapterInfo.Loading)
             }
             DownloadStateDomain.NoStart -> {
-                isMoreDownload.emit(false)
                 emptyList()
             }
         }

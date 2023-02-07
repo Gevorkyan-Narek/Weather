@@ -42,8 +42,8 @@ class CityBottomSheetFragment : BottomSheetDialogFragment() {
     private val scrollListener by lazy {
         SuggestionsOnScrollListener(
             linearLayoutManager,
-            onScrolledListener = { _, _, _ ->
-                viewModel.onScrolled()
+            onScrolledListener = { offset ->
+                viewModel.onScrolled(offset)
             }
         )
     }
@@ -93,12 +93,6 @@ class CityBottomSheetFragment : BottomSheetDialogFragment() {
             }
             observe(searchList) { list ->
                 citySelectAdapter.updateItems(list)
-            }
-            observe(showSavedCities) { isShow ->
-                citySelectAdapter.showSavedCities(isShow)
-            }
-            observe(savedCities) { list ->
-                citySelectAdapter.setSavedItems(list)
             }
             observe(showDeleteWarning) {
                 Toast.makeText(context, R.string.deleteWarning, Toast.LENGTH_SHORT).show()
