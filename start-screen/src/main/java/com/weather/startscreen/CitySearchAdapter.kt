@@ -52,6 +52,10 @@ class CitySearchAdapter(
         }
     }
 
+    fun getFilteredItemCount(): Int {
+        return items.filterIsInstance<CityAdapterInfo.CityInfo>().size
+    }
+
     fun updateItems(list: List<CityAdapterInfo>) {
         clear()
         items.addAll(list)
