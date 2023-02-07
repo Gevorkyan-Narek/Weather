@@ -10,7 +10,13 @@ interface GeoUseCase {
 
     val selectedCity: Flow<CityDomain>
 
-    suspend fun downloadCities(namePrefix: String, offset: Int): DownloadStateDomain
+    val downloadCities: Flow<Pair<DownloadStateDomain, Int>>
+
+    val isDownloading: Flow<Unit>
+
+    suspend fun downloadCities(namePrefix: String)
+
+    suspend fun updateOffset(offset: Int)
 
     suspend fun saveCity(city: CityDomain)
 
