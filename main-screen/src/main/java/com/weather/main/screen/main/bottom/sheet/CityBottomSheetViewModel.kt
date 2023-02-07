@@ -74,20 +74,20 @@ class CityBottomSheetViewModel(
     val showSavedCities = _showSavedCities.liveData()
 
     init {
-        viewModelScope.launch {
-            cityTextChanged.collectLatest { cityPrefix ->
-                logger.debug("Search new city: $cityPrefix")
-                val cities = geoUseCase.downloadCities(cityPrefix)
-                _searchList.postValue(mapToCityAdapterInfo(cities))
-            }
-        }
-        viewModelScope.launch {
-            onScrolled.collectLatest { link ->
-                logger.debug("Scrolled: ${link.href}")
-                val nextCities = geoUseCase.downloadNextCities(link)
-                _loadMoreCitiesList.postValue(mapToCityAdapterInfo(nextCities))
-            }
-        }
+//        viewModelScope.launch {
+//            cityTextChanged.collectLatest { cityPrefix ->
+//                logger.debug("Search new city: $cityPrefix")
+//                val cities = geoUseCase.downloadCities(cityPrefix)
+//                _searchList.postValue(mapToCityAdapterInfo(cities))
+//            }
+//        }
+//        viewModelScope.launch {
+//            onScrolled.collectLatest { link ->
+//                logger.debug("Scrolled: ${link.href}")
+//                val nextCities = geoUseCase.downloadNextCities(link)
+//                _loadMoreCitiesList.postValue(mapToCityAdapterInfo(nextCities))
+//            }
+//        }
     }
 
     fun onCityPrefixChanged(cityPrefix: String) {
@@ -158,6 +158,9 @@ class CityBottomSheetViewModel(
             DownloadStateDomain.Loading -> {
                 geoLinks.postValue(emptyList())
                 listOf(CityAdapterInfo.Loading)
+            }
+            DownloadStateDomain.NoStart -> {
+                emptyList()
             }
         }
     }

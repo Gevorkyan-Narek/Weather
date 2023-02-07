@@ -6,7 +6,6 @@ import com.weather.android.utils.liveData
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.core.domain.models.DownloadStateDomain
 import com.weather.core.domain.models.geo.GeoLinkDomain
-import com.weather.core.domain.models.geo.GeoRelEnumsDomain
 import com.weather.navigation.NavigationGraph
 import com.weather.navigation.NavigationInfo
 import com.weather.startscreen.adapter.CityAdapterInfo
@@ -15,6 +14,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.Executors
 
 @OptIn(FlowPreview::class)
 class StartScreenViewModel(
@@ -25,8 +25,9 @@ class StartScreenViewModel(
 ) : ViewModel() {
 
     companion object {
-        private const val DEBOUNCE = 1500L
+        private const val DEBOUNCE = 1000L
         private const val MOTION_DELAY = 1500L
+        private const val NO_OFFSET = 0
     }
 
     private val geoLinks = MutableLiveData<List<GeoLinkDomain>>(emptyList())
@@ -38,15 +39,32 @@ class StartScreenViewModel(
     val loadMoreCitiesList = _loadMoreCitiesList.liveData()
 
     private val _cityTextChanged = MutableStateFlow(emptyString())
-    private val cityTextChanged = _cityTextChanged
-        .filterNot { text -> text.isBlank() }
-        .distinctUntilChanged()
-        .debounce(DEBOUNCE)
+    private val cityTextChanged = _cityTextChanged.debounce(DEBOUNCE)
 
-    private val _onScrolled = MutableStateFlow<GeoLinkDomain?>(null)
-    private val onScrolled = _onScrolled
-        .filterNotNull()
-        .debounce(DEBOUNCE)
+    private val _onScrolled = MutableStateFlow(NO_OFFSET)
+    private val onScrolled = _onScrolled.debounce(DEBOUNCE)
+
+    private val isMoreDownload = MutableStateFlow(true)
+
+    private val listUpdateFlow = combine(
+        cityTextChanged,
+        onScrolled,
+        isMoreDownload
+    ) { cityPrefix, offset, isMoreDownload ->
+        geoLinks.postValue(emptyList())
+        logger.debug("Offset: $offset, prefix: $cityPrefix, isMore: $isMoreDownload")
+        when {
+            cityPrefix.isBlank() -> {
+                DownloadStateDomain.NoStart to NO_OFFSET
+            }
+            isMoreDownload -> {
+                _addLoading.postValue(Unit)
+                val cities = geoUseCase.downloadCities(cityPrefix, offset)
+                cities to offset
+            }
+            else -> null
+        }
+    }.filterNotNull()
 
     private val _navigationEvent = MutableLiveData<NavigationInfo.NavigationToWithPopup>()
     val navigationEvent = _navigationEvent.liveData()
@@ -63,6 +81,8 @@ class StartScreenViewModel(
     private val _motionEvent = MutableLiveData<Boolean>()
     val motionEvent = _motionEvent.liveData().distinctUntilChanged()
 
+    private val singleThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+
     init {
         viewModelScope.launch {
             geoUseCase.savedCities.collect { cities ->
@@ -75,17 +95,20 @@ class StartScreenViewModel(
             }
         }
         viewModelScope.launch {
-            cityTextChanged.collectLatest { cityPrefix ->
-                logger.debug("Search new city: $cityPrefix")
-                val cities = geoUseCase.downloadCities(cityPrefix)
-                _searchList.postValue(mapToCityAdapterInfo(cities))
-            }
+            cityTextChanged.collect()
         }
         viewModelScope.launch {
-            onScrolled.collectLatest { link ->
-                logger.debug("Scrolling UI: ${link.href}")
-                val nextCities = geoUseCase.downloadNextCities(link)
-                _loadMoreCitiesList.postValue(mapToCityAdapterInfo(nextCities))
+            onScrolled.collect()
+        }
+        viewModelScope.launch(singleThread) {
+            listUpdateFlow.collectLatest { (cities, offset) ->
+                logger.debug("Pre map: $offset, cities: $cities")
+                val mappedCities = mapToCityAdapterInfo(cities)
+                if (offset == NO_OFFSET) {
+                    _searchList.postValue(mappedCities)
+                } else {
+                    _loadMoreCitiesList.postValue(mappedCities.filterNot { it is CityAdapterInfo.NoMatch })
+                }
             }
         }
     }
@@ -93,19 +116,16 @@ class StartScreenViewModel(
     fun onCityTextChanged(cityPrefix: String) {
         _motionEvent.postValue(cityPrefix.isBlank())
         _clearSearchList.postValue(Unit)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(singleThread) {
+            logger.debug("Emit prefix: $cityPrefix")
             _cityTextChanged.emit(cityPrefix)
+            isMoreDownload.emit(true)
         }
     }
 
-    fun onScrolled() {
-        viewModelScope.launch(Dispatchers.IO) {
-            geoLinks.value?.find { link ->
-                link.rel == GeoRelEnumsDomain.NEXT
-            }?.let { nextLink ->
-                _addLoading.postValue(Unit)
-                _onScrolled.emit(nextLink)
-            }
+    fun onScrolled(offset: Int) {
+        viewModelScope.launch(singleThread) {
+            _onScrolled.emit(offset)
         }
     }
 
@@ -126,14 +146,15 @@ class StartScreenViewModel(
         )
     }
 
-    private fun mapToCityAdapterInfo(downloadStateDomain: DownloadStateDomain): List<CityAdapterInfo> {
+    private suspend fun mapToCityAdapterInfo(downloadStateDomain: DownloadStateDomain): List<CityAdapterInfo> {
         return when (downloadStateDomain) {
             is DownloadStateDomain.Success -> {
                 downloadStateDomain.geoDomain.run {
                     if (data.isEmpty()) {
-                        geoLinks.postValue(emptyList())
+                        isMoreDownload.emit(false)
                         listOf(CityAdapterInfo.NoMatch)
                     } else {
+                        isMoreDownload.emit(true)
                         geoLinks.postValue(links)
                         data.map { city ->
                             CityAdapterInfo.CityInfo(geoMapper.toPres(city))
@@ -142,12 +163,16 @@ class StartScreenViewModel(
                 }
             }
             DownloadStateDomain.Error -> {
-                geoLinks.postValue(emptyList())
+                isMoreDownload.emit(false)
                 listOf(CityAdapterInfo.Error)
             }
             DownloadStateDomain.Loading -> {
-                geoLinks.postValue(emptyList())
+                isMoreDownload.emit(true)
                 listOf(CityAdapterInfo.Loading)
+            }
+            DownloadStateDomain.NoStart -> {
+                isMoreDownload.emit(false)
+                emptyList()
             }
         }
     }
