@@ -30,8 +30,8 @@ class StartScreenFragment : BindingFragment<FStartScreenBinding>() {
     private val scrollListener by lazy {
         SuggestionsOnScrollListener(
             linearLayoutManager,
-            onScrolledListener = { _, _, _ ->
-                viewModel.onScrolled()
+            onScrolledListener = { offset ->
+                viewModel.onScrolled(offset)
             }
         )
     }

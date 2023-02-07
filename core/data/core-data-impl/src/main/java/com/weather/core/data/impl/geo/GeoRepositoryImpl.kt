@@ -6,7 +6,6 @@ import com.weather.core.datasource.db.geo.CityDao
 import com.weather.core.datasource.net.geo.GeoApi
 import com.weather.core.domain.models.DownloadStateDomain
 import com.weather.core.domain.models.geo.CityDomain
-import com.weather.core.domain.models.geo.GeoLinkDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -23,7 +22,6 @@ class GeoRepositoryImpl(
 ) : GeoRepository {
 
     companion object {
-        private const val OFFSET = 0
         private const val LIMIT = 10
         private const val LANG_CODE = "ru"
     }
@@ -32,28 +30,15 @@ class GeoRepositoryImpl(
 
     override val selectedCity = dao.selectedCities().filterNotNull().map(mapper::toDomain)
 
-    override suspend fun downloadCities(namePrefix: String): DownloadStateDomain {
+    override suspend fun downloadCities(namePrefix: String, offset: Int): DownloadStateDomain {
         return try {
             withContext(Dispatchers.IO) {
                 val response = api.downloadCities(
                     namePrefix = namePrefix,
-                    offset = OFFSET,
+                    offset = offset,
                     limit = LIMIT,
                     languageCode = LANG_CODE
                 )
-                logger.debug("Downloaded: $namePrefix")
-                DownloadStateDomain.Success(mapper.toDomain(response))
-            }
-        } catch (e: Exception) {
-            DownloadStateDomain.Error
-        }
-    }
-
-    override suspend fun downloadNextCities(geoLink: GeoLinkDomain): DownloadStateDomain {
-        return try {
-            withContext(Dispatchers.IO) {
-                val response = api.downloadMoreCities(geoLink.href)
-                logger.debug("New downloaded: $geoLink\n$response")
                 DownloadStateDomain.Success(mapper.toDomain(response))
             }
         } catch (e: Exception) {
