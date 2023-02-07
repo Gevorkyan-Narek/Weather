@@ -2,11 +2,12 @@ package com.weather.main.screen.main
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.weather.main.screen.city.changer.CitySelectAdapter
 
 class SuggestionsOnScrollListener(
     private val layoutManager: LinearLayoutManager,
     private val onStateChanged: ((RecyclerView, Int) -> Unit)? = null,
-    private val onScrolledListener: ((RecyclerView, dx: Int, dy: Int) -> Unit)? = null,
+    private val onScrolledListener: ((offset: Int) -> Unit)? = null,
 ) : RecyclerView.OnScrollListener() {
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -18,8 +19,9 @@ class SuggestionsOnScrollListener(
         super.onScrolled(recyclerView, dx, dy)
         val visiblePos = layoutManager.findLastVisibleItemPosition()
         recyclerView.adapter?.let { adapter ->
-            if (visiblePos >= adapter.itemCount - 3) {
-                onScrolledListener?.invoke(recyclerView, dx, dy)
+            adapter as CitySelectAdapter
+            if (visiblePos >= adapter.itemCount - 5) {
+                onScrolledListener?.invoke(adapter.getFilteredItemCount())
             }
         }
     }

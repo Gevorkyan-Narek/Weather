@@ -1,52 +1,36 @@
 package com.weather.startscreen
 
 import androidx.lifecycle.*
-import com.weather.android.utils.emptyString
 import com.weather.android.utils.liveData
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.core.domain.models.DownloadStateDomain
-import com.weather.core.domain.models.geo.GeoLinkDomain
-import com.weather.core.domain.models.geo.GeoRelEnumsDomain
 import com.weather.navigation.NavigationGraph
 import com.weather.navigation.NavigationInfo
 import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.models.CityPres
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
-@OptIn(FlowPreview::class)
 class StartScreenViewModel(
     private val geoUseCase: GeoUseCase,
     private val geoMapper: GeoPresMapper,
     private val navigationGraph: NavigationGraph,
-    private val logger: Logger = LoggerFactory.getLogger(StartScreenViewModel::class.java),
 ) : ViewModel() {
 
     companion object {
-        private const val DEBOUNCE = 1500L
         private const val MOTION_DELAY = 1500L
+        private const val NO_OFFSET = 0
     }
 
-    private val geoLinks = MutableLiveData<List<GeoLinkDomain>>(emptyList())
-
     private val _searchList = MutableLiveData<List<CityAdapterInfo>>()
-    val searchList = _searchList.liveData()
+    val searchList = _searchList
 
     private val _loadMoreCitiesList = MutableLiveData<List<CityAdapterInfo>>()
-    val loadMoreCitiesList = _loadMoreCitiesList.liveData()
-
-    private val _cityTextChanged = MutableStateFlow(emptyString())
-    private val cityTextChanged = _cityTextChanged
-        .filterNot { text -> text.isBlank() }
-        .distinctUntilChanged()
-        .debounce(DEBOUNCE)
-
-    private val _onScrolled = MutableStateFlow<GeoLinkDomain?>(null)
-    private val onScrolled = _onScrolled
-        .filterNotNull()
-        .debounce(DEBOUNCE)
+    val loadMoreCitiesList = _loadMoreCitiesList.distinctUntilChanged()
 
     private val _navigationEvent = MutableLiveData<NavigationInfo.NavigationToWithPopup>()
     val navigationEvent = _navigationEvent.liveData()
@@ -57,11 +41,12 @@ class StartScreenViewModel(
     private val _clearSearchList = MutableLiveData<Unit>()
     val clearSearchList = _clearSearchList.liveData()
 
-    private val _addLoading = MutableLiveData<Unit>()
-    val addLoading = _addLoading.liveData()
+    val addLoading = geoUseCase.isDownloading.asLiveData()
 
     private val _motionEvent = MutableLiveData<Boolean>()
     val motionEvent = _motionEvent.liveData().distinctUntilChanged()
+
+    private val singleThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     init {
         viewModelScope.launch {
@@ -74,18 +59,14 @@ class StartScreenViewModel(
                 }
             }
         }
-        viewModelScope.launch {
-            cityTextChanged.collectLatest { cityPrefix ->
-                logger.debug("Search new city: $cityPrefix")
-                val cities = geoUseCase.downloadCities(cityPrefix)
-                _searchList.postValue(mapToCityAdapterInfo(cities))
-            }
-        }
-        viewModelScope.launch {
-            onScrolled.collectLatest { link ->
-                logger.debug("Scrolling UI: ${link.href}")
-                val nextCities = geoUseCase.downloadNextCities(link)
-                _loadMoreCitiesList.postValue(mapToCityAdapterInfo(nextCities))
+        viewModelScope.launch(singleThread) {
+            geoUseCase.downloadCities.collectLatest { (cities, offset) ->
+                val mappedCities = mapToCityAdapterInfo(cities)
+                if (offset == NO_OFFSET) {
+                    _searchList.postValue(mappedCities)
+                } else {
+                    _loadMoreCitiesList.postValue(mappedCities.filterNot { it is CityAdapterInfo.NoMatch })
+                }
             }
         }
     }
@@ -93,19 +74,14 @@ class StartScreenViewModel(
     fun onCityTextChanged(cityPrefix: String) {
         _motionEvent.postValue(cityPrefix.isBlank())
         _clearSearchList.postValue(Unit)
-        viewModelScope.launch(Dispatchers.IO) {
-            _cityTextChanged.emit(cityPrefix)
+        viewModelScope.launch(singleThread) {
+            geoUseCase.downloadCities(cityPrefix)
         }
     }
 
-    fun onScrolled() {
-        viewModelScope.launch(Dispatchers.IO) {
-            geoLinks.value?.find { link ->
-                link.rel == GeoRelEnumsDomain.NEXT
-            }?.let { nextLink ->
-                _addLoading.postValue(Unit)
-                _onScrolled.emit(nextLink)
-            }
+    fun onScrolled(offset: Int) {
+        viewModelScope.launch(singleThread) {
+            geoUseCase.updateOffset(offset)
         }
     }
 
@@ -131,10 +107,8 @@ class StartScreenViewModel(
             is DownloadStateDomain.Success -> {
                 downloadStateDomain.geoDomain.run {
                     if (data.isEmpty()) {
-                        geoLinks.postValue(emptyList())
                         listOf(CityAdapterInfo.NoMatch)
                     } else {
-                        geoLinks.postValue(links)
                         data.map { city ->
                             CityAdapterInfo.CityInfo(geoMapper.toPres(city))
                         }
@@ -142,12 +116,13 @@ class StartScreenViewModel(
                 }
             }
             DownloadStateDomain.Error -> {
-                geoLinks.postValue(emptyList())
                 listOf(CityAdapterInfo.Error)
             }
             DownloadStateDomain.Loading -> {
-                geoLinks.postValue(emptyList())
                 listOf(CityAdapterInfo.Loading)
+            }
+            DownloadStateDomain.NoStart -> {
+                emptyList()
             }
         }
     }
