@@ -1,6 +1,6 @@
-package com.weather.main.screen.city.changer
+package com.weather.main.screen.city.adapter
 
-import com.weather.main.screen.city.changer.model.CityInfoItemPres
+import com.weather.main.screen.city.adapter.model.CityInfoItemPres
 
 sealed class CityAdapterInfo(val viewType: Int) {
 

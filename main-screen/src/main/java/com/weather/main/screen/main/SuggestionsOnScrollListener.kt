@@ -2,7 +2,7 @@ package com.weather.main.screen.main
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.weather.main.screen.city.changer.CitySelectAdapter
+import com.weather.main.screen.city.adapter.CitySelectAdapter
 
 class SuggestionsOnScrollListener(
     private val layoutManager: LinearLayoutManager,

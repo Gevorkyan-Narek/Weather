@@ -1,4 +1,4 @@
-package com.weather.main.screen.city.changer.viewholders
+package com.weather.main.screen.city.adapter.viewholders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

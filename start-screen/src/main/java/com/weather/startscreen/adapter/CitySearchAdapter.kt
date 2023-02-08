@@ -1,10 +1,8 @@
-package com.weather.startscreen
+package com.weather.startscreen.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.weather.startscreen.adapter.CityAdapterDiffUtils
-import com.weather.startscreen.adapter.CityAdapterInfo
 import com.weather.startscreen.adapter.holders.CitySearchViewHolder
 import com.weather.startscreen.adapter.holders.ErrorViewHolder
 import com.weather.startscreen.adapter.holders.LoadingViewHolder

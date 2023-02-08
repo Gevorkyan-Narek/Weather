@@ -1,10 +1,10 @@
-package com.weather.main.screen.city.changer
+package com.weather.main.screen.city.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.weather.main.screen.city.changer.model.CityInfoItemPres
-import com.weather.main.screen.city.changer.viewholders.*
+import com.weather.main.screen.city.adapter.model.CityInfoItemPres
+import com.weather.main.screen.city.adapter.viewholders.*
 
 class CitySelectAdapter(
     private val onSavedCitySelect: (CityInfoItemPres) -> Unit,

@@ -1,7 +1,7 @@
 package com.weather.main.screen.mapper
 
 import com.weather.core.domain.models.geo.CityDomain
-import com.weather.main.screen.city.changer.model.CityInfoItemPres
+import com.weather.main.screen.city.adapter.model.CityInfoItemPres
 
 class CityPresMapper {
 

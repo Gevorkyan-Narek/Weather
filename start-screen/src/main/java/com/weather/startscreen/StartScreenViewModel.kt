@@ -7,6 +7,7 @@ import com.weather.core.domain.models.DownloadStateDomain
 import com.weather.navigation.NavigationGraph
 import com.weather.navigation.NavigationInfo
 import com.weather.startscreen.adapter.CityAdapterInfo
+import com.weather.startscreen.mapper.GeoPresMapper
 import com.weather.startscreen.models.CityPres
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher

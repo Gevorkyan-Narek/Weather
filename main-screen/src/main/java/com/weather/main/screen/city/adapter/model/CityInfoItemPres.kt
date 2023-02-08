@@ -1,4 +1,4 @@
-package com.weather.main.screen.city.changer.model
+package com.weather.main.screen.city.adapter.model
 
 data class CityInfoItemPres(
     val name: String,

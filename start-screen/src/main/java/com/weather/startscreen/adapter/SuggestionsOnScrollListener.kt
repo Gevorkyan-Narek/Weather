@@ -2,7 +2,6 @@ package com.weather.startscreen.adapter
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.weather.startscreen.CitySearchAdapter
 
 class SuggestionsOnScrollListener(
     private val layoutManager: LinearLayoutManager,
