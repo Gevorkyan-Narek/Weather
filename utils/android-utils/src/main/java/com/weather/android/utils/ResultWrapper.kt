@@ -18,15 +18,6 @@ suspend inline fun <T> safeApiCall(crossinline apiCall: suspend () -> T): Result
 }
 
 suspend inline fun <reified T> ResultWrapper<T>.checkResult(
-    crossinline success: suspend (T) -> Unit,
-) {
-    checkResult(
-        fail = { emptyFun() },
-        success = success
-    )
-}
-
-suspend inline fun <reified T> ResultWrapper<T>.checkResult(
     crossinline fail: suspend (Throwable) -> Unit,
     crossinline success: suspend (T) -> Unit,
 ) {
