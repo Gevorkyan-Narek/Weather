@@ -8,8 +8,8 @@ import com.weather.android.utils.liveData
 import com.weather.android.utils.postEvent
 import com.weather.core.domain.api.GeoUseCase
 import com.weather.core.domain.models.DownloadStateDomain
-import com.weather.main.screen.city.changer.CityAdapterInfo
-import com.weather.main.screen.city.changer.model.CityInfoItemPres
+import com.weather.main.screen.city.adapter.CityAdapterInfo
+import com.weather.main.screen.city.adapter.model.CityInfoItemPres
 import com.weather.main.screen.mapper.CityPresMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher

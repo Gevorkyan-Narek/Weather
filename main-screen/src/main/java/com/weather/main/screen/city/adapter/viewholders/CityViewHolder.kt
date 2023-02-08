@@ -1,11 +1,11 @@
-package com.weather.main.screen.city.changer.viewholders
+package com.weather.main.screen.city.adapter.viewholders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.android.utils.getColorIf
 import com.weather.main.screen.R
-import com.weather.main.screen.city.changer.model.CityInfoItemPres
+import com.weather.main.screen.city.adapter.model.CityInfoItemPres
 import com.weather.main.screen.databinding.CityItemBinding
 
 private fun inflateBinding(parent: ViewGroup): CityItemBinding = CityItemBinding.inflate(

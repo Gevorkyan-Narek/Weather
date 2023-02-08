@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.android.utils.fragment.BindingFragment
 import com.weather.android.utils.observe
+import com.weather.startscreen.adapter.CitySearchAdapter
 import com.weather.startscreen.adapter.SuggestionsOnScrollListener
 import com.weather.startscreen.databinding.FStartScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel

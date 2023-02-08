@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weather.android.utils.observe
 import com.weather.main.screen.R
-import com.weather.main.screen.city.changer.CitySelectAdapter
+import com.weather.main.screen.city.adapter.CitySelectAdapter
 import com.weather.main.screen.databinding.FCityBottomSheetBinding
 import com.weather.main.screen.main.SuggestionsOnScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel

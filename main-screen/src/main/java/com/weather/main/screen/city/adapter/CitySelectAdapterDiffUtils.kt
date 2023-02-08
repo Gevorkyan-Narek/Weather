@@ -1,4 +1,4 @@
-package com.weather.main.screen.city.changer
+package com.weather.main.screen.city.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 

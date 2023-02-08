@@ -1,4 +1,4 @@
-package com.weather.startscreen
+package com.weather.startscreen.mapper
 
 import com.weather.core.domain.models.geo.CityDomain
 import com.weather.startscreen.models.CityPres
