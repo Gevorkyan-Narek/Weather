@@ -11,14 +11,11 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class GeoRepositoryImpl(
     private val api: GeoApi,
     private val dao: CityDao,
     private val mapper: GeoMapper,
-    private val logger: Logger = LoggerFactory.getLogger(GeoRepositoryImpl::class.java),
 ) : GeoRepository {
 
     companion object {

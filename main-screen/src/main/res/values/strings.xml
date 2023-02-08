@@ -4,12 +4,10 @@
 
     <string name="today">Сегодня</string>
     <string name="forecast">Прогноз</string>
-    <string name="cities">Города</string>
     <string name="addCity">Добавить город</string>
     <string name="noMatch">Город не найден</string>
 
     <string name="wind">Ветер</string>
-    <string name="windSpeed">%1$.2f м/c</string>
     <string name="degreeLabel">"Угол ветра "</string>
     <string name="degree">%1$d°</string>
     <string name="tempMaxMin">%1$.0f° / %2$.0f°</string>

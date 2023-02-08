@@ -14,8 +14,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:paddingHorizontal="@dimen/defaultIndent"
         android:paddingVertical="@dimen/smallIndent"
-        android:paddingStart="@dimen/defaultIndent"
         tools:text="London" />
 
     <ImageButton
